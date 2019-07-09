@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+  <display-name>Library system</display-name>
+
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>com.library.web.filters.EncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/</url-pattern>
+  </filter-mapping>
+
+  <listener>
+    <listener-class>com.library.web.listeners.StartApplicationListener</listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <servlet-class>com.library.web.controller.FrontControllerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FrontControllerServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+</web-app>
