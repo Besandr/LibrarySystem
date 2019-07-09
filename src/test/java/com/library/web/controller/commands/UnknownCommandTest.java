@@ -22,8 +22,7 @@ public class UnknownCommandTest {
         ArgumentCaptor valueCapture = ArgumentCaptor.forClass(String.class);
 
         doNothing().when(spyCommand).forward((String)valueCapture.capture());
-        doCallRealMethod().when(spyCommand).process();
-        when(mockRequest.getParameter(RequestParamsMap.COMMAND)).thenReturn("unknown");
+        when(mockRequest.getParameter(RequestParameterNamesDict.COMMAND)).thenReturn("unknown");
 
         spyCommand.init(null, mockRequest, null);
         spyCommand.process();
