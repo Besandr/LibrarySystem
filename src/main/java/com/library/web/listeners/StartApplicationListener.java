@@ -1,6 +1,6 @@
 package com.library.web.listeners;
 
-import com.library.web.controller.commands.RequestParamsMap;
+import com.library.web.controller.commands.RequestParameterNamesDict;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -21,7 +21,7 @@ public class StartApplicationListener implements ServletContextListener{
         ServletContext context = sce.getServletContext();
 
         //Set application scope attribute with request parameters names
-        context.setAttribute("requestParamsMap", new RequestParamsMap());
+        context.setAttribute("requestParameterNamesDict", new RequestParameterNamesDict());
     }
 
     @Override

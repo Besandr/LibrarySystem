@@ -19,7 +19,7 @@ public class UnknownCommand extends FrontCommand {
      */
     @Override
     public void process() throws ServletException, IOException {
-        log.error(String.format("Received unknown command \"%s\" from view.", request.getParameter(RequestParamsMap.COMMAND)));
+        log.error(String.format("Received unknown command \"%s\" from view.", request.getParameter(RequestParameterNamesDict.COMMAND)));
         forward("error");
     }
 
