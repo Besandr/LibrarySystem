@@ -1,8 +1,7 @@
-package com.library.data.entity;
+package com.library.model.data.entity;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Builder
