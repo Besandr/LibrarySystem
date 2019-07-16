@@ -7,6 +7,7 @@ import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
 
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,38 +22,40 @@ public class BookService {
 
         synchronized (this) {
 
-            return (Boolean) daoManager.executeTransaction(manager -> {
+            return (Boolean) daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book));
+        }
+    }
 
-                AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
-                // Checks are there the book authors in the DB already (they must have an id)
-                // If there are not - save them and set their id received from dao
-                for (Author author : book.getAuthors()) {
-                    if (author.getId() == 0) {
-                        long authorId = authorDao.save(author);
-                        author.setId(authorId);
-                    }
-                }
+    private boolean addBookToCatalogueCommand(DaoManager manager, Book book) throws SQLException {
 
-                KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
-                // Checks are there the book keywords in the DB already (they must have an id)
-                // If there are not - save them and set their id received from dao
-                for (Keyword keyword : book.getKeywords()) {
-                    if (keyword.getId() == 0) {
-                        long keywordId = keywordDao.save(keyword);
-                        keyword.setId(keywordId);
-                    }
-                }
+        AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
+        // Checks are there the book authors in the DB already (they must have an id)
+        // If there are not - save them and set their id received from dao
+        for (Author author : book.getAuthors()) {
+            if (author.getId() == 0) {
+                long authorId = authorDao.save(author);
+                author.setId(authorId);
+            }
+        }
 
-                BookDao bookDao = (BookDao) manager.getBookDao();
-                long bookId = bookDao.save(book);
+        KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
+        // Checks are there the book keywords in the DB already (they must have an id)
+        // If there are not - save them and set their id received from dao
+        for (Keyword keyword : book.getKeywords()) {
+            if (keyword.getId() == 0) {
+                long keywordId = keywordDao.save(keyword);
+                keyword.setId(keywordId);
+            }
+        }
 
-                if (bookId > 0) {
-                    book.setId(bookId);
-                    return true;
-                } else {
-                    return false;
-                }
-            });
+        BookDao bookDao = (BookDao) manager.getBookDao();
+        long bookId = bookDao.save(book);
+
+        if (bookId > 0) {
+            book.setId(bookId);
+            return true;
+        } else {
+            return false;
         }
     }
 
