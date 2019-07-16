@@ -33,13 +33,15 @@ public class UserServiceTest {
     public void initSetUp() throws SQLException {
         mockService = spy(UserService.getInstance());
         when(mockDaoManager.getUserDao()).thenReturn(mockUserDao);
+        when(mockUserDao.save(mockUser)).thenReturn(1L);
     }
 
     @Test
-    public void createNewUserCommand() throws SQLException {
+    public void createNewUserCommandShouldReturn1() throws SQLException {
 
-        mockService.createNewUserCommand(mockDaoManager, mockUser);
+        long id = mockService.createNewUserCommand(mockDaoManager, mockUser);
         verify(mockUserDao, times(1)).save(mockUser);
+        assertEquals(1, id);
     }
 
     @Test
