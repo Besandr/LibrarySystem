@@ -21,6 +21,13 @@ public class DaoManager {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Executes command which needs transaction logic.
+     * After work closes connection.
+     * @param command - command to be executed
+     * @return - object returned by command if executing successful
+     *           or null if executing failed
+     */
     public Object executeTransaction(DaoManagerCommand command) {
 
         Object result = null;
@@ -30,14 +37,12 @@ public class DaoManager {
             connection.setAutoCommit(false);
 
             try {
-
                 result = command.execute(this);
                 connection.commit();
 
             } catch (DBException e) {
                 connection.rollback();
             }
-
             return result;
 
         } catch (SQLException e) {
@@ -46,6 +51,35 @@ public class DaoManager {
         } finally {
             closeConnection();
         }
+    }
+
+    /**
+     * Executes command which has no need in transaction logic.
+     * After work closes connection.
+     * @param command - command to be executed
+     * @return - object returned by command if executing successful
+     *           or null if executing failed
+     */
+    public Object executeAndClose(DaoManagerCommand command) {
+
+        Object result = null;
+
+        try {
+            getConnection();
+
+            result = command.execute(this);
+
+        } catch (SQLException e) {
+            log.error("SQLException occurred. Cause: " + e.getMessage());
+            return null;
+        } catch (DBException e) {
+            //SQL query/ies are failed so there is nothing to return
+            return null;
+        } finally {
+            closeConnection();
+        }
+
+        return result;
     }
 
     private void closeConnection() {
@@ -59,7 +93,6 @@ public class DaoManager {
     protected Connection getConnection() throws SQLException {
         if (connection == null) {
             connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
         }
         return connection;
     }
@@ -91,23 +124,6 @@ public class DaoManager {
     public Dao getUserDao() throws SQLException {
         return new MySqlUserDao(getConnection());
     }
-
-/*    public Dao getDao(Class clazz) throws SQLException {
-
-        switch (clazz.getSimpleName()) {
-            case "MySqlAuthorDao":
-                return new MySqlAuthorDao(getConnection());
-            case "MySqlBookDao":
-                return new MySqlBookDao(getConnection());
-            case "MySqlLocationDao":
-                return new MySqlLocationDao(getConnection());
-            case "MySqlLoanDao":
-                return new MySqlLoanDao(getConnection());
-            case "MySqlKeywordDao":
-                return new MySqlKeywordDao(getConnection());
-        }
-        return null;
-    }*/
 
     public interface DaoManagerCommand{
         Object execute(DaoManager manager) throws SQLException;
