@@ -18,20 +18,20 @@ public class UserService {
 
     public static final UserService instance = new UserService();
 
-    public long createNewUser(User user) {
+    public boolean createNewUser(User user) {
 
         user.setPassword(hashPassword(user.getPassword()));
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Long) daoManager.executeTransaction( manager -> createNewUserCommand(manager, user));
+        return (Boolean) daoManager.executeTransaction( manager -> createNewUserCommand(manager, user));
     }
 
-    protected long createNewUserCommand(DaoManager manager, User user) throws SQLException {
+    protected boolean createNewUserCommand(DaoManager manager, User user) throws SQLException {
 
         UserDao userDao = (UserDao) manager.getUserDao();
-        return userDao.save(user);
-
+        userDao.save(user);
+        return true;
     }
 
     protected String hashPassword(String passwordToHash) {
