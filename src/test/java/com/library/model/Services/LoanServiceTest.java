@@ -33,14 +33,12 @@ public class LoanServiceTest {
     public void initSetUp() throws SQLException {
         mockService = spy(LoanService.getInstance());
         when(mockManager.getLoanDao()).thenReturn(mockLoanDao);
-        when(mockLoanDao.save(mockLoan)).thenReturn(1L);
     }
 
     @Test
-    public void saveApplyForLoanCommandShouldReturn1() throws SQLException {
-        long id = mockService.saveApplyForLoanCommand(mockManager, mockLoan);
+    public void saveApplyForLoanCommand() throws SQLException {
+        mockService.saveApplyForLoanCommand(mockManager, mockLoan);
         verify(mockLoanDao, times(1)).save(mockLoan);
-        assertEquals(1, id);
     }
 
 }

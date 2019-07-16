@@ -14,11 +14,11 @@ public class LoanService {
 
     private static final LoanService instance = new LoanService();
 
-    public Long saveApplyForLoan(Loan loan) {
+    public boolean saveApplyForLoan(Loan loan) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Long) daoManager.executeAndClose(manager -> saveApplyForLoanCommand(manager, loan));
+        return (Boolean) daoManager.executeAndClose(manager -> saveApplyForLoanCommand(manager, loan));
 
     }
 
@@ -38,10 +38,11 @@ public class LoanService {
             return  (Boolean) daoManager.executeTransaction(manager -> returnBookCommand(manager, loanId));
     }
 
-    protected long saveApplyForLoanCommand(DaoManager manager, Loan loan) throws SQLException {
+    protected boolean saveApplyForLoanCommand(DaoManager manager, Loan loan) throws SQLException {
 
         LoanDao dao =(LoanDao) manager.getLoanDao();
-        return dao.save(loan);
+        dao.save(loan);
+        return true;
     }
 
     protected boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
