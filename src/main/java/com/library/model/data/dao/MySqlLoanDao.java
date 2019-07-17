@@ -1,7 +1,9 @@
 package com.library.model.data.dao;
 
 import com.library.model.data.DBUtils;
+import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Loan;
+import com.library.model.data.entity.User;
 import com.library.model.exceptions.DBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -80,8 +82,8 @@ public class MySqlLoanDao implements LoanDao {
         try {
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_LOAN_QUERY, Statement.RETURN_GENERATED_KEYS);
-            insertStatement.setLong(1, loan.getBookId());
-            insertStatement.setLong(2, loan.getUserId());
+            insertStatement.setLong(1, loan.getBook().getId());
+            insertStatement.setLong(2, loan.getUser().getId());
             insertStatement.setObject(3, loan.getApplyDate());
 
             insertStatement.executeUpdate();
@@ -161,8 +163,8 @@ public class MySqlLoanDao implements LoanDao {
 
         Loan loan = Loan.builder()
                 .id(rs.getLong("loan_id"))
-                .bookId(rs.getLong("book_id"))
-                .userId(rs.getLong("user_id"))
+                .book(Book.builder().id(rs.getLong("book_id")).build())
+                .user(User.builder().id(rs.getLong("user_id")).build())
                 .applyDate(rs.getObject("apply_date", LocalDate.class))
                 .loanDate(rs.getObject("loan_date", LocalDate.class))
                 .expiredDate(rs.getObject("expired_date", LocalDate.class))

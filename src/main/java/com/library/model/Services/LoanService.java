@@ -56,7 +56,7 @@ public class LoanService {
         }
 
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
-        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), true);
+        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBook().getId(), true);
         //check is there a target book on the shelves
         if (locationOptional.isPresent()) {
 
@@ -86,7 +86,7 @@ public class LoanService {
         }
 
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
-        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), false);
+        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBook().getId(), false);
         locationDao.updateIsOccupied(locationOptional.get().getId(), true);
 
         return true;
