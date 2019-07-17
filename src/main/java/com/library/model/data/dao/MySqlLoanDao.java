@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing of AuthorDao for working with a MySql server
+ */
 public class MySqlLoanDao implements LoanDao {
 
     private static final Logger log = LogManager.getLogger(LoanDao.class);
@@ -24,6 +27,9 @@ public class MySqlLoanDao implements LoanDao {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Loan> get(long loanId) {
 
@@ -51,31 +57,27 @@ public class MySqlLoanDao implements LoanDao {
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Loan> getAll() {
 
-        List<Loan> loans = new ArrayList<>();
-
-        try {
-            PreparedStatement selectStatement = connection
-                    .prepareStatement(SqlQueries.ALL_LOANS_QUERY);
-            ResultSet rs = selectStatement.executeQuery();
-
-            while (rs.next()) {
-                loans.add(getLoanFromResultRow(rs));
-            }
-
-            rs.close();
-
-        } catch (SQLException e) {
-            String errorText = "Can't get loans list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
-            throw new DBException(errorText, e);
-        }
-
-        return loans;
+        return createLoansListFromQuery(SqlQueries.ALL_LOANS_QUERY);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Loan> getUnapprovedLoans() {
+
+        return createLoansListFromQuery(SqlQueries.GET_UNAPPROVED_LOANS_QUERY);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long save(Loan loan) {
 
@@ -101,10 +103,16 @@ public class MySqlLoanDao implements LoanDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Loan loan) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateLoanAndExpiredDate(long loanId, LocalDate loanDate, LocalDate expiredDate) {
 
@@ -124,6 +132,9 @@ public class MySqlLoanDao implements LoanDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateReturnDate(long loanId, LocalDate returnDate) {
 
@@ -142,6 +153,9 @@ public class MySqlLoanDao implements LoanDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Loan loan) {
 
@@ -157,6 +171,36 @@ public class MySqlLoanDao implements LoanDao {
             log.error(errorText);
             throw new DBException(errorText, e);
         }
+    }
+
+    /**
+     * Takes a "select" query, executes it and create Loans list
+     * from query results
+     * @param query - DB query "select" string
+     * @return - loans list contains the result of the given query
+     */
+    protected List<Loan> createLoansListFromQuery(String query) {
+        List<Loan> loans = new ArrayList<>();
+
+        try {
+            PreparedStatement selectStatement = connection
+                    .prepareStatement(query);
+
+            ResultSet rs = selectStatement.executeQuery();
+
+            while (rs.next()) {
+                loans.add(getLoanFromResultRow(rs));
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String errorText = "Can't get loans list from DB. Cause: " + e.getMessage();
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+
+        return loans;
     }
 
     protected Loan getLoanFromResultRow(ResultSet rs) throws SQLException {

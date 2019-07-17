@@ -78,4 +78,5 @@ public class SqlQueries {
     public static final String UPDATE_RETURN_DATE_QUERY = "UPDATE library_system.loan SET return_date = ? WHERE loan_id = ?;";
     public static final String ALL_LOANS_QUERY = "SELECT * FROM library_system.loan ORDER BY expired_date;";
     public static final String GET_LOAN_QUERY = "SELECT * FROM library_system.loan WHERE loan_id = ?;";
+    public static final String GET_UNAPPROVED_LOANS_QUERY = "SELECT * FROM library_system.loan WHERE COALESCE (loan_date, expired_date, return_date) IS NULL GROUP BY apply_date;";
 }
