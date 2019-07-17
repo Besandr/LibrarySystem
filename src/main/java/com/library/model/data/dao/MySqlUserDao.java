@@ -1,6 +1,5 @@
 package com.library.model.data.dao;
 
-import com.library.model.data.DBService;
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.User;
 import com.library.model.exceptions.DBException;
@@ -12,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing of BookDao for working with a MySql server
+ */
 public class MySqlUserDao implements UserDao {
 
     private static final Logger log = LogManager.getLogger(UserDao.class);
@@ -22,6 +24,9 @@ public class MySqlUserDao implements UserDao {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> get(long id) {
 
@@ -49,6 +54,9 @@ public class MySqlUserDao implements UserDao {
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> getAll() {
 
@@ -75,6 +83,9 @@ public class MySqlUserDao implements UserDao {
         return users;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long save(User user) {
 
@@ -103,6 +114,9 @@ public class MySqlUserDao implements UserDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(User user) {
 
@@ -125,6 +139,9 @@ public class MySqlUserDao implements UserDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(User user) {
 
@@ -142,6 +159,9 @@ public class MySqlUserDao implements UserDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateKarma(long userId, int karma) {
 
@@ -159,6 +179,9 @@ public class MySqlUserDao implements UserDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateRole(long userId, long roleId) {
 
@@ -180,7 +203,7 @@ public class MySqlUserDao implements UserDao {
 
     protected User getUserFromResultRow(ResultSet rs) throws SQLException {
          return User.builder()
-                .id(rs.getLong("id"))
+                .id(rs.getLong("user_id"))
                 .email(rs.getString("email"))
                 .password(rs.getString("password"))
                 .phone(rs.getString("phone"))
