@@ -9,6 +9,7 @@ import com.library.model.data.entity.Keyword;
 
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,33 +22,30 @@ public class BookService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        synchronized (this) {
-            return (Boolean) daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book));
-        }
+        return (Boolean) daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book));
+
     }
 
-    protected boolean addBookToCatalogueCommand(DaoManager manager, Book book) throws SQLException {
+
+
+    protected synchronized boolean addBookToCatalogueCommand(DaoManager manager, Book book) throws SQLException {
 
         saveAuthors(manager, book.getAuthors());
 
         saveKeywords(manager, book.getKeywords());
 
         BookDao bookDao = (BookDao) manager.getBookDao();
-        long bookId = bookDao.save(book);
+        bookDao.save(book);
 
-        if (bookId > 0) {
-            book.setId(bookId);
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
-    protected void saveAuthors(DaoManager manager, Set<Author> authorSet) throws SQLException {
+    protected synchronized void saveAuthors(DaoManager manager, Set<Author> authorSet) throws SQLException {
+
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
 
         for (Author author : authorSet) {
-            // Checks are there the book authors was the DB when book
+            // Checks are there the book authors was in the DB when the book
             // was creating (they must have an id)
             if (author.getId() == 0) {
                 // If there are not - try to save them and set their id received from dao
@@ -56,9 +54,22 @@ public class BookService {
                 // the same authors. So we need to check it
                 if (authorId > 0) {
                     author.setId(authorId);
+                } else {
+                    // Current author is already in the DB. We need get him and takes
+                    // his id.
+                    Optional<Author> dbAuthor = getAuthorByName(authorDao, author);
+                    if (dbAuthor.isPresent()) {
+                        author.setId(dbAuthor.get().getId());
+                    }
                 }
             }
         }
+    }
+
+    protected Optional<Author> getAuthorByName(AuthorDao dao, Author author) {
+
+        return dao.getByName(author.getFirstName(), author.getLastName());
+
     }
 
     protected void saveKeywords(DaoManager manager, Set<Keyword> keywordSet) throws SQLException {
@@ -75,10 +86,24 @@ public class BookService {
                 // the same keywords. So we need to check it
                 if (keywordId > 0) {
                     keyword.setId(keywordId);
+                } else {
+                    // Current keyword is already in the DB. We need get it and takes
+                    // its id.
+                    Optional<Keyword> dbKeyword = getKeywordByWord(keywordDao, keyword);
+                    if (dbKeyword.isPresent()) {
+                        keyword.setId(dbKeyword.get().getId());
+                    }
                 }
             }
         }
     }
+
+    protected Optional<Keyword> getKeywordByWord(KeywordDao dao, Keyword keyword) {
+
+        return dao.getByWord(keyword.getWord());
+
+    }
+
 
     public static BookService getInstance() {
         return instance;
