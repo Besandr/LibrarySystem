@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS `author` (
 	`author_id` bigint NOT NULL AUTO_INCREMENT,
 	`first_name` varchar(25) NOT NULL,
 	`last_name` varchar(40) NOT NULL,
-	PRIMARY KEY (`author_id`)
+	PRIMARY KEY (`author_id`),
+    UNIQUE KEY (first_name, last_name)
 );
 
 CREATE TABLE IF NOT EXISTS `keyword` (
@@ -26,13 +27,14 @@ CREATE TABLE IF NOT EXISTS `book` (
 	`title` varchar(255) NOT NULL,
 	`year` int(4) NOT NULL,
 	`description` varchar(500),
-	PRIMARY KEY (`book_id`)
+	PRIMARY KEY (`book_id`),
+    UNIQUE KEY (title, year, description)
 );
 
 CREATE TABLE IF NOT EXISTS `user` (
 	`user_id` bigint NOT NULL AUTO_INCREMENT,
 	`email` varchar(255) NOT NULL UNIQUE,
-	`password` varchar(255) NOT NULL,
+	`password` varchar(100) NOT NULL,
 	`phone` varchar(15) NOT NULL UNIQUE,
 	`first_name` varchar(30) NOT NULL,
 	`last_name` varchar(30) NOT NULL,
