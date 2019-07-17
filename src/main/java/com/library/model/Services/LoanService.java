@@ -3,11 +3,14 @@ package com.library.model.Services;
 import com.library.model.data.DaoManager;
 import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.*;
+import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Loan;
 import com.library.model.data.entity.Location;
+import com.library.model.data.entity.User;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public class LoanService {
@@ -20,6 +23,13 @@ public class LoanService {
 
         return (Boolean) daoManager.executeAndClose(manager -> saveApplyForLoanCommand(manager, loan));
 
+    }
+
+    public List<Loan> getUnapprovedLoans(){
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        return (List<Loan>) daoManager.executeAndClose(manager -> getUnapprovedLoansCommand(manager));
     }
 
     public boolean approveLoan(long loanId) {
@@ -43,6 +53,25 @@ public class LoanService {
         LoanDao dao =(LoanDao) manager.getLoanDao();
         dao.save(loan);
         return true;
+    }
+
+    private List<Loan> getUnapprovedLoansCommand(DaoManager manager) throws SQLException {
+
+        LoanDao loanDao = (LoanDao) manager.getLoanDao();
+        List<Loan> loanList = loanDao.getUnapprovedLoans();
+
+        UserDao userDao = (UserDao) manager.getUserDao();
+        BookDao bookDao = (BookDao) manager.getBookDao();
+        for (Loan loan : loanList) {
+
+            User user = userDao.get(loan.getUser().getId()).get();
+            loan.setUser(user);
+
+            Book book = bookDao.get(loan.getBook().getId()).get();
+            loan.setBook(book);
+        }
+
+        return loanList;
     }
 
     protected boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
@@ -92,7 +121,7 @@ public class LoanService {
         return true;
     }
 
-    static LoanService getInstance() {
+    public static LoanService getInstance() {
         return instance;
     }
 
