@@ -7,6 +7,7 @@ public class SqlQueries {
     public static final String UPDATE_AUTHOR_QUERY = "UPDATE library_system.author SET first_name = ?, last_name = ? WHERE author_id = ?;";
     public static final String ALL_AUTHORS_QUERY = "SELECT * FROM library_system.author ORDER BY last_name;";
     public static final String GET_AUTHOR_QUERY = "SELECT * FROM library_system.author WHERE author_id = ?;";
+    public static final String GET_AUTHOR_BY_NAME_QUERY = "SELECT * FROM library_system.author WHERE first_name = ? AND last_name = ?;";
 
     public static final String SAVE_BOOK_QUERY = "INSERT INTO library_system.book (title, year, description) VALUES (?, ?, ?);";
     public static final String DELETE_BOOK_QUERY = "DELETE FROM library_system.book WHERE book_id = ?;";
@@ -21,6 +22,7 @@ public class SqlQueries {
     public static final String UPDATE_KEYWORD_QUERY = "UPDATE library_system.keyword SET word = ? WHERE keyword_id = ?;";
     public static final String ALL_KEYWORDS_QUERY = "SELECT * FROM library_system.keyword ORDER BY word;";
     public static final String GET_KEYWORD_QUERY = "SELECT * FROM library_system.keyword WHERE keyword_id = ?;";
+    public static final String GET_KEYWORD_BY_WORD_QUERY = "SELECT * FROM library_system.keyword WHERE word = ?;";
 
     public static final String SAVE_BOOKCASE_QUERY = "INSERT INTO library_system.bookcase (shelf_quantity, cell_quantity) VALUES (?, ?);";
     public static final String DELETE_BOOKCASE_QUERY = "DELETE FROM library_system.bookcase WHERE bookcase_id = ?;";
