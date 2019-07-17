@@ -1,5 +1,6 @@
 package com.library.model.data.dao;
 
+import com.library.model.data.DBService;
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing of BookDao for working with a MySql server
+ */
 public class MySqlBookDao implements BookDao {
 
     private static final Logger log = LogManager.getLogger(MySqlBookDao.class);
@@ -23,6 +27,9 @@ public class MySqlBookDao implements BookDao {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Book> get(long bookId) {
 
@@ -52,20 +59,29 @@ public class MySqlBookDao implements BookDao {
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Book> getAll() {
+        return getAllBookParameterized(Optional.empty(), Optional.empty(), "");
+    }
 
-        List<Book> authors = new ArrayList<>();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Book> getAllBookParameterized(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) {
 
-        try {
+        List<Book> books = new ArrayList<>();
 
-            PreparedStatement selectStatement = connection
-                    .prepareStatement(SqlQueries.ALL_BOOKS_QUERY);
+        try{
+            PreparedStatement statement = getPreparedStatement(author, keyword, partOfTitle);
 
-            ResultSet rs = selectStatement.executeQuery();
+            ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
-                authors.add(getBookFromResultRow(rs));
+                books.add(getBookFromResultRow(rs));
             }
 
             rs.close();
@@ -76,9 +92,37 @@ public class MySqlBookDao implements BookDao {
             throw new DBException(errorText, e);
         }
 
-        return authors;
+        return books;
     }
 
+    protected PreparedStatement getPreparedStatement(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) throws SQLException {
+
+        StringBuilder queryBuilder = new StringBuilder(SqlQueries.ALL_BOOKS_QUERY_HEAD_PART);
+        if (author.isPresent()) {
+            queryBuilder.append(" ").append(SqlQueries.ALL_BOOKS_QUERY_AUTHOR_PART);
+        }
+        if (keyword.isPresent()) {
+            queryBuilder.append(" ").append(SqlQueries.ALL_BOOKS_QUERY_KEYWORD_PART);
+        }
+        queryBuilder.append(" ").append(SqlQueries.ALL_BOOKS_QUERY_TAIL_PART);
+
+        PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
+
+        int parameterIndex = 1;
+        if (author.isPresent()) {
+            statement.setLong(parameterIndex++, author.get().getId());
+        }
+        if (keyword.isPresent()) {
+            statement.setLong(parameterIndex++, keyword.get().getId());
+        }
+        statement.setString(parameterIndex, "%" + partOfTitle + "%");
+
+        return statement;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long save(Book book) {
 
@@ -104,6 +148,9 @@ public class MySqlBookDao implements BookDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Book book) {
 
@@ -124,6 +171,9 @@ public class MySqlBookDao implements BookDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Book book) {
 
@@ -201,5 +251,16 @@ public class MySqlBookDao implements BookDao {
                 .description(rs.getString("description"))
                 .build();
         return book;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        MySqlBookDao dao = new MySqlBookDao(DBService.getInstance().getConnection());
+
+        Optional<Author> author = Optional.of(Author.builder().id(5).build());
+        Optional<Keyword> keyword = Optional.of(Keyword.builder().id(3).build());
+//        List<Book> list = dao.getAll();
+        List<Book> list = dao.getAllBookParameterized(author, Optional.empty(), "");
+
+        list.forEach(System.out::println);
     }
 }
