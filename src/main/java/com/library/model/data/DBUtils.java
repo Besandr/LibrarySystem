@@ -29,4 +29,16 @@ public class DBUtils {
 
         return id;
     }
+
+    /**
+     * Checks is a given exception thrown because of attempt to insert
+     * into a table a duplicate entry. In many popular SQL servers such as
+     * MySQL, PostgreSQL, and Oracle the exception it this case will return
+     * SQLState = "23000"
+     * @param e - exception thrown by INSERT statement execute
+     * @return true if the INSERT statement query met the duplicate in the table
+     */
+    public static boolean isTryingToInsertDuplicate(SQLException e) {
+        return "23000".equals(e.getSQLState());
+    }
 }
