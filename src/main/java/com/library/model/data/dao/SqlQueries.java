@@ -7,12 +7,19 @@ public class SqlQueries {
     public static final String UPDATE_AUTHOR_QUERY = "UPDATE library_system.author SET first_name = ?, last_name = ? WHERE author_id = ?;";
     public static final String ALL_AUTHORS_QUERY = "SELECT * FROM library_system.author ORDER BY last_name;";
     public static final String GET_AUTHOR_QUERY = "SELECT * FROM library_system.author WHERE author_id = ?;";
+    public static final String GET_AUTHORS_BY_BOOK_QUERY = "SELECT * FROM library_system.author AS a\n" +
+            "INNER JOIN library_system.author_book AS ab ON a.author_id = ab.author_id\n" +
+            "WHERE ab.book_id = ?;";
     public static final String GET_AUTHOR_BY_NAME_QUERY = "SELECT * FROM library_system.author WHERE first_name = ? AND last_name = ?;";
 
     public static final String SAVE_BOOK_QUERY = "INSERT INTO library_system.book (title, year, description) VALUES (?, ?, ?);";
     public static final String DELETE_BOOK_QUERY = "DELETE FROM library_system.book WHERE book_id = ?;";
     public static final String UPDATE_BOOK_QUERY = "UPDATE library_system.book SET title = ?, year = ?, description = ? WHERE book_id = ?;";
     public static final String ALL_BOOKS_QUERY = "SELECT * FROM library_system.book;";
+    public static final String ALL_BOOKS_QUERY_HEAD_PART = "SELECT * FROM library_system.book AS b";
+    public static final String ALL_BOOKS_QUERY_AUTHOR_PART = "INNER JOIN library_system.author_book AS ab ON ab.author_id = ? AND ab.book_id = b.book_id";
+    public static final String ALL_BOOKS_QUERY_KEYWORD_PART = "INNER JOIN library_system.book_keyword AS bk ON bk.keyword_id = ? AND bk.book_id = b.book_id";
+    public static final String ALL_BOOKS_QUERY_TAIL_PART = "WHERE title LIKE ? ORDER BY b.year DESC;";
     public static final String GET_BOOK_QUERY = "SELECT * FROM library_system.book WHERE book_id = ?;";
     public static final String INSERT_AUTHOR_BOOK_QUERY = "INSERT INTO library_system.author_book VALUES (?, ?);";
     public static final String INSERT_BOOK_KEYWORD_QUERY = "INSERT INTO library_system.book_keyword VALUES (?, ?);";
