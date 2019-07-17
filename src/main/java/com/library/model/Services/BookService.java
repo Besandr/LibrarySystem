@@ -8,6 +8,7 @@ import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -37,7 +38,12 @@ public class BookService {
         return (List<Author>) daoManager.executeAndClose(manager -> getAllAuthorsCommand(manager));
     }
 
+    public List<Book> findBooks(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) {
 
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        return (List<Book>) daoManager.executeAndClose(manager -> findBooksCommand(manager, author, keyword, partOfTitle));
+    }
 
     protected synchronized boolean addBookToCatalogueCommand(DaoManager manager, Book book) throws SQLException {
 
@@ -57,6 +63,24 @@ public class BookService {
 
     protected List<Author> getAllAuthorsCommand(DaoManager manager) throws SQLException {
         return manager.getAuthorDao().getAll();
+    }
+
+    protected List<Book> findBooksCommand(DaoManager manager, Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) throws SQLException {
+
+        BookDao bookDao = (BookDao) manager.getBookDao();
+        List<Book> bookList = bookDao.getAllBookParameterized(author, keyword, partOfTitle);
+
+        addAuthorsToBooks(manager, bookList);
+
+        return bookList;
+    }
+
+    protected void addAuthorsToBooks(DaoManager manager, List<Book> bookList) throws SQLException {
+        AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
+        for (Book book : bookList) {
+            List<Author> authors = authorDao.getByBook(book);
+            book.setAuthors(new HashSet<>(authors));
+        }
     }
 
     protected synchronized void saveAuthors(DaoManager manager, Set<Author> authorSet) throws SQLException {
