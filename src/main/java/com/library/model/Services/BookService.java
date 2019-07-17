@@ -8,11 +8,9 @@ import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
 
 import java.sql.SQLException;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BookService {
 
@@ -24,6 +22,19 @@ public class BookService {
 
         return (Boolean) daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book));
 
+    }
+
+    public List<Keyword> getAllKeywords(){
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        return (List<Keyword>) daoManager.executeAndClose(manager -> getAllKeywordsCommand(daoManager));
+    }
+
+    public List<Author> getAllAuthors(){
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        return (List<Author>) daoManager.executeAndClose(manager -> getAllAuthorsCommand(manager));
     }
 
 
@@ -38,6 +49,14 @@ public class BookService {
         bookDao.save(book);
 
         return true;
+    }
+
+    protected List<Keyword> getAllKeywordsCommand(DaoManager manager) throws SQLException {
+        return manager.getKeywordDao().getAll();
+    }
+
+    protected List<Author> getAllAuthorsCommand(DaoManager manager) throws SQLException {
+        return manager.getAuthorDao().getAll();
     }
 
     protected synchronized void saveAuthors(DaoManager manager, Set<Author> authorSet) throws SQLException {
@@ -104,36 +123,9 @@ public class BookService {
 
     }
 
-
     public static BookService getInstance() {
         return instance;
     }
 
     private BookService(){}
-
-    public static void main(String[] args) {
-
-        BookService bookService = new BookService();
-
-        Author first = Author.builder().firstName("Миша").lastName("Соломенный").build();
-        Author second = Author.builder().firstName("Andrew").lastName("Loving").build();
-
-        HashSet<Author> authors = Stream.of(first, second).collect(Collectors.toCollection(HashSet::new));
-
-        Keyword k1 = Keyword.builder().word("жызнь!").build();
-        Keyword k2 = Keyword.builder().word("love").build();
-
-        HashSet<Keyword> keys = Stream.of(k1, k2).collect(Collectors.toCollection(HashSet::new));
-
-        Book book = Book.builder()
-                .title("Different stories")
-                .year(2019)
-                .description("Many stories from two extra different people")
-                .authors(authors)
-                .keywords(keys)
-                .build();
-
-        System.out.println(bookService.addBookToCatalogue(book));
-
-    }
 }
