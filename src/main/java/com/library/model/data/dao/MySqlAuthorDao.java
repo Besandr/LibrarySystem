@@ -2,6 +2,7 @@ package com.library.model.data.dao;
 
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.Author;
+import com.library.model.data.entity.Book;
 import com.library.model.exceptions.DBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing of AuthorDao for working with a MySql server
+ */
 public class MySqlAuthorDao implements AuthorDao {
 
     private static final Logger log = LogManager.getLogger(MySqlAuthorDao.class);
@@ -21,6 +25,9 @@ public class MySqlAuthorDao implements AuthorDao {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Author> get(long id) {
 
@@ -48,6 +55,9 @@ public class MySqlAuthorDao implements AuthorDao {
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Author> getByName(String firstName, String lastName) {
 
@@ -76,6 +86,9 @@ public class MySqlAuthorDao implements AuthorDao {
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Author> getAll() {
 
@@ -84,6 +97,7 @@ public class MySqlAuthorDao implements AuthorDao {
         try {
             PreparedStatement selectStatement = connection
                     .prepareStatement(SqlQueries.ALL_AUTHORS_QUERY);
+
             ResultSet rs = selectStatement.executeQuery();
 
             while (rs.next()) {
@@ -101,6 +115,39 @@ public class MySqlAuthorDao implements AuthorDao {
         return authors;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Author> getByBook(Book book) {
+
+        List<Author> authors = new ArrayList<>();
+
+        try {
+            PreparedStatement selectStatement = connection
+                    .prepareStatement(SqlQueries.GET_AUTHORS_BY_BOOK_QUERY);
+            selectStatement.setLong(1, book.getId());
+
+            ResultSet rs = selectStatement.executeQuery();
+
+            while (rs.next()) {
+                authors.add(getAuthorFromResultRow(rs));
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't get authors list by Book from DB. Book: %s. Cause: ", book, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+
+        return authors;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long save(Author author) {
 
@@ -126,6 +173,9 @@ public class MySqlAuthorDao implements AuthorDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Author author) {
 
@@ -145,6 +195,9 @@ public class MySqlAuthorDao implements AuthorDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Author author) {
 
@@ -170,5 +223,4 @@ public class MySqlAuthorDao implements AuthorDao {
                 .lastName(rs.getString("last_name"))
                 .build();
     }
-
 }
