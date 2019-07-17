@@ -27,10 +27,8 @@ public class MySqlBookcaseDao implements BookcaseDao {
         Optional<Bookcase> resultOptional = Optional.empty();
 
         try {
-
             PreparedStatement getBookcaseStatement = connection
                     .prepareStatement(SqlQueries.GET_BOOKCASE_QUERY);
-
             getBookcaseStatement.setLong(1, id);
 
             ResultSet rs = getBookcaseStatement.executeQuery();
@@ -42,7 +40,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get bookcase by id: %s. Exception message: %s", id, e.getMessage());
+            String errorText = String.format("Can't get bookcase by id: %s. Cause: %s", id, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -68,7 +66,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get bookcases list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get bookcases list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -78,8 +76,6 @@ public class MySqlBookcaseDao implements BookcaseDao {
     @Override
     public long save(Bookcase bookcase) {
 
-        long id = -1;
-
         try {
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_BOOKCASE_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -88,21 +84,23 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
             insertStatement.executeUpdate();
 
-            id = DBUtils.getIdFromStatement(insertStatement);
+            return DBUtils.getIdFromStatement(insertStatement);
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't save bookcase: %s. Exception message: %s", bookcase, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save bookcase: %s. Cause: %s", bookcase, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
     public void update(Bookcase bookcase) {
 
         try {
-
             PreparedStatement updateStatement = connection
                     .prepareStatement(SqlQueries.UPDATE_BOOKCASE_QUERY);
             updateStatement.setInt(1, bookcase.getShelfQuantity());
@@ -112,7 +110,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
             updateStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't update bookcase: %s. Exception message: %s", bookcase, e.getMessage());
+            String errorText = String.format("Can't update bookcase: %s. Cause: %s", bookcase, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -129,7 +127,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete bookcase: %s. Exception message: %s", bookcase, e.getMessage());
+            String errorText = String.format("Can't delete bookcase: %s. Cause: %s", bookcase, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

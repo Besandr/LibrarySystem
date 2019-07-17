@@ -41,7 +41,7 @@ public class MySqlLoanDao implements LoanDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get loan by id: %s. Exception message: %s", loanId, e.getMessage());
+            String errorText = String.format("Can't get loan by id: %s. Cause: %s", loanId, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -66,7 +66,7 @@ public class MySqlLoanDao implements LoanDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get loans list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get loans list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -77,8 +77,6 @@ public class MySqlLoanDao implements LoanDao {
     @Override
     public long save(Loan loan) {
 
-        long id = -1;
-
         try {
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_LOAN_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -88,14 +86,17 @@ public class MySqlLoanDao implements LoanDao {
 
             insertStatement.executeUpdate();
 
-            id = DBUtils.getIdFromStatement(insertStatement);
+            return DBUtils.getIdFromStatement(insertStatement);
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't save loan: %s. Exception message: %s", loan, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save loan: %s. Cause: %s", loan, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
@@ -115,7 +116,7 @@ public class MySqlLoanDao implements LoanDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update loan and expired dates. id: %s." +
-                    " loanDate: %s. expiredDate: %s. Exception message: %s", loanId, loanDate, expiredDate, e.getMessage());
+                    " loanDate: %s. expiredDate: %s. Cause: %s", loanId, loanDate, expiredDate, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -133,7 +134,7 @@ public class MySqlLoanDao implements LoanDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update return date. id: %s." +
-                    " Return date: %s. Exception message: %s", loanId, returnDate, e.getMessage());
+                    " Return date: %s. Cause: %s", loanId, returnDate, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -150,7 +151,7 @@ public class MySqlLoanDao implements LoanDao {
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete loan: %s. Exception message: %s", loan, e.getMessage());
+            String errorText = String.format("Can't delete loan: %s. Cause: %s", loan, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

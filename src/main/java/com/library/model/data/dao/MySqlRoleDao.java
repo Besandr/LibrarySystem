@@ -40,7 +40,7 @@ public class MySqlRoleDao implements RoleDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get role by id: %s. Exception message: %s", id, e.getMessage());
+            String errorText = String.format("Can't get role by id: %s. Cause: %s", id, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -65,7 +65,7 @@ public class MySqlRoleDao implements RoleDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get roles list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get roles list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -76,8 +76,6 @@ public class MySqlRoleDao implements RoleDao {
     @Override
     public long save(Role role) {
 
-        long id;
-
         try {
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -86,14 +84,17 @@ public class MySqlRoleDao implements RoleDao {
 
             insertStatement.executeUpdate();
 
-            id = DBUtils.getIdFromStatement(insertStatement);
+            return DBUtils.getIdFromStatement(insertStatement);
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't save role: %s. Exception message: %s", role, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save role: %s. Cause: %s", role, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
@@ -108,7 +109,7 @@ public class MySqlRoleDao implements RoleDao {
             updateStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't update role: %s. Exception message: %s", role, e.getMessage());
+            String errorText = String.format("Can't update role: %s. Cause: %s", role, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -125,7 +126,7 @@ public class MySqlRoleDao implements RoleDao {
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete role: %s. Exception message: %s", role, e.getMessage());
+            String errorText = String.format("Can't delete role: %s. Cause: %s", role, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

@@ -44,7 +44,7 @@ public class MySqlBookDao implements BookDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get book by id: %s. Exception message: %s", bookId, e.getMessage());
+            String errorText = String.format("Can't get book by id: %s. Cause: %s", bookId, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -71,7 +71,7 @@ public class MySqlBookDao implements BookDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get books list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get books list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -82,11 +82,8 @@ public class MySqlBookDao implements BookDao {
     @Override
     public long save(Book book) {
 
-        long id = -1;
-
         try {
-
-            id = insertRowIntoBookTable(book);
+            long id = insertRowIntoBookTable(book);
 
             book.setId(id);
 
@@ -94,12 +91,17 @@ public class MySqlBookDao implements BookDao {
             insertRowsIntoAuthorBookTable(book);
             insertRowsIntoBook_KeywordTable(book);
 
+            return id;
+
         } catch (SQLException e) {
-            String errorText = String.format("Can't save book: %s. Exception message: %s", book, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save book: %s. Cause: %s", book, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
@@ -116,7 +118,7 @@ public class MySqlBookDao implements BookDao {
             updateStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't update book: %s. Exception message: %s", book, e.getMessage());
+            String errorText = String.format("Can't update book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -133,7 +135,7 @@ public class MySqlBookDao implements BookDao {
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete book: %s. Exception message: %s", book, e.getMessage());
+            String errorText = String.format("Can't delete book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -166,7 +168,7 @@ public class MySqlBookDao implements BookDao {
 
             statement.execute();
         } catch (SQLException e) {
-            String errorText = String.format("Can't add rows to author_book table. Book: %s. Exception message: %s", book, e.getMessage());
+            String errorText = String.format("Can't add rows to author_book table. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -185,7 +187,7 @@ public class MySqlBookDao implements BookDao {
 
             statement.execute();
         } catch (SQLException e) {
-            String errorText = String.format("Can't add rows to book_keyword table. Book: %s. Exception message: %s", book, e.getMessage());
+            String errorText = String.format("Can't add rows to book_keyword table. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

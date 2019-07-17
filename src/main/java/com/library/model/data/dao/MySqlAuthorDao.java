@@ -27,10 +27,8 @@ public class MySqlAuthorDao implements AuthorDao {
         Optional<Author> resultOptional = Optional.empty();
 
         try {
-
             PreparedStatement getAuthorStatement = connection
                     .prepareStatement(SqlQueries.GET_AUTHOR_QUERY);
-
             getAuthorStatement.setLong(1, id);
 
             ResultSet rs = getAuthorStatement.executeQuery();
@@ -42,7 +40,35 @@ public class MySqlAuthorDao implements AuthorDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get author by id: %s. Exception message: %s", id, e.getMessage());
+            String errorText = String.format("Can't get author by id: %s. Cause: %s", id, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+
+        return resultOptional;
+    }
+
+    @Override
+    public Optional<Author> getByName(String firstName, String lastName) {
+
+        Optional<Author> resultOptional = Optional.empty();
+
+        try {
+            PreparedStatement getAuthorStatement = connection
+                    .prepareStatement(SqlQueries.GET_AUTHOR_BY_NAME_QUERY);
+            getAuthorStatement.setString(1, firstName);
+            getAuthorStatement.setString(2, lastName);
+
+            ResultSet rs = getAuthorStatement.executeQuery();
+
+            if (rs.next()) {
+                resultOptional = Optional.of(getAuthorFromResultRow(rs));
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't get author by name: %s %s. Cause: %s", firstName, lastName, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -56,10 +82,8 @@ public class MySqlAuthorDao implements AuthorDao {
         List<Author> authors = new ArrayList<>();
 
         try {
-
             PreparedStatement selectStatement = connection
                     .prepareStatement(SqlQueries.ALL_AUTHORS_QUERY);
-
             ResultSet rs = selectStatement.executeQuery();
 
             while (rs.next()) {
@@ -69,7 +93,7 @@ public class MySqlAuthorDao implements AuthorDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get authors list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get authors list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -80,10 +104,7 @@ public class MySqlAuthorDao implements AuthorDao {
     @Override
     public long save(Author author) {
 
-        long id = -1;
-
         try {
-
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_AUTHOR_QUERY, Statement.RETURN_GENERATED_KEYS);
 
@@ -92,24 +113,25 @@ public class MySqlAuthorDao implements AuthorDao {
 
             insertStatement.executeUpdate();
 
-            id = DBUtils.getIdFromStatement(insertStatement);
+            return DBUtils.getIdFromStatement(insertStatement);
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't save author: %s. Exception message: %s", author, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save author: %s. Cause: %s", author, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
     public void update(Author author) {
 
         try {
-
             PreparedStatement updateStatement = connection
                     .prepareStatement(SqlQueries.UPDATE_AUTHOR_QUERY);
-
             updateStatement.setString(1, author.getFirstName());
             updateStatement.setString(2, author.getLastName());
             updateStatement.setLong(3, author.getId());
@@ -117,7 +139,7 @@ public class MySqlAuthorDao implements AuthorDao {
             updateStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't update author: %s. Exception message: %s", author, e.getMessage());
+            String errorText = String.format("Can't update author: %s. Cause: %s", author, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -134,7 +156,7 @@ public class MySqlAuthorDao implements AuthorDao {
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete author: %s. Exception message: %s", author, e.getMessage());
+            String errorText = String.format("Can't delete author: %s. Cause: %s", author, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

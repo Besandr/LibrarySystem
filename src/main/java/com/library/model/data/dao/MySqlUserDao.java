@@ -41,7 +41,7 @@ public class MySqlUserDao implements UserDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get user by id: %s. Exception message: %s", id, e.getMessage());
+            String errorText = String.format("Can't get user by id: %s. Cause: %s", id, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -67,7 +67,7 @@ public class MySqlUserDao implements UserDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get users list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get users list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -77,8 +77,6 @@ public class MySqlUserDao implements UserDao {
 
     @Override
     public long save(User user) {
-
-        long id;
 
         try {
             PreparedStatement insertStatement = connection
@@ -92,14 +90,17 @@ public class MySqlUserDao implements UserDao {
 
             insertStatement.executeUpdate();
 
-            id = DBUtils.getIdFromStatement(insertStatement);
+            return DBUtils.getIdFromStatement(insertStatement);
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't save user: %s. Exception message: %s", user, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save user: %s. Cause: %s", user, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
@@ -118,7 +119,7 @@ public class MySqlUserDao implements UserDao {
             updateStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't update user: %s. Exception message: %s", user, e.getMessage());
+            String errorText = String.format("Can't update user: %s. Cause: %s", user, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -135,7 +136,7 @@ public class MySqlUserDao implements UserDao {
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete user: %s. Exception message: %s", user, e.getMessage());
+            String errorText = String.format("Can't delete user: %s. Cause: %s", user, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

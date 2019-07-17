@@ -40,7 +40,34 @@ public class MySqlKeywordDao implements KeywordDao{
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get keyword by id: %s. Exception message: %s", id, e.getMessage());
+            String errorText = String.format("Can't get keyword by id: %s. Cause: %s", id, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+
+        return resultOptional;
+    }
+
+    @Override
+    public Optional<Keyword> getByWord(String word) {
+
+        Optional<Keyword> resultOptional = Optional.empty();
+
+        try {
+            PreparedStatement getKeywordStatement = connection
+                    .prepareStatement(SqlQueries.GET_KEYWORD_BY_WORD_QUERY);
+            getKeywordStatement.setString(1, word);
+
+            ResultSet rs = getKeywordStatement.executeQuery();
+
+            if (rs.next()) {
+                resultOptional = Optional.of(getKeywordFromResultRow(rs));
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't get keyword by word: %s. Cause: %s", word, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -66,7 +93,7 @@ public class MySqlKeywordDao implements KeywordDao{
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get keywords list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get keywords list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -77,8 +104,6 @@ public class MySqlKeywordDao implements KeywordDao{
     @Override
     public long save(Keyword keyword) {
 
-        long id;
-
         try {
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_KEYWORD_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -86,14 +111,17 @@ public class MySqlKeywordDao implements KeywordDao{
 
             insertStatement.executeUpdate();
 
-            id = DBUtils.getIdFromStatement(insertStatement);
+            return DBUtils.getIdFromStatement(insertStatement);
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't save keyword: %s. Exception message: %s", keyword, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save keyword: %s. Cause: %s", keyword, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
@@ -108,7 +136,7 @@ public class MySqlKeywordDao implements KeywordDao{
             updateStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't update keyword: %s. Exception message: %s", keyword, e.getMessage());
+            String errorText = String.format("Can't update keyword: %s. Cause: %s", keyword, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -125,7 +153,7 @@ public class MySqlKeywordDao implements KeywordDao{
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete keyword: %s. Exception message: %s", keyword, e.getMessage());
+            String errorText = String.format("Can't delete keyword: %s. Cause: %s", keyword, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

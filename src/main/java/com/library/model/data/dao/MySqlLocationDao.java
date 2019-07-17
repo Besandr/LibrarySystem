@@ -41,7 +41,7 @@ public class MySqlLocationDao implements LocationDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get location by id: %s. Exception message: %s", locationId, e.getMessage());
+            String errorText = String.format("Can't get location by id: %s. Cause: %s", locationId, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -57,8 +57,6 @@ public class MySqlLocationDao implements LocationDao {
     @Override
     public long save(Location location) {
 
-        long id = -1;
-
         try {
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_LOCATION_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -68,14 +66,17 @@ public class MySqlLocationDao implements LocationDao {
 
             insertStatement.executeUpdate();
 
-            id = DBUtils.getIdFromStatement(insertStatement);
+            return DBUtils.getIdFromStatement(insertStatement);
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't save locastion: %s. Exception message: %s", location, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
+            if (DBUtils.isTryingToInsertDuplicate(e)) {
+                return -1;
+            } else {
+                String errorText = String.format("Can't save locastion: %s. Cause: %s", location, e.getMessage());
+                log.error(errorText);
+                throw new DBException(errorText, e);
+            }
         }
-        return id;
     }
 
     @Override
@@ -94,7 +95,7 @@ public class MySqlLocationDao implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update book_id in Location table. " +
-                    "Location_id: %s. Exception message: %s", locationId, e.getMessage());
+                    "Location_id: %s. Cause: %s", locationId, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -113,7 +114,7 @@ public class MySqlLocationDao implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update is_occupied in Location table. " +
-                    "Location_id: %s. Exception message: %s", locationId, e.getMessage());
+                    "Location_id: %s. Cause: %s", locationId, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -130,7 +131,7 @@ public class MySqlLocationDao implements LocationDao {
             deleteStatement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete location: %s. Exception message: %s", location, e.getMessage());
+            String errorText = String.format("Can't delete location: %s. Cause: %s", location, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
@@ -185,7 +186,7 @@ public class MySqlLocationDao implements LocationDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = "Can't get locations list from DB. Exception message: " + e.getMessage();
+            String errorText = "Can't get locations list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
