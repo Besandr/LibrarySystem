@@ -125,6 +125,10 @@ public class DaoManager {
         return new MySqlUserDao(getConnection());
     }
 
+    public LoanDtoDao getLoanDtoDao() throws SQLException {
+        return new MySqlLoanDtoDao(this, getConnection());
+    }
+
     public interface DaoManagerCommand{
         Object execute(DaoManager manager) throws SQLException;
     }
