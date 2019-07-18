@@ -3,25 +3,23 @@ package com.library.model.Services;
 import com.library.model.data.DaoManager;
 import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.*;
+import com.library.model.data.dto.BookDto;
 import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
 
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class BookService {
 
     private final static BookService instance = new BookService();
 
-    public boolean addBookToCatalogue(Book book) {
+    public boolean addBookToCatalogue(BookDto bookDto) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Boolean) daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book));
+        return (Boolean) daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, bookDto));
 
     }
 
@@ -38,21 +36,25 @@ public class BookService {
         return (List<Author>) daoManager.executeAndClose(manager -> getAllAuthorsCommand(manager));
     }
 
-    public List<Book> findBooks(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) {
+    public List<BookDto> findBooks(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<Book>) daoManager.executeAndClose(manager -> findBooksCommand(manager, author, keyword, partOfTitle));
+        return (List<BookDto>) daoManager.executeAndClose(manager -> findBooksCommand(manager, author, keyword, partOfTitle));
     }
 
-    protected synchronized boolean addBookToCatalogueCommand(DaoManager manager, Book book) throws SQLException {
+    protected synchronized boolean addBookToCatalogueCommand(DaoManager manager, BookDto bookDto) throws SQLException {
 
-        saveAuthors(manager, book.getAuthors());
+        boolean isSavingBookSuccessful = saveBook(manager, bookDto.getBook());
+        if (!isSavingBookSuccessful) {
+            return false;
+        }
 
-        saveKeywords(manager, book.getKeywords());
-
-        BookDao bookDao = (BookDao) manager.getBookDao();
-        bookDao.save(book);
+        saveAuthors(manager, bookDto.getAuthors());
+        saveKeywords(manager, bookDto.getKeywords());
+        //Filling junction tables author_book & book_keyword
+        manager.getAuthorBookDao().saveAuthorBookJunction(bookDto.getBook(), bookDto.getAuthors());
+        manager.getBookKeywordDao().saveBookKeywordsJunction(bookDto.getBook(), bookDto.getKeywords());
 
         return true;
     }
@@ -65,22 +67,33 @@ public class BookService {
         return manager.getAuthorDao().getAll();
     }
 
-    protected List<Book> findBooksCommand(DaoManager manager, Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) throws SQLException {
+    protected List<BookDto> findBooksCommand(DaoManager manager, Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) throws SQLException {
 
         BookDao bookDao = (BookDao) manager.getBookDao();
         List<Book> bookList = bookDao.getAllBookParameterized(author, keyword, partOfTitle);
 
-        addAuthorsToBooks(manager, bookList);
+        List<BookDto> bookDtos = new ArrayList<>();
 
-        return bookList;
+        for (Book book : bookList) {
+            bookDtos.add(createBookDtoFromBook(manager, book));
+        }
+
+        return bookDtos;
     }
 
-    protected void addAuthorsToBooks(DaoManager manager, List<Book> bookList) throws SQLException {
+    protected BookDto createBookDtoFromBook(DaoManager manager, Book book) throws SQLException {
+
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
-        for (Book book : bookList) {
-            List<Author> authors = authorDao.getByBook(book);
-            book.setAuthors(new HashSet<>(authors));
-        }
+        Set<Author> authorsSet = new HashSet<>(authorDao.getByBook(book));
+
+        KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
+        Set<Keyword> keywordsSet = new HashSet<>(keywordDao.getByBook(book));
+
+        return BookDto.builder()
+                .book(book)
+                .authors(authorsSet)
+                .keywords(keywordsSet)
+                .build();
     }
 
     protected synchronized void saveAuthors(DaoManager manager, Set<Author> authorSet) throws SQLException {
@@ -145,6 +158,18 @@ public class BookService {
 
         return dao.getByWord(keyword.getWord());
 
+    }
+
+    protected boolean saveBook(DaoManager manager, Book book) throws SQLException {
+
+        long bookId = manager.getBookDao().save(book);
+        if (bookId < 0) {
+            //There is such a book in the DB
+            return false;
+        } else {
+            book.setId(bookId);
+            return true;
+        }
     }
 
     public static BookService getInstance() {

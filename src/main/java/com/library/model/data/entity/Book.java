@@ -12,12 +12,8 @@ public class Book {
 
     private String title;
 
-    private Set<Author> authors;
-
     private int year;
 
     private String description;
-
-    private Set<Keyword> keywords;
 
 }

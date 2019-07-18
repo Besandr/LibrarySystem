@@ -1,6 +1,5 @@
 package com.library.model.data.dao;
 
-import com.library.model.data.DBService;
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
@@ -127,15 +126,8 @@ public class MySqlBookDao implements BookDao {
     public long save(Book book) {
 
         try {
-            long id = insertRowIntoBookTable(book);
 
-            book.setId(id);
-
-            //filling junction tables author_book & book_keyword
-            insertRowsIntoAuthorBookTable(book);
-            insertRowsIntoBook_KeywordTable(book);
-
-            return id;
+            return insertRowIntoBookTable(book);
 
         } catch (SQLException e) {
             if (DBUtils.isTryingToInsertDuplicate(e)) {
@@ -205,44 +197,6 @@ public class MySqlBookDao implements BookDao {
         return DBUtils.getIdFromStatement(insertStatement);
     }
 
-    protected void insertRowsIntoAuthorBookTable(Book book){
-
-        try {
-            PreparedStatement statement = connection.prepareStatement(SqlQueries.INSERT_AUTHOR_BOOK_QUERY);
-
-            for (Author author : book.getAuthors()) {
-                statement.setLong(1, author.getId());
-                statement.setLong(2, book.getId());
-                statement.addBatch();
-            }
-
-            statement.execute();
-        } catch (SQLException e) {
-            String errorText = String.format("Can't add rows to author_book table. Book: %s. Cause: %s", book, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
-        }
-    }
-
-    protected void insertRowsIntoBook_KeywordTable(Book book){
-
-        try {
-            PreparedStatement statement = connection.prepareStatement(SqlQueries.INSERT_BOOK_KEYWORD_QUERY);
-
-            for (Keyword keyword : book.getKeywords()) {
-                statement.setLong(1, book.getId());
-                statement.setLong(2, keyword.getId());
-                statement.addBatch();
-            }
-
-            statement.execute();
-        } catch (SQLException e) {
-            String errorText = String.format("Can't add rows to book_keyword table. Book: %s. Cause: %s", book, e.getMessage());
-            log.error(errorText);
-            throw new DBException(errorText, e);
-        }
-    }
-
     protected Book getBookFromResultRow(ResultSet rs) throws SQLException {
         Book book = Book.builder()
                 .id(rs.getLong("book_id"))
@@ -251,16 +205,5 @@ public class MySqlBookDao implements BookDao {
                 .description(rs.getString("description"))
                 .build();
         return book;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        MySqlBookDao dao = new MySqlBookDao(DBService.getInstance().getConnection());
-
-        Optional<Author> author = Optional.of(Author.builder().id(5).build());
-        Optional<Keyword> keyword = Optional.of(Keyword.builder().id(3).build());
-//        List<Book> list = dao.getAll();
-        List<Book> list = dao.getAllBookParameterized(author, Optional.empty(), "");
-
-        list.forEach(System.out::println);
     }
 }
