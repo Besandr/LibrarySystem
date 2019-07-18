@@ -11,9 +11,9 @@ public class Loan {
 
     private long id;
 
-    private Book book;
+    private long bookId;
 
-    private User user;
+    private long userId;
 
     private LocalDate applyDate;
 
