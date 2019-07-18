@@ -22,7 +22,10 @@ public class LoanService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Boolean) daoManager.executeAndClose(manager -> saveApplyForLoanCommand(manager, loan));
+        return (Boolean) daoManager.executeAndClose(manager -> {
+            manager.getLoanDao().save(loan);
+            return true;
+        });
 
     }
 
@@ -30,7 +33,14 @@ public class LoanService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<LoanDto>) daoManager.executeAndClose(manager -> getUnapprovedLoansCommand(manager));
+        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoans());
+    }
+
+    public List<LoanDto> getActiveLoans(){
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoans());
     }
 
     public boolean approveLoan(long loanId) {
@@ -47,17 +57,6 @@ public class LoanService {
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
             return  (Boolean) daoManager.executeTransaction(manager -> returnBookCommand(manager, loanId));
-    }
-
-    protected boolean saveApplyForLoanCommand(DaoManager manager, Loan loan) throws SQLException {
-
-        LoanDao dao =(LoanDao) manager.getLoanDao();
-        dao.save(loan);
-        return true;
-    }
-
-    private List<LoanDto> getUnapprovedLoansCommand(DaoManager manager) throws SQLException {
-        return manager.getLoanDtoDao().getUnapprovedLoans();
     }
 
     protected boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {

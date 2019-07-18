@@ -36,8 +36,15 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
      * {@inheritDoc}
      */
     public List<LoanDto> getUnapprovedLoans() {
-
         return createLoanDtoListFromQuery(SqlQueries.GET_UNAPPROVED_LOANS_QUERY);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LoanDto> getActiveLoans() {
+        return createLoanDtoListFromQuery(SqlQueries.GET_ACTIVE_LOANS_QUERY);
     }
 
     protected List<LoanDto> createLoanDtoListFromQuery(String query) {

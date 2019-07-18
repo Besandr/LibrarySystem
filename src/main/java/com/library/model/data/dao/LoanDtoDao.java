@@ -12,4 +12,11 @@ public interface LoanDtoDao {
      *          or the empty list if there is no any
      */
     List<LoanDto> getUnapprovedLoans();
+
+    /**
+     * Gets a list of active (not returned) loans
+     * @return - a list with active loans
+     *          or the empty list if there is no any
+     */
+    List<LoanDto> getActiveLoans();
 }
