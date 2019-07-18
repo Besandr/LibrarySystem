@@ -3,6 +3,7 @@ package com.library.model.Services;
 import com.library.model.data.DaoManager;
 import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.*;
+import com.library.model.data.dto.LoanDto;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Loan;
 import com.library.model.data.entity.Location;
@@ -25,11 +26,11 @@ public class LoanService {
 
     }
 
-    public List<Loan> getUnapprovedLoans(){
+    public List<LoanDto> getUnapprovedLoans(){
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<Loan>) daoManager.executeAndClose(manager -> getUnapprovedLoansCommand(manager));
+        return (List<LoanDto>) daoManager.executeAndClose(manager -> getUnapprovedLoansCommand(manager));
     }
 
     public boolean approveLoan(long loanId) {
@@ -55,23 +56,8 @@ public class LoanService {
         return true;
     }
 
-    private List<Loan> getUnapprovedLoansCommand(DaoManager manager) throws SQLException {
-
-        LoanDao loanDao = (LoanDao) manager.getLoanDao();
-        List<Loan> loanList = loanDao.getUnapprovedLoans();
-
-        UserDao userDao = (UserDao) manager.getUserDao();
-        BookDao bookDao = (BookDao) manager.getBookDao();
-        for (Loan loan : loanList) {
-
-            User user = userDao.get(loan.getUser().getId()).get();
-            loan.setUser(user);
-
-            Book book = bookDao.get(loan.getBook().getId()).get();
-            loan.setBook(book);
-        }
-
-        return loanList;
+    private List<LoanDto> getUnapprovedLoansCommand(DaoManager manager) throws SQLException {
+        return manager.getLoanDtoDao().getUnapprovedLoans();
     }
 
     protected boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
@@ -85,7 +71,7 @@ public class LoanService {
         }
 
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
-        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBook().getId(), true);
+        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), true);
         //check is there a target book on the shelves
         if (locationOptional.isPresent()) {
 
@@ -115,7 +101,7 @@ public class LoanService {
         }
 
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
-        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBook().getId(), false);
+        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), false);
         locationDao.updateIsOccupied(locationOptional.get().getId(), true);
 
         return true;
