@@ -137,7 +137,7 @@ public class MySqlAuthorDao implements AuthorDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get authors list by Book from DB. Book: %s. Cause: ", book, e.getMessage());
+            String errorText = String.format("Can't get authors list by Book from DB. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }
