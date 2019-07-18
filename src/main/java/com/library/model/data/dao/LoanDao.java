@@ -24,11 +24,4 @@ public interface LoanDao extends Dao<Loan> {
      * @param returnDate - new returned date
      */
     void updateReturnDate(long loanId, LocalDate returnDate);
-
-    /**
-     * Gets a list of unapproved loans
-     * @return - a list with unaproved loans
-     *          or the empty list if there is no any
-     */
-    List<Loan> getUnapprovedLoans();
 }

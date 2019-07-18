@@ -70,22 +70,13 @@ public class MySqlLoanDao implements LoanDao {
      * {@inheritDoc}
      */
     @Override
-    public List<Loan> getUnapprovedLoans() {
-
-        return createLoansListFromQuery(SqlQueries.GET_UNAPPROVED_LOANS_QUERY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public long save(Loan loan) {
 
         try {
             PreparedStatement insertStatement = connection
                     .prepareStatement(SqlQueries.SAVE_LOAN_QUERY, Statement.RETURN_GENERATED_KEYS);
-            insertStatement.setLong(1, loan.getBook().getId());
-            insertStatement.setLong(2, loan.getUser().getId());
+            insertStatement.setLong(1, loan.getBookId());
+            insertStatement.setLong(2, loan.getUserId());
             insertStatement.setObject(3, loan.getApplyDate());
 
             insertStatement.executeUpdate();
@@ -207,8 +198,8 @@ public class MySqlLoanDao implements LoanDao {
 
         Loan loan = Loan.builder()
                 .id(rs.getLong("loan_id"))
-                .book(Book.builder().id(rs.getLong("book_id")).build())
-                .user(User.builder().id(rs.getLong("user_id")).build())
+                .bookId(rs.getLong("book_id"))
+                .userId(rs.getLong("user_id"))
                 .applyDate(rs.getObject("apply_date", LocalDate.class))
                 .loanDate(rs.getObject("loan_date", LocalDate.class))
                 .expiredDate(rs.getObject("expired_date", LocalDate.class))
