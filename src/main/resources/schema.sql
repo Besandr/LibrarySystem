@@ -57,7 +57,8 @@ CREATE TABLE IF NOT EXISTS `loan` (
 CREATE TABLE IF NOT EXISTS `author_book` (
 	`author_id` bigint NOT NULL,
 	`book_id` bigint NOT NULL,
-	PRIMARY KEY (`author_id`,`book_id`)
+	PRIMARY KEY (`author_id`,`book_id`),
+    UNIQUE KEY (author_id, book_id)
 );
 
 CREATE TABLE IF NOT EXISTS `role` (
