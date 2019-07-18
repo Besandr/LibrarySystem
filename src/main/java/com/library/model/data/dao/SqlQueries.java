@@ -92,4 +92,10 @@ public class SqlQueries {
             "INNER JOIN library_system.book AS b ON l.book_id = b.book_id\n" +
             "INNER JOIN library_system.user AS u ON l.user_id = u.user_id\n" +
             "WHERE loan_date IS NOT NULL AND return_date IS NULL;";
+
+    public static final String GET_ACTIVE_LOANS_BY_BOOK_QUERY = "SELECT * FROM library_system.loan AS l \n" +
+            "INNER JOIN library_system.book AS b ON l.book_id = b.book_id\n" +
+            "INNER JOIN library_system.user AS u ON l.user_id = u.user_id\n" +
+            "WHERE loan_date IS NOT NULL AND return_date IS NULL\n" +
+            "AND l.book_id = ?;";
 }

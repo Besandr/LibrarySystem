@@ -47,37 +47,65 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
         return createLoanDtoListFromQuery(SqlQueries.GET_ACTIVE_LOANS_QUERY);
     }
 
-    protected List<LoanDto> createLoanDtoListFromQuery(String query) {
+    @Override
+    public List<LoanDto> getActiveLoansByBook(Book book) {
 
-        List<LoanDto> loanDtos = new ArrayList<>();
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.GET_ACTIVE_LOANS_BY_BOOK_QUERY);
+            statement.setLong(1, book.getId());
 
-        try {
-            PreparedStatement selectStatement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
 
-            ResultSet rs = selectStatement.executeQuery();
-
-            while (rs.next()) {
-
-                Loan loan = ((MySqlLoanDao) manager.getLoanDao()).getLoanFromResultRow(rs);
-                Book book = ((MySqlBookDao) manager.getBookDao()).getBookFromResultRow(rs);
-                User user = ((MySqlUserDao) manager.getUserDao()).getUserFromResultRow(rs);
-
-                LoanDto dto = LoanDto.builder()
-                        .loan(loan)
-                        .book(book)
-                        .user(user)
-                        .build();
-
-                loanDtos.add(dto);
-            }
-
-            rs.close();
+            return createLoanDtoListFromResultSet(rs);
 
         } catch (SQLException e) {
             String errorText = "Can't get loanDtos list from DB. Cause: " + e.getMessage();
             log.error(errorText);
             throw new DBException(errorText, e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+
+    protected List<LoanDto> createLoanDtoListFromQuery(String query) {
+
+        try {
+            PreparedStatement selectStatement = connection.prepareStatement(query);
+
+            ResultSet rs = selectStatement.executeQuery();
+
+            return createLoanDtoListFromResultSet(rs);
+
+        } catch (SQLException e) {
+            String errorText = "Can't get loanDtos list from DB. Cause: " + e.getMessage();
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+    }
+
+    protected List<LoanDto> createLoanDtoListFromResultSet(ResultSet rs) throws SQLException {
+
+        List<LoanDto> loanDtos = new ArrayList<>();
+
+        while (rs.next()) {
+
+            Loan loan = ((MySqlLoanDao) manager.getLoanDao()).getLoanFromResultRow(rs);
+            Book book = ((MySqlBookDao) manager.getBookDao()).getBookFromResultRow(rs);
+            User user = ((MySqlUserDao) manager.getUserDao()).getUserFromResultRow(rs);
+
+            LoanDto dto = LoanDto.builder()
+                    .loan(loan)
+                    .book(book)
+                    .user(user)
+                    .build();
+
+            loanDtos.add(dto);
+        }
+
+        rs.close();
 
         return loanDtos;
     }

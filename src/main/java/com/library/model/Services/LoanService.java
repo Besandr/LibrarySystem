@@ -43,6 +43,13 @@ public class LoanService {
         return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoans());
     }
 
+    public List<LoanDto> getActiveLoansByBook(Book book) {
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByBook(book));
+    }
+
     public boolean approveLoan(long loanId) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
