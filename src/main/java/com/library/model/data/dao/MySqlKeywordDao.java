@@ -1,6 +1,7 @@
 package com.library.model.data.dao;
 
 import com.library.model.data.DBUtils;
+import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
 import com.library.model.exceptions.DBException;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing of KeywordDao for working with a MySql server
+ */
 public class MySqlKeywordDao implements KeywordDao{
 
     private static final Logger log = LogManager.getLogger(KeywordDao.class);
@@ -21,6 +25,9 @@ public class MySqlKeywordDao implements KeywordDao{
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Keyword> get(long id) {
 
@@ -48,6 +55,9 @@ public class MySqlKeywordDao implements KeywordDao{
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Keyword> getByWord(String word) {
 
@@ -75,6 +85,9 @@ public class MySqlKeywordDao implements KeywordDao{
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Keyword> getAll() {
 
@@ -101,6 +114,38 @@ public class MySqlKeywordDao implements KeywordDao{
         return keywords;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Keyword> getByBook(Book book) {
+        List<Keyword> keywords = new ArrayList<>();
+
+        try {
+            PreparedStatement selectStatement = connection
+                    .prepareStatement(SqlQueries.GET_KEYWORDS_BY_BOOK_QUERY);
+            selectStatement.setLong(1, book.getId());
+
+            ResultSet rs = selectStatement.executeQuery();
+
+            while (rs.next()) {
+                keywords.add(getKeywordFromResultRow(rs));
+            }
+
+            rs.close();
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't get keywords list by Book from DB. Book: %s. Cause: %s", book, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+
+        return keywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long save(Keyword keyword) {
 
@@ -124,6 +169,9 @@ public class MySqlKeywordDao implements KeywordDao{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Keyword keyword) {
 
@@ -142,6 +190,9 @@ public class MySqlKeywordDao implements KeywordDao{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Keyword keyword) {
 
