@@ -7,11 +7,11 @@ import com.library.model.data.dto.LoanDto;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Loan;
 import com.library.model.data.entity.Location;
-import com.library.model.data.entity.User;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class LoanService {
@@ -22,11 +22,12 @@ public class LoanService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Boolean) daoManager.executeAndClose(manager -> {
+        Object executingResult = daoManager.executeAndClose(manager -> {
             manager.getLoanDao().save(loan);
             return true;
         });
 
+        return checkAndCastExecutingResult(executingResult);
     }
 
     public List<LoanDto> getUnapprovedLoans(){
@@ -55,7 +56,8 @@ public class LoanService {
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
         synchronized (this) {
-            return (Boolean) daoManager.executeTransaction(manager -> approveLoanCommand(manager, loanId));
+            Object executingResult = daoManager.executeTransaction(manager -> approveLoanCommand(manager, loanId));
+            return checkAndCastExecutingResult(executingResult);
         }
     }
 
@@ -63,7 +65,9 @@ public class LoanService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-            return  (Boolean) daoManager.executeTransaction(manager -> returnBookCommand(manager, loanId));
+        Object executingResult = daoManager.executeTransaction(manager -> returnBookCommand(manager, loanId));
+
+        return checkAndCastExecutingResult(executingResult);
     }
 
     protected boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
@@ -111,6 +115,14 @@ public class LoanService {
         locationDao.updateIsOccupied(locationOptional.get().getId(), true);
 
         return true;
+    }
+
+    protected boolean checkAndCastExecutingResult(Object executingResult) {
+        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
+            return (Boolean) executingResult;
+        } else {
+            return false;
+        }
     }
 
     public static LoanService getInstance() {

@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class UserService {
 
@@ -24,7 +25,9 @@ public class UserService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Boolean) daoManager.executeTransaction( manager -> createNewUserCommand(manager, user));
+        Object executingResult = daoManager.executeTransaction(manager -> createNewUserCommand(manager, user));
+
+        return checkAndCastExecutingResult(executingResult);
     }
 
     protected boolean createNewUserCommand(DaoManager manager, User user) throws SQLException {
@@ -53,6 +56,14 @@ public class UserService {
 
     public static UserService getInstance() {
         return instance;
+    }
+
+    protected boolean checkAndCastExecutingResult(Object executingResult) {
+        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
+            return (Boolean) executingResult;
+        } else {
+            return false;
+        }
     }
 
     private UserService(){}

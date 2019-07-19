@@ -19,8 +19,9 @@ public class BookService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Boolean) daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, bookDto));
+        Object executingResult = daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, bookDto));
 
+        return checkAndCastExecutingResult(executingResult);
     }
 
     public List<Keyword> getAllKeywords(){
@@ -169,6 +170,14 @@ public class BookService {
         } else {
             book.setId(bookId);
             return true;
+        }
+    }
+
+    protected boolean checkAndCastExecutingResult(Object executingResult) {
+        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
+            return (Boolean) executingResult;
+        } else {
+            return false;
         }
     }
 

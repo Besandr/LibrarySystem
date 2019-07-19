@@ -9,6 +9,7 @@ import com.library.model.data.entity.Location;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 public class LocationService {
 
@@ -18,14 +19,18 @@ public class LocationService {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Boolean) daoManager.executeTransaction(manager -> addBookcaseToStorageCommand(manager, bookcase));
+        Object executingResult = daoManager.executeTransaction(manager -> addBookcaseToStorageCommand(manager, bookcase));
+
+        return checkAndCastExecutingResult(executingResult);
     }
 
     public boolean addBooksToStorage(long bookId, int booksQuantity) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (Boolean) daoManager.executeTransaction( manager -> addBooksToStorageCommand(manager, bookId, booksQuantity));
+        Object executingResult = daoManager.executeTransaction(manager -> addBooksToStorageCommand(manager, bookId, booksQuantity));
+
+        return checkAndCastExecutingResult(executingResult);
     }
 
     public static LocationService getInstance() {
@@ -65,17 +70,15 @@ public class LocationService {
         }
         return true;
     }
-    private LocationService(){}
 
-    public static void main(String[] args) {
-
-//        Bookcase bookcase = Bookcase.builder()
-//                .cellQuantity(10)
-//                .shelfQuantity(8)
-//                .build();
-//        System.out.println(LocationService.getInstance().addBookcaseToStorage(bookcase));
-
-//        System.out.println(LocationService.getInstance().addBooksToStorage(6, 10));
+    protected boolean checkAndCastExecutingResult(Object executingResult) {
+        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
+            return (Boolean) executingResult;
+        } else {
+            return false;
+        }
     }
+
+    private LocationService(){}
 
 }
