@@ -59,6 +59,23 @@ public class LoanService extends Service{
     }
 
     /**
+     * Gets a list with all active loans (not returned yet).
+     * @return a list with all active loans
+     */
+    public List<LoanDto> getAllActiveLoans(){
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllActiveLoans());
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
+            return (List) executingResult;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Gets a list with all unapproved loans of given User.
      * @param user - user whose unapproved loans need to
      *             be returned
@@ -78,23 +95,6 @@ public class LoanService extends Service{
     }
 
     /**
-     * Gets a list with all active loans (not returned yet).
-     * @return a list with all active loans
-     */
-    public List<LoanDto> getAllActiveLoans(){
-
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
-
-        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllActiveLoans());
-
-        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
-            return (List) executingResult;
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    /**
      * Gets a list with all active (not returned) loans of given User.
      * @param user - user whose active loans need to
      *             be returned
@@ -105,6 +105,24 @@ public class LoanService extends Service{
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByUser(user));
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
+            return (List) executingResult;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Gets a list with all loans of given User(his loans history).
+     * @param user - user whose loans need to be returned
+     * @return a list with all user's loans
+     */
+    public List<LoanDto> getAllLoansByUser(User user) {
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllLoansByUser(user));
 
         if (Objects.nonNull(executingResult) && executingResult instanceof List) {
             return (List) executingResult;
