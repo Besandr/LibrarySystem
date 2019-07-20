@@ -33,6 +33,17 @@ public class BookService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    public boolean updateBookProperties(BookDto bookDto) {
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> updateBookPropertiesCommand(manager, bookDto));
+
+        return checkAndCastExecutingResult(executingResult);
+    }
+
+
+
     public List<Keyword> getAllKeywords(){
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
@@ -82,9 +93,6 @@ public class BookService extends Service{
         return true;
     }
 
-
-
-
     protected List<Keyword> getAllKeywordsCommand(DaoManager manager) throws SQLException {
         return manager.getKeywordDao().getAll();
     }
@@ -105,6 +113,16 @@ public class BookService extends Service{
         }
 
         return bookDtos;
+    }
+
+    protected synchronized boolean updateBookPropertiesCommand(DaoManager manager, BookDto bookDto) throws SQLException {
+
+        BookDao bookDao = (BookDao) manager.getBookDao();
+
+        bookDao.update(bookDto.getBook());
+        // If updating fails the manager in caller method will return null.
+        return true;
+
     }
 
     protected BookDto createBookDtoFromBook(DaoManager manager, Book book) throws SQLException {
@@ -227,7 +245,7 @@ public class BookService extends Service{
         BookDao bookDao = (BookDao) manager.getBookDao();
 
         bookDao.delete(book);
-        // If deleting fails the manager will return null.
+        // If deleting fails the manager in caller method will return null.
         return true;
     }
 
