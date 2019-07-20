@@ -137,6 +137,8 @@ public class DaoManager {
         return new MySqlLoanDtoDao(this, getConnection());
     }
 
+    DaoManager(){}
+
     /**
      * Command for executing by DaoManager
      */
