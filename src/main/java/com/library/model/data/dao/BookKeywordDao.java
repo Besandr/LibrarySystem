@@ -26,4 +26,11 @@ public interface BookKeywordDao {
      *           {@code false} if there is no any
      */
     boolean doesKeywordBelongToBook(Keyword keyword);
+
+    /**
+     * Deletes a junction between given book and given keyword
+     * @param book - book which junction to given keyword need to be deleted
+     * @param keyword - keyword which junction to given book need to be deleted
+     */
+    void deleteBookKeywordJunction(Keyword keyword, Book book);
 }

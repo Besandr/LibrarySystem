@@ -22,6 +22,7 @@ public class SqlQueries {
     public static final String GET_BOOK_QUERY = "SELECT * FROM library_system.book WHERE book_id = ?;";
 
     public static final String INSERT_BOOK_KEYWORD_QUERY = "INSERT INTO library_system.book_keyword VALUES (?, ?);";
+    public static final String DELETE_BOOK_KEYWORD_QUERY = "DELETE FROM library_system.book_keyword WHERE book_id = ? AND keyword_id = ?;";
     public static final String COUNT_BOOKS_WITH_KEYWORD_QUERY = "SELECT COUNT(*) FROM library_system.book_keyword WHERE keyword_id = ?;";
 
 

@@ -71,4 +71,25 @@ public class MySqlBookKeywordDao implements BookKeywordDao {
             throw new DBException(errorText, e);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteBookKeywordJunction(Keyword keyword, Book book) {
+
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.DELETE_BOOK_KEYWORD_QUERY);
+            statement.setLong(1, book.getId());
+            statement.setLong(2, keyword.getId());
+
+            statement.execute();
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't delete row from book_keyword. Keyword: %s." +
+                    "Book: %s. Cause: %s", keyword, book, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+    }
 }
