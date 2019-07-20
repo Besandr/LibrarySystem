@@ -7,10 +7,13 @@ import com.library.model.data.dto.LoanDto;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Loan;
 import com.library.model.data.entity.Location;
+import com.library.model.data.entity.User;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -46,7 +49,32 @@ public class LoanService extends Service{
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllUnapprovedLoans());
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllUnapprovedLoans());
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
+            return (List) executingResult;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Gets a list with all unapproved loans of given User.
+     * @param user - user whose unapproved loans need to
+     *             be returned
+     * @return a list with user's unapproved loans
+     */
+    public List<LoanDto> getUnapprovedLoansByUser(User user){
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoansByUser(user));
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
+            return (List) executingResult;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -57,7 +85,13 @@ public class LoanService extends Service{
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllActiveLoans());
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllActiveLoans());
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
+            return (List) executingResult;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -69,7 +103,13 @@ public class LoanService extends Service{
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByBook(book));
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByBook(book));
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
+            return (List) executingResult;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -171,9 +211,7 @@ public class LoanService extends Service{
 
             UserDao userDao = (UserDao) manager.getUserDao();
             userDao.updateKarma(loan.get().getUserId(), -1);
-
         }
-
     }
 
     public static LoanService getInstance() {

@@ -35,7 +35,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
     /**
      * {@inheritDoc}
      */
-    public List<LoanDto> getUnapprovedLoans() {
+    public List<LoanDto> getAllUnapprovedLoans() {
         return createLoanDtoListFromQuery(SqlQueries.GET_UNAPPROVED_LOANS_QUERY);
     }
 
@@ -43,7 +43,26 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
      * {@inheritDoc}
      */
     @Override
-    public List<LoanDto> getActiveLoans() {
+    public List<LoanDto> getUnapprovedLoansByUser(User user) {
+
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.GET_UNAPPROVED_LOANS_BY_USER_QUERY);
+            statement.setLong(1, user.getId());
+
+            return createLoanDtoListFromResultSet(statement.executeQuery());
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't get unapproved loans by user. User: %s. Cause: %s.", user, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LoanDto> getAllActiveLoans() {
         return createLoanDtoListFromQuery(SqlQueries.GET_ACTIVE_LOANS_QUERY);
     }
 
@@ -66,10 +85,12 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a {@code List} and fills it with LoanDto objects received from
+     * executing a given query.
+     * @param query - query which result is need to be returned
+     * @return - a {@code List} with results of executing the given query.
+     * {@code List} can be empty if query has no results
      */
-
-
     protected List<LoanDto> createLoanDtoListFromQuery(String query) {
 
         try {
@@ -86,6 +107,13 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
         }
     }
 
+    /**
+     * Creates a {@code List} and fills it with LoanDto objects received
+     * from given {@code ResultSet}
+     * @param rs - set with data which is need to be returned
+     * @return - a {@code List} with the data from given {@code ResultSet}.
+     * {@code List} can be empty if the given set has no data
+     */
     protected List<LoanDto> createLoanDtoListFromResultSet(ResultSet rs) throws SQLException {
 
         List<LoanDto> loanDtos = new ArrayList<>();
