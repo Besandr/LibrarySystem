@@ -62,26 +62,25 @@ public class DaoManager {
      */
     public Object executeAndClose(DaoManagerCommand command) {
 
-        Object result = null;
-
         try {
             getConnection();
 
-            result = command.execute(this);
+            return command.execute(this);
 
         } catch (SQLException e) {
             log.error("SQLException occurred. Cause: " + e.getMessage());
             return null;
         } catch (DBException e) {
-            //SQL query/ies are failed so there is nothing to return
+            //Command executing is failed so there is nothing to return
             return null;
         } finally {
             closeConnection();
         }
-
-        return result;
     }
 
+    /**
+     * Closes manager's connection and handles a possible Exception
+     */
     private void closeConnection() {
         try {
             connection.close();
@@ -97,6 +96,7 @@ public class DaoManager {
         return connection;
     }
 
+    // Dao getters
     public Dao getAuthorDao() throws SQLException {
         return new MySqlAuthorDao(getConnection());
     }
@@ -105,16 +105,24 @@ public class DaoManager {
         return new MySqlBookDao(getConnection());
     }
 
+    public AuthorBookDao getAuthorBookDao() throws SQLException {
+        return new MySqlAuthorBookDao(getConnection());
+    }
+
+    public Dao getKeywordDao() throws SQLException {
+        return new MySqlKeywordDao(getConnection());
+    }
+
+    public BookKeywordDao getBookKeywordDao() throws SQLException {
+        return new MySqlBookKeywordDao(getConnection());
+    }
+
     public Dao getLocationDao() throws SQLException {
         return new MySqlLocationDao(getConnection());
     }
 
     public Dao getLoanDao() throws SQLException {
         return new MySqlLoanDao(getConnection());
-    }
-
-    public Dao getKeywordDao() throws SQLException {
-        return new MySqlKeywordDao(getConnection());
     }
 
     public Dao getBookcaseDao() throws SQLException {
@@ -129,6 +137,10 @@ public class DaoManager {
         return new MySqlLoanDtoDao(this, getConnection());
     }
 
+    /**
+     * Command for executing by DaoManager
+     */
+    @FunctionalInterface
     public interface DaoManagerCommand{
         Object execute(DaoManager manager) throws SQLException;
     }
