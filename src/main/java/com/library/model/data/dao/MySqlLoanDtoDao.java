@@ -66,6 +66,28 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
         return createLoanDtoListFromQuery(SqlQueries.GET_ACTIVE_LOANS_QUERY);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LoanDto> getActiveLoansByUser(User user) {
+
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.GET_ACTIVE_LOANS_BY_USER_QUERY);
+            statement.setLong(1, user.getId());
+
+            return createLoanDtoListFromResultSet(statement.executeQuery());
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't get active loans for given user. User: %s. Cause: %s", user, e.getMessage());
+            log.error(errorText);
+            throw new DaoException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<LoanDto> getActiveLoansByBook(Book book) {
 

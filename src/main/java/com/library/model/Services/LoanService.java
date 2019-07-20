@@ -95,6 +95,25 @@ public class LoanService extends Service{
     }
 
     /**
+     * Gets a list with all active (not returned) loans of given User.
+     * @param user - user whose active loans need to
+     *             be returned
+     * @return a list with user's active loans
+     */
+    public List<LoanDto> getActiveLoansByUser(User user) {
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByUser(user));
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
+            return (List) executingResult;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Gets a list with all active loans of target book.
      * @param book - book which active loans are needed to be get
      * @return a list with all active loans of target book

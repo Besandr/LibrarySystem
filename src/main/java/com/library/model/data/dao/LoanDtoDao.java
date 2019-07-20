@@ -25,11 +25,20 @@ public interface LoanDtoDao {
     List<LoanDto> getUnapprovedLoansByUser(User user);
 
     /**
-     * Gets a list of active (not returned) loans.
+     * Gets a list of active(not returned) loans.
      * @return - a list with active loans
      *          or the empty list if there is no any
      */
     List<LoanDto> getAllActiveLoans();
+
+    /**
+     * Gets a list of active(not returned) loans for
+     * target user.
+     * @param user - a target user whose loans is need to be returned
+     * @return - a list with active loans for target user
+     *          or the empty list if there is no any
+     */
+    List<LoanDto> getActiveLoansByUser(User user);
 
     /**
      * Gets a list of active (not returned) loans for
