@@ -11,7 +11,7 @@ import com.library.model.data.entity.Keyword;
 import java.sql.SQLException;
 import java.util.*;
 
-public class BookService {
+public class BookService extends Service{
 
     private final static BookService instance = new BookService();
 
@@ -20,6 +20,15 @@ public class BookService {
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, bookDto));
+
+        return checkAndCastExecutingResult(executingResult);
+    }
+
+    public boolean removeBookFromCatalogue(BookDto bookDto) {
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeTransaction(manager -> removeBookFromCatalogueCommand(manager, bookDto));
 
         return checkAndCastExecutingResult(executingResult);
     }
@@ -59,6 +68,22 @@ public class BookService {
 
         return true;
     }
+
+    private synchronized boolean removeBookFromCatalogueCommand(DaoManager manager, BookDto bookDto) throws SQLException {
+
+        boolean isDeletingBookSuccessful = deleteBook(manager, bookDto.getBook());
+        if (!isDeletingBookSuccessful) {
+            return false;
+        }
+
+        deleteAuthors(manager, bookDto.getAuthors());
+        deleteKeywords(manager, bookDto.getKeywords());
+
+        return true;
+    }
+
+
+
 
     protected List<Keyword> getAllKeywordsCommand(DaoManager manager) throws SQLException {
         return manager.getKeywordDao().getAll();
@@ -123,6 +148,30 @@ public class BookService {
         }
     }
 
+    protected synchronized void deleteAuthors(DaoManager manager, Set<Author> authors) throws SQLException {
+
+        AuthorBookDao authorBookDao = manager.getAuthorBookDao();
+        AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
+
+        for (Author author : authors) {
+            if (!authorBookDao.doesAuthorHasBooks(author)) {
+                authorDao.delete(author);
+            }
+        }
+    }
+
+    protected synchronized void deleteKeywords(DaoManager manager, Set<Keyword> keywords) throws SQLException {
+
+        BookKeywordDao bookKeywordDao = manager.getBookKeywordDao();
+        KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
+
+        for (Keyword keyword : keywords) {
+            if (!bookKeywordDao.doesKeywordBelongToBook(keyword)) {
+                keywordDao.delete(keyword);
+            }
+        }
+    }
+
     protected Optional<Author> getAuthorByName(AuthorDao dao, Author author) {
 
         return dao.getByName(author.getFirstName(), author.getLastName());
@@ -173,12 +222,13 @@ public class BookService {
         }
     }
 
-    protected boolean checkAndCastExecutingResult(Object executingResult) {
-        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
-            return (Boolean) executingResult;
-        } else {
-            return false;
-        }
+    private boolean deleteBook(DaoManager manager, Book book) throws SQLException {
+
+        BookDao bookDao = (BookDao) manager.getBookDao();
+
+        bookDao.delete(book);
+        // If deleting fails the manager will return null.
+        return true;
     }
 
     public static BookService getInstance() {

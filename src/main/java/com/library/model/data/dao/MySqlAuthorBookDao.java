@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
@@ -42,6 +43,30 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
             statement.execute();
         } catch (SQLException e) {
             String errorText = String.format("Can't add rows to author_book table. Book: %s. Cause: %s", book, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean doesAuthorHasBooks(Author author) {
+
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.COUNT_BOOKS_OF_AUTHOR_QUERY);
+            statement.setLong(1, author.getId());
+            //Result set will contain only one string with given author books quantity
+            ResultSet rs = statement.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't count books of author. Author: %s. Cause: %s", author, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

@@ -17,4 +17,13 @@ public interface AuthorBookDao {
      * @param authors - set with authors for joining
      */
     void saveAuthorBookJunction(Book book, Set<Author> authors);
+
+    /**
+     * Seeks for presenting books with a given author in the catalogue
+     * @param author - given author
+     * @return - {@code true} if there is at least one book of given
+     *          author in the catalogue of {@code false} if there is
+     *          no any
+     */
+    boolean doesAuthorHasBooks(Author author);
 }

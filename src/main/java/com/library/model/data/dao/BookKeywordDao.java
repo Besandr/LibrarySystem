@@ -17,4 +17,13 @@ public interface BookKeywordDao {
      * @param keywords - set with keywords for joining
      */
     void saveBookKeywordsJunction(Book book, Set<Keyword> keywords);
+
+    /**
+     * Seeks books which has given keyword and return {@code true}
+     * if there are any.
+     * @param keyword - given keyword
+     * @return - {@code true} if there is at least one book with given keyword
+     *           {@code false} if there is no any
+     */
+    boolean doesKeywordBelongToBook(Keyword keyword);
 }

@@ -15,14 +15,19 @@ public class SqlQueries {
     public static final String SAVE_BOOK_QUERY = "INSERT INTO library_system.book (title, year, description) VALUES (?, ?, ?);";
     public static final String DELETE_BOOK_QUERY = "DELETE FROM library_system.book WHERE book_id = ?;";
     public static final String UPDATE_BOOK_QUERY = "UPDATE library_system.book SET title = ?, year = ?, description = ? WHERE book_id = ?;";
-    public static final String ALL_BOOKS_QUERY = "SELECT * FROM library_system.book;";
     public static final String ALL_BOOKS_QUERY_HEAD_PART = "SELECT * FROM library_system.book AS b";
     public static final String ALL_BOOKS_QUERY_AUTHOR_PART = "INNER JOIN library_system.author_book AS ab ON ab.author_id = ? AND ab.book_id = b.book_id";
     public static final String ALL_BOOKS_QUERY_KEYWORD_PART = "INNER JOIN library_system.book_keyword AS bk ON bk.keyword_id = ? AND bk.book_id = b.book_id";
     public static final String ALL_BOOKS_QUERY_TAIL_PART = "WHERE title LIKE ? ORDER BY b.year DESC;";
     public static final String GET_BOOK_QUERY = "SELECT * FROM library_system.book WHERE book_id = ?;";
-    public static final String INSERT_AUTHOR_BOOK_QUERY = "INSERT INTO library_system.author_book VALUES (?, ?);";
+
     public static final String INSERT_BOOK_KEYWORD_QUERY = "INSERT INTO library_system.book_keyword VALUES (?, ?);";
+    public static final String COUNT_BOOKS_WITH_KEYWORD_QUERY = "SELECT COUNT(*) FROM library_system.book_keyword WHERE keyword_id = ?;";
+
+
+    public static final String INSERT_AUTHOR_BOOK_QUERY = "INSERT INTO library_system.author_book VALUES (?, ?);";
+    public static final String COUNT_BOOKS_OF_AUTHOR_QUERY = "SELECT COUNT(*) FROM library_system.author_book WHERE author_id = ?;";
+
 
     public static final String SAVE_KEYWORD_QUERY = "INSERT INTO library_system.keyword (word) VALUES (?);";
     public static final String DELETE_KEYWORD_QUERY = "DELETE FROM library_system.keyword WHERE keyword_id = ?;";
