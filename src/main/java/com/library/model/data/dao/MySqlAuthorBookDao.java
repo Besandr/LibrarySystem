@@ -52,6 +52,26 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
      * {@inheritDoc}
      */
     @Override
+    public void deleteAuthorBookJunction(Author author, Book book) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.DELETE_AUTHOR_BOOK_QUERY);
+            statement.setLong(1, author.getId());
+            statement.setLong(2, book.getId());
+
+            statement.execute();
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't delete row from author_book. Author: %s." +
+                    "Book: %s. Cause: %s", author, book, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean doesAuthorHasBooks(Author author) {
 
         try{

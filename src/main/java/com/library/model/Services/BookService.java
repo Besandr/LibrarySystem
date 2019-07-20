@@ -10,6 +10,7 @@ import com.library.model.data.entity.Keyword;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BookService extends Service{
 
@@ -42,7 +43,14 @@ public class BookService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    public boolean updateBookAuthorsSet(BookDto bookDto) {
 
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeTransaction(manager -> updateBookAuthorsSetCommand(manager, bookDto));
+
+        return checkAndCastExecutingResult(executingResult);
+    }
 
     public List<Keyword> getAllKeywords(){
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -125,6 +133,32 @@ public class BookService extends Service{
 
     }
 
+    protected synchronized boolean updateBookAuthorsSetCommand(DaoManager manager, BookDto bookDto) throws SQLException {
+        //Updated authors set doesn't contain removed from book authors
+        AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
+        //Getting old book authors list
+        List<Author> deletedAuthors = authorDao.getByBook(bookDto.getBook());
+        //Filtering it to remain only deleted from book authors
+        deletedAuthors.removeAll(bookDto.getAuthors());
+        AuthorBookDao authorBookDao = manager.getAuthorBookDao();
+        //Deleting records from junction author_book table
+        for (Author author : deletedAuthors) {
+            authorBookDao.deleteAuthorBookJunction(author, bookDto.getBook());
+        }
+
+        deleteAuthors(manager, deletedAuthors);
+
+        //Updated authors set may contain new authors
+        Set<Author> newAuthors = bookDto.getAuthors().stream()
+                .filter(a -> a.getId() == 0)
+                .collect(Collectors.toCollection(HashSet::new));
+        saveAuthors(manager, newAuthors);
+        //Filling a junction table author_book
+        manager.getAuthorBookDao().saveAuthorBookJunction(bookDto.getBook(), newAuthors);
+
+        return true;
+    }
+
     protected BookDto createBookDtoFromBook(DaoManager manager, Book book) throws SQLException {
 
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
@@ -140,11 +174,17 @@ public class BookService extends Service{
                 .build();
     }
 
-    protected synchronized void saveAuthors(DaoManager manager, Set<Author> authorSet) throws SQLException {
+    /**
+     * Iterates through given collection, finds new authors and saves them
+     * @param manager - {@DaoManager} for accessing needed {@code Dao}
+     * @param authors - collection of authors need to be checked and saved
+     * @throws SQLException
+     */
+    protected synchronized void saveAuthors(DaoManager manager, Collection<Author> authors) throws SQLException {
 
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
 
-        for (Author author : authorSet) {
+        for (Author author : authors) {
             // Checks are there the book authors was in the DB when the book
             // was creating (they must have an id)
             if (author.getId() == 0) {
@@ -166,7 +206,14 @@ public class BookService extends Service{
         }
     }
 
-    protected synchronized void deleteAuthors(DaoManager manager, Set<Author> authors) throws SQLException {
+    /**
+     * Checks each author in the given {@Collection} on having a book in the catalogue. If authors doesn't have any
+     * book - deletes him.
+     * @param manager - {@DaoManager} for accessing needed {@code Dao}
+     * @param authors - collection of authors need to be checked
+     * @throws SQLException
+     */
+    protected synchronized void deleteAuthors(DaoManager manager, Collection<Author> authors) throws SQLException {
 
         AuthorBookDao authorBookDao = manager.getAuthorBookDao();
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();

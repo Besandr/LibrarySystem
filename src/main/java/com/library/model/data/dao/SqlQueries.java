@@ -26,6 +26,7 @@ public class SqlQueries {
 
 
     public static final String INSERT_AUTHOR_BOOK_QUERY = "INSERT INTO library_system.author_book VALUES (?, ?);";
+    public static final String DELETE_AUTHOR_BOOK_QUERY = "DELETE FROM library_system.author_book WHERE author_id = ? AND book_id = ?;";
     public static final String COUNT_BOOKS_OF_AUTHOR_QUERY = "SELECT COUNT(*) FROM library_system.author_book WHERE author_id = ?;";
 
 

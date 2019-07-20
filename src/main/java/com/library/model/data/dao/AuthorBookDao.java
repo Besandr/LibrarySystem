@@ -19,6 +19,13 @@ public interface AuthorBookDao {
     void saveAuthorBookJunction(Book book, Set<Author> authors);
 
     /**
+     * Deletes a junction between given book and given author
+     * @param book - book which junction to given author need to be deleted
+     * @param author - author which junction to given book need to be deleted
+     */
+    void deleteAuthorBookJunction(Author author, Book book);
+
+    /**
      * Seeks for presenting books with a given author in the catalogue
      * @param author - given author
      * @return - {@code true} if there is at least one book of given
