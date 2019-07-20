@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class UserService {
+public class UserService extends Service{
 
     private static final Logger log = LogManager.getLogger(UserService.class);
 
@@ -56,14 +56,6 @@ public class UserService {
 
     public static UserService getInstance() {
         return instance;
-    }
-
-    protected boolean checkAndCastExecutingResult(Object executingResult) {
-        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
-            return (Boolean) executingResult;
-        } else {
-            return false;
-        }
     }
 
     private UserService(){}

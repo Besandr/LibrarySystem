@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
-public class LocationService {
+public class LocationService extends Service {
 
     private static final LocationService instance = new LocationService();
 
@@ -80,14 +80,6 @@ public class LocationService {
             }
         }
         return true;
-    }
-
-    protected boolean checkAndCastExecutingResult(Object executingResult) {
-        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
-            return (Boolean) executingResult;
-        } else {
-            return false;
-        }
     }
 
     private Object removeBookFromStorageCommand(DaoManager manager, Book book) throws SQLException {

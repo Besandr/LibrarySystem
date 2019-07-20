@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class LoanService {
+public class LoanService extends Service{
 
     private static final LoanService instance = new LoanService();
 
@@ -115,14 +115,6 @@ public class LoanService {
         locationDao.updateIsOccupied(locationOptional.get().getId(), true);
 
         return true;
-    }
-
-    protected boolean checkAndCastExecutingResult(Object executingResult) {
-        if (Objects.nonNull(executingResult) && executingResult instanceof Boolean) {
-            return (Boolean) executingResult;
-        } else {
-            return false;
-        }
     }
 
     public static LoanService getInstance() {

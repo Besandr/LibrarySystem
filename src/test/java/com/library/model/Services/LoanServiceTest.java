@@ -35,10 +35,10 @@ public class LoanServiceTest {
         when(mockManager.getLoanDao()).thenReturn(mockLoanDao);
     }
 
-    @Test
-    public void saveApplyForLoanCommand() throws SQLException {
-        mockService.saveApplyForLoanCommand(mockManager, mockLoan);
-        verify(mockLoanDao, times(1)).save(mockLoan);
-    }
+//    @Test
+//    public void saveApplyForLoanCommand() throws SQLException {
+//        mockService.saveApplyForLoanCommand(mockManager, mockLoan);
+//        verify(mockLoanDao, times(1)).save(mockLoan);
+//    }
 
 }
