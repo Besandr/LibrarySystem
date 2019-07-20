@@ -3,7 +3,7 @@ package com.library.model.data.dao;
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +49,7 @@ public class MySqlKeywordDao implements KeywordDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't get keyword by id: %s. Cause: %s", id, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return resultOptional;
@@ -79,7 +79,7 @@ public class MySqlKeywordDao implements KeywordDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't get keyword by word: %s. Cause: %s", word, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return resultOptional;
@@ -108,7 +108,7 @@ public class MySqlKeywordDao implements KeywordDao{
         } catch (SQLException e) {
             String errorText = "Can't get keywords list from DB. Cause: " + e.getMessage();
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return keywords;
@@ -137,7 +137,7 @@ public class MySqlKeywordDao implements KeywordDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't get keywords list by Book from DB. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return keywords;
@@ -164,7 +164,7 @@ public class MySqlKeywordDao implements KeywordDao{
             } else {
                 String errorText = String.format("Can't save keyword: %s. Cause: %s", keyword, e.getMessage());
                 log.error(errorText);
-                throw new DBException(errorText, e);
+                throw new DaoException(errorText, e);
             }
         }
     }
@@ -186,7 +186,7 @@ public class MySqlKeywordDao implements KeywordDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't update keyword: %s. Cause: %s", keyword, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -206,7 +206,7 @@ public class MySqlKeywordDao implements KeywordDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't delete keyword: %s. Cause: %s", keyword, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 

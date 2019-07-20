@@ -4,7 +4,7 @@ import com.library.model.data.DBUtils;
 import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,7 +52,7 @@ public class MySqlBookDao implements BookDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't get book by id: %s. Cause: %s", bookId, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return resultOptional;
@@ -88,7 +88,7 @@ public class MySqlBookDao implements BookDao {
         } catch (SQLException e) {
             String errorText = "Can't get books list from DB. Cause: " + e.getMessage();
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return books;
@@ -135,7 +135,7 @@ public class MySqlBookDao implements BookDao {
             } else {
                 String errorText = String.format("Can't save book: %s. Cause: %s", book, e.getMessage());
                 log.error(errorText);
-                throw new DBException(errorText, e);
+                throw new DaoException(errorText, e);
             }
         }
     }
@@ -159,7 +159,7 @@ public class MySqlBookDao implements BookDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -179,7 +179,7 @@ public class MySqlBookDao implements BookDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't delete book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 

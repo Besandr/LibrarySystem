@@ -2,7 +2,7 @@ package com.library.model.data.dao;
 
 import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +44,7 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't add rows to author_book table. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -64,7 +64,7 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
             String errorText = String.format("Can't delete row from author_book. Author: %s." +
                     "Book: %s. Cause: %s", author, book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -88,7 +88,7 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't count books of author. Author: %s. Cause: %s", author, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 }

@@ -5,7 +5,7 @@ import com.library.model.data.dto.LoanDto;
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Loan;
 import com.library.model.data.entity.User;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +54,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
         } catch (SQLException e) {
             String errorText = String.format("Can't get unapproved loans by user. User: %s. Cause: %s.", user, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -80,7 +80,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
         } catch (SQLException e) {
             String errorText = "Can't get loanDtos list from DB. Cause: " + e.getMessage();
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -103,7 +103,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
         } catch (SQLException e) {
             String errorText = "Can't get loanDtos list from DB. Cause: " + e.getMessage();
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 

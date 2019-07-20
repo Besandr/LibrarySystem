@@ -12,7 +12,7 @@ public interface BookKeywordDao {
 
     /**
      * Inserts data for joining keyword and book tables.
-     * Throws {@code DBException} if inserting fails
+     * Throws {@code DaoException} if inserting fails
      * @param book - book for joining
      * @param keywords - set with keywords for joining
      */

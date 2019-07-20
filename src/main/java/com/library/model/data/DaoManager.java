@@ -1,7 +1,7 @@
 package com.library.model.data;
 
 import com.library.model.data.dao.*;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,7 +40,7 @@ public class DaoManager {
                 result = command.execute(this);
                 connection.commit();
 
-            } catch (DBException e) {
+            } catch (DaoException e) {
                 connection.rollback();
             }
             return result;
@@ -70,7 +70,7 @@ public class DaoManager {
         } catch (SQLException e) {
             log.error("SQLException occurred. Cause: " + e.getMessage());
             return null;
-        } catch (DBException e) {
+        } catch (DaoException e) {
             //Command executing is failed so there is nothing to return
             return null;
         } finally {

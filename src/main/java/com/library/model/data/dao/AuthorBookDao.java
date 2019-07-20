@@ -12,7 +12,7 @@ public interface AuthorBookDao {
 
     /**
      * Inserts data for joining author and book tables.
-     * Throws {@code DBException} if inserting fails
+     * Throws {@code DaoException} if inserting fails
      * @param book - book for joining
      * @param authors - set with authors for joining
      */

@@ -3,7 +3,7 @@ package com.library.model.data.dao;
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +49,7 @@ public class MySqlAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't get author by id: %s. Cause: %s", id, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return resultOptional;
@@ -80,7 +80,7 @@ public class MySqlAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't get author by name: %s %s. Cause: %s", firstName, lastName, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return resultOptional;
@@ -109,7 +109,7 @@ public class MySqlAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             String errorText = "Can't get authors list from DB. Cause: " + e.getMessage();
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return authors;
@@ -139,7 +139,7 @@ public class MySqlAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't get authors list by Book from DB. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return authors;
@@ -168,7 +168,7 @@ public class MySqlAuthorDao implements AuthorDao {
             } else {
                 String errorText = String.format("Can't save author: %s. Cause: %s", author, e.getMessage());
                 log.error(errorText);
-                throw new DBException(errorText, e);
+                throw new DaoException(errorText, e);
             }
         }
     }
@@ -191,7 +191,7 @@ public class MySqlAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update author: %s. Cause: %s", author, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -211,7 +211,7 @@ public class MySqlAuthorDao implements AuthorDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't delete author: %s. Cause: %s", author, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 

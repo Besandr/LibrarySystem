@@ -2,7 +2,7 @@ package com.library.model.data.dao;
 
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.Bookcase;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,7 +42,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't get bookcase by id: %s. Cause: %s", id, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return resultOptional;
@@ -68,7 +68,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
         } catch (SQLException e) {
             String errorText = "Can't get bookcases list from DB. Cause: " + e.getMessage();
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
         return bookcases;
     }
@@ -92,7 +92,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
             } else {
                 String errorText = String.format("Can't save bookcase: %s. Cause: %s", bookcase, e.getMessage());
                 log.error(errorText);
-                throw new DBException(errorText, e);
+                throw new DaoException(errorText, e);
             }
         }
     }
@@ -112,7 +112,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update bookcase: %s. Cause: %s", bookcase, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -129,7 +129,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't delete bookcase: %s. Cause: %s", bookcase, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 

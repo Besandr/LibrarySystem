@@ -2,7 +2,7 @@ package com.library.model.data.dao;
 
 import com.library.model.data.DBUtils;
 import com.library.model.data.entity.User;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,7 +48,7 @@ public class MySqlUserDao implements UserDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't get user by id: %s. Cause: %s", id, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return resultOptional;
@@ -77,7 +77,7 @@ public class MySqlUserDao implements UserDao {
         } catch (SQLException e) {
             String errorText = "Can't get users list from DB. Cause: " + e.getMessage();
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
         return users;
@@ -109,7 +109,7 @@ public class MySqlUserDao implements UserDao {
             } else {
                 String errorText = String.format("Can't save user: %s. Cause: %s", user, e.getMessage());
                 log.error(errorText);
-                throw new DBException(errorText, e);
+                throw new DaoException(errorText, e);
             }
         }
     }
@@ -135,7 +135,7 @@ public class MySqlUserDao implements UserDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update user: %s. Cause: %s", user, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -155,7 +155,7 @@ public class MySqlUserDao implements UserDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't delete user: %s. Cause: %s", user, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -175,7 +175,7 @@ public class MySqlUserDao implements UserDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update user's karma. User id: %s. Cause: %s", userId, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -196,7 +196,7 @@ public class MySqlUserDao implements UserDao {
             String errorText = String.format("Can't update user's role_id. User id: %s. Role id: %s. " +
                     "Cause: %s",userId, roleId, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
 
     }

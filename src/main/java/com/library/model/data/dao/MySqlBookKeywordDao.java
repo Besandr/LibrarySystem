@@ -2,7 +2,7 @@ package com.library.model.data.dao;
 
 import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Keyword;
-import com.library.model.exceptions.DBException;
+import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +44,7 @@ public class MySqlBookKeywordDao implements BookKeywordDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't add rows to book_keyword table. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -68,7 +68,7 @@ public class MySqlBookKeywordDao implements BookKeywordDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't count books with keyword. Keyword: %s. Cause: %s", keyword, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 
@@ -89,7 +89,7 @@ public class MySqlBookKeywordDao implements BookKeywordDao {
             String errorText = String.format("Can't delete row from book_keyword. Keyword: %s." +
                     "Book: %s. Cause: %s", keyword, book, e.getMessage());
             log.error(errorText);
-            throw new DBException(errorText, e);
+            throw new DaoException(errorText, e);
         }
     }
 }
