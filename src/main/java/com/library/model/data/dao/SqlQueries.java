@@ -44,6 +44,7 @@ public class SqlQueries {
             "INSERT INTO library_system.location (bookcase_id, shelf_number, cell_number) VALUES (?, ?, ?);";
     public static final String DELETE_LOCATION_QUERY = "DELETE FROM library_system.location WHERE location_id = ?;";
     public static final String SAVE_BOOK_TO_LOCATION_QUERY = "UPDATE library_system.location SET book_id = ?, is_occupied = TRUE WHERE location_id = ?;";
+    public static final String DELETE_BOOK_FROM_ALL_LOCATIONS_QUERY = "UPDATE library_system.location SET book_id = NULL, is_occupied = FALSE WHERE book_id = ?;";
     public static final String UPDATE_LOCATION_OCCUPIED_QUERY = "UPDATE library_system.location SET is_occupied = ? WHERE location_id = ?;";
     public static final String ALL_LOCATIONS_QUERY = "SELECT * FROM library_system.location;";
     public static final String GET_FREE_LOCATIONS_QUERY = "SELECT * FROM library_system.location WHERE book_id IS NULL AND is_occupied = false;";

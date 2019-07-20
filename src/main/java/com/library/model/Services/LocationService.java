@@ -3,7 +3,9 @@ package com.library.model.Services;
 import com.library.model.data.DaoManager;
 import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.BookcaseDao;
+import com.library.model.data.dao.LoanDtoDao;
 import com.library.model.data.dao.LocationDao;
+import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Bookcase;
 import com.library.model.data.entity.Location;
 
@@ -29,6 +31,15 @@ public class LocationService {
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> addBooksToStorageCommand(manager, bookId, booksQuantity));
+
+        return checkAndCastExecutingResult(executingResult);
+    }
+
+    public boolean removeBookFromStorage(Book book) {
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeTransaction(manager -> removeBookFromStorageCommand(manager, book));
 
         return checkAndCastExecutingResult(executingResult);
     }
@@ -77,6 +88,19 @@ public class LocationService {
         } else {
             return false;
         }
+    }
+
+    private Object removeBookFromStorageCommand(DaoManager manager, Book book) throws SQLException {
+
+        LoanDtoDao loanDtoDao = manager.getLoanDtoDao();
+        if (!loanDtoDao.getActiveLoansByBook(book).isEmpty()) {
+            return false;
+        }
+
+        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        locationDao.deleteBookFromAllLocations(book);
+
+        return true;
     }
 
     private LocationService(){}

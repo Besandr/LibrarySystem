@@ -2,6 +2,7 @@ package com.library.model.data.dao;
 
 import com.library.model.data.DBService;
 import com.library.model.data.DBUtils;
+import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Location;
 import com.library.model.exceptions.DBException;
 import org.apache.logging.log4j.LogManager;
@@ -79,6 +80,11 @@ public class MySqlLocationDao implements LocationDao {
         }
     }
 
+    /**
+     * Universal update is not supported. Use special update
+     * for special cases
+     * @param location
+     */
     @Override
     public void update(Location location) {
     }
@@ -96,6 +102,22 @@ public class MySqlLocationDao implements LocationDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update book_id in Location table. " +
                     "Location_id: %s. Cause: %s", locationId, e.getMessage());
+            log.error(errorText);
+            throw new DBException(errorText, e);
+        }
+    }
+
+    @Override
+    public void deleteBookFromAllLocations(Book book) {
+
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.DELETE_BOOK_FROM_ALL_LOCATIONS_QUERY);
+            statement.setLong(1, book.getId());
+
+            statement.execute();
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't delete book from all locations. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText);
             throw new DBException(errorText, e);
         }

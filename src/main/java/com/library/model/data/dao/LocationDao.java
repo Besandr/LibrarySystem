@@ -1,5 +1,6 @@
 package com.library.model.data.dao;
 
+import com.library.model.data.entity.Book;
 import com.library.model.data.entity.Location;
 
 import java.util.List;
@@ -16,6 +17,12 @@ public interface LocationDao extends Dao<Location> {
      * @param bookId - id of book to be saved
      */
     void saveBookToLocation(long locationId, long bookId);
+
+    /**
+     * Deletes information of given book in every location occupied by it
+     * @param book - book for deleting.
+     */
+    void deleteBookFromAllLocations(Book book);
 
     /**
      * Changes is_occupied state of given location
@@ -47,4 +54,6 @@ public interface LocationDao extends Dao<Location> {
     List<Location> getAllLocations(boolean onlyFreeLocations);
 
     Optional<Location> getBookLocation(long book_id, boolean isOccupied);
+
+
 }
