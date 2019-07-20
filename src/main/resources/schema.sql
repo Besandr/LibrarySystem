@@ -90,15 +90,15 @@ ALTER TABLE `book_keyword` ADD CONSTRAINT `book_keyword_fk1` FOREIGN KEY (`keywo
 
 ALTER TABLE `user` ADD CONSTRAINT `user_fk0` FOREIGN KEY (`role_id`) REFERENCES `role`(`role_id`)  ON DELETE NO ACTION;
 
-ALTER TABLE `loan` ADD CONSTRAINT `loan_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`);
+ALTER TABLE `loan` ADD CONSTRAINT `loan_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE;
 
-ALTER TABLE `loan` ADD CONSTRAINT `loan_fk1` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`);
+ALTER TABLE `loan` ADD CONSTRAINT `loan_fk1` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE NO ACTION;
 
 ALTER TABLE `author_book` ADD CONSTRAINT `author_book_fk0` FOREIGN KEY (`author_id`) REFERENCES `author`(`author_id`) ON DELETE CASCADE;
 
 ALTER TABLE `author_book` ADD CONSTRAINT `author_book_fk1` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE;
 
-ALTER TABLE `location` ADD CONSTRAINT `location_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`);
+ALTER TABLE `location` ADD CONSTRAINT `location_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE;
 
 ALTER TABLE `location` ADD CONSTRAINT `location_fk1` FOREIGN KEY (`bookcase_id`) REFERENCES `bookcase`(`bookcase_id`)  ON DELETE CASCADE;
 
