@@ -163,11 +163,11 @@ public class MySqlUserDao implements UserDao {
      * {@inheritDoc}
      */
     @Override
-    public void updateKarma(long userId, int karma) {
+    public void updateKarma(long userId, int delta) {
 
         try {
             PreparedStatement updateStatement = connection.prepareStatement(SqlQueries.UPDATE_USER_KARMA_QUERY);
-            updateStatement.setInt(1, karma);
+            updateStatement.setInt(1, delta);
             updateStatement.setLong(2, userId);
 
             updateStatement.execute();

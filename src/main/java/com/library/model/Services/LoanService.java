@@ -11,13 +11,21 @@ import com.library.model.data.entity.Location;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Service class which has methods bound with loan operations
+ */
 public class LoanService extends Service{
 
     private static final LoanService instance = new LoanService();
 
+    /**
+     * Saves an apply for loan which is needed to be approved
+     * @param loan - a new loan at "apply for" stage
+     * @return {@code true} if saving is successful
+     *         and {@code false} if it is not
+     */
     public boolean saveApplyForLoan(Loan loan) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -30,20 +38,33 @@ public class LoanService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
-    public List<LoanDto> getUnapprovedLoans(){
+    /**
+     * Gets a list with all unapproved loans.
+     * @return a list with all unapproved loans
+     */
+    public List<LoanDto> getAllUnapprovedLoans(){
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoans());
+        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllUnapprovedLoans());
     }
 
-    public List<LoanDto> getActiveLoans(){
+    /**
+     * Gets a list with all active loans (not returned yet).
+     * @return a list with all active loans
+     */
+    public List<LoanDto> getAllActiveLoans(){
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoans());
+        return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllActiveLoans());
     }
 
+    /**
+     * Gets a list with all active loans of target book.
+     * @param book - book which active loans are needed to be get
+     * @return a list with all active loans of target book
+     */
     public List<LoanDto> getActiveLoansByBook(Book book) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -51,6 +72,12 @@ public class LoanService extends Service{
         return (List<LoanDto>) daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByBook(book));
     }
 
+    /**
+     * Approves unapproved loan with given id
+     * @param loanId - id of unapproved loan
+     * @return {@code true} if saving changes is successful
+     *          and {@code false} if it is not
+     */
     public boolean approveLoan(long loanId) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -61,6 +88,13 @@ public class LoanService extends Service{
         }
     }
 
+    /**
+     * Updates the record of active loan with given Id to change it to
+     * "return" state. It represents returning a book from user to library
+     * @param loanId - id of active loan
+     * @return {@code true} if saving changes is successful
+     *         and {@code false} if it is not
+     */
     public boolean returnBook(long loanId) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -70,28 +104,32 @@ public class LoanService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    //Commands which is needed to be executed in corresponding public service methods
     protected boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
 
         LoanDao loanDao = (LoanDao) manager.getLoanDao();
         Optional<Loan> loan = loanDao.get(loanId);
         //check is loan with given id persistent in the DB
-        //and book is not lend to user yet
+        //and not approved yet
         if (!loan.isPresent() || loan.get().getLoanDate() != null) {
-            return false;
+            return EXECUTING_FAILED;
         }
 
+        //check is there a target book on the shelves
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
         Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), true);
-        //check is there a target book on the shelves
-        if (locationOptional.isPresent()) {
 
+        if (locationOptional.isPresent()) {
+            //change loan status to "approved"(set today's date
+            //as loan date and expired date(plus 1 month from today)
             loanDao.updateLoanAndExpiredDate(loanId, LocalDate.now(), LocalDate.now().plusMonths(1));
+            //change the status of book cell in the storage as not occupied but still reserved by this book_id
             locationDao.updateIsOccupied(locationOptional.get().getId(), false);
 
-            return true;
+            return EXECUTING_SUCCESSFUL;
 
         } else {
-            return false;
+            return EXECUTING_FAILED;
         }
     }
 
@@ -99,22 +137,43 @@ public class LoanService extends Service{
 
         LoanDao loanDao = (LoanDao) manager.getLoanDao();
         Optional<Loan> loan;
+
         synchronized (this) {
             loan = loanDao.get(loanId);
-            //check is loan with given id persistent in the DB
+            //Checking is loan with given id persistent in the DB
             //and book is not returned by user yet
             if (!loan.isPresent() || loan.get().getReturnDate() != null) {
-                return false;
+                return EXECUTING_FAILED;
             }
-
+            //Setting the loan status as "returned"(set today's date as return date in the loan record)
             loanDao.updateReturnDate(loanId, LocalDate.now());
+            //Returning the book to the library's storage
+            LocationDao locationDao = (LocationDao) manager.getLocationDao();
+            Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), false);
+            locationDao.updateIsOccupied(locationOptional.get().getId(), true);
         }
 
-        LocationDao locationDao = (LocationDao) manager.getLocationDao();
-        Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), false);
-        locationDao.updateIsOccupied(locationOptional.get().getId(), true);
+        updateUsersKarma(manager, loan);
 
-        return true;
+        return EXECUTING_SUCCESSFUL;
+    }
+
+    /**
+     * Decrease users karma if the loan was returned after the expired date
+     * @param manager - {@code DadManager} for accessing {@code Dao} is needed
+     * @param loan - returned loan
+     */
+    protected void updateUsersKarma(DaoManager manager, Optional<Loan> loan) throws SQLException {
+
+        LocalDate today = LocalDate.now();
+
+        if (loan.get().getExpiredDate().isBefore(today)) {
+
+            UserDao userDao = (UserDao) manager.getUserDao();
+            userDao.updateKarma(loan.get().getUserId(), -1);
+
+        }
+
     }
 
     public static LoanService getInstance() {
