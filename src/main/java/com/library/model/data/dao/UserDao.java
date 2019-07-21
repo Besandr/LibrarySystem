@@ -2,6 +2,8 @@ package com.library.model.data.dao;
 
 import com.library.model.data.entity.User;
 
+import java.util.Optional;
+
 /**
  * Dao for Books entity
  */
@@ -24,4 +26,12 @@ public interface UserDao extends Dao<User> {
      * @param roleId - the id of new user's role
      */
     void updateRole(long userId, long roleId);
+
+    /**
+     * Gets an {@code Optional} with user by its email & password
+     * @param email - email of a target user
+     * @param password - password of a target use
+     * @return
+     */
+    Optional<User> getUserByEmailAndPassword(String email, String password);
 }

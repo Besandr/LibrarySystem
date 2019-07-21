@@ -201,11 +201,44 @@ public class MySqlUserDao implements UserDao {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<User> getUserByEmailAndPassword(String email, String password) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(SqlQueries.GET_USER_BY_EMAIL_AND_PASSWORD_QUERY);
+            statement.setString(1, email);
+            statement.setString(2, password);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(getUserFromResultRow(rs));
+            } else {
+                return Optional.empty();
+            }
+
+
+        } catch (SQLException e) {
+            String errorText = String.format("Can't get an user by email & password. " +
+                    "Email: %s. Password: %s. Cause: %s.", email, password, e.getMessage());
+            log.error(errorText);
+            throw new DaoException(errorText, e);
+        }
+    }
+
+    /**
+     * Creates an user(without password field) from given {@code ResultSet}
+     * @param rs - {@code ResultSet} with users data
+     * @return - user whose email & password was passed into
+     * @throws SQLException if the columnLabels is not valid;
+     * if a database access error occurs or result set is closed
+     */
     protected User getUserFromResultRow(ResultSet rs) throws SQLException {
          return User.builder()
                 .id(rs.getLong("user_id"))
                 .email(rs.getString("email"))
-                .password(rs.getString("password"))
                 .phone(rs.getString("phone"))
                 .firstName(rs.getString("first_name"))
                 .lastName(rs.getString("last_name"))

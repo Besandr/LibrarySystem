@@ -12,13 +12,23 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.Optional;
 
+/**
+ * Service class which has methods bound with user operations
+ */
 public class UserService extends Service{
 
     private static final Logger log = LogManager.getLogger(UserService.class);
 
     public static final UserService instance = new UserService();
 
+    /**
+     * Creates(saves) a new user.
+     * @param user - user which is need to be saved
+     * @return {@code true} if saving is successful
+     *         and {@code false} if it is not
+     */
     public boolean createNewUser(User user) {
 
         user.setPassword(hashPassword(user.getPassword()));
@@ -30,13 +40,54 @@ public class UserService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Gets an {@code Optional} of user with given combination of email & password
+     * @param email - an user's email
+     * @param password - a user's password
+     * @return - an {@code Optional} of target user or an empty {@code Optional}
+     *          if there is no user with given combination of email & password
+     */
+    public Optional<User> getUserByLoginInfo(String email, String password) {
+        //The passwords stored in their hashed version so we need
+        // to get hash of the password first
+        String hashedPassword = hashPassword(password);
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> getUserByLoginInfoCommand(manager, email, hashedPassword));
+
+        if (Objects.nonNull(executingResult) && executingResult instanceof Optional) {
+            return (Optional<User>) executingResult;
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    //Commands which is needed to be executed in corresponding public service methods
     protected boolean createNewUserCommand(DaoManager manager, User user) throws SQLException {
 
         UserDao userDao = (UserDao) manager.getUserDao();
-        userDao.save(user);
-        return true;
+        long id = userDao.save(user);
+        if (id > 0) {
+            return EXECUTING_SUCCESSFUL;
+        } else {
+            return EXECUTING_FAILED;
+        }
     }
 
+    protected Optional<User> getUserByLoginInfoCommand(DaoManager manager, String email, String password) throws SQLException {
+
+        UserDao dao = (UserDao) manager.getUserDao();
+
+        return dao.getUserByEmailAndPassword(email, password);
+    }
+
+    /**
+     * Makes the hashed password for storing hash of the password instead
+     * of it's raw version
+     * @param passwordToHash - password which is need to be hashed
+     * @return - hashed version of password
+     */
     protected String hashPassword(String passwordToHash) {
 
         final String salt = "nox#!9Z7";

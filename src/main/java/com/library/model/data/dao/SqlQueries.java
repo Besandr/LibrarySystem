@@ -81,6 +81,7 @@ public class SqlQueries {
     public static final String UPDATE_USER_ROLE_QUERY = "UPDATE library_system.user SET role_id = ? WHERE user_id = ?;";
     public static final String ALL_USERS_QUERY = "SELECT * FROM library_system.user;";
     public static final String GET_USER_QUERY = "SELECT * FROM library_system.user WHERE user_id = ?;";
+    public static final String GET_USER_BY_EMAIL_AND_PASSWORD_QUERY = "SELECT * FROM library_system.user WHERE email = ? AND password = ?;";
 
     public static final String SAVE_LOAN_QUERY = "INSERT INTO library_system.loan (book_id, user_id, apply_date) VALUES (?, ?, ?);";
     public static final String DELETE_LOAN_QUERY = "DELETE FROM library_system.loan WHERE loan_id = ?;";
