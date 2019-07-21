@@ -32,7 +32,7 @@ public class MySqlBookKeywordDao implements BookKeywordDao {
     public void saveBookKeywordsJunction(Book book, Set<Keyword> keywords) {
 
         try {
-            PreparedStatement statement = connection.prepareStatement(SqlQueries.INSERT_BOOK_KEYWORD_QUERY);
+            PreparedStatement statement = connection.prepareStatement(MySqlQueries.INSERT_BOOK_KEYWORD_QUERY);
 
             for (Keyword keyword : keywords) {
                 statement.setLong(1, book.getId());
@@ -55,7 +55,7 @@ public class MySqlBookKeywordDao implements BookKeywordDao {
     public boolean doesKeywordBelongToBook(Keyword keyword) {
 
         try{
-            PreparedStatement statement = connection.prepareStatement(SqlQueries.COUNT_BOOKS_WITH_KEYWORD_QUERY);
+            PreparedStatement statement = connection.prepareStatement(MySqlQueries.COUNT_BOOKS_WITH_KEYWORD_QUERY);
             statement.setLong(1, keyword.getId());
             //Result set will contain only one string with given author books quantity
             ResultSet rs = statement.executeQuery();
@@ -79,7 +79,7 @@ public class MySqlBookKeywordDao implements BookKeywordDao {
     public void deleteBookKeywordJunction(Keyword keyword, Book book) {
 
         try{
-            PreparedStatement statement = connection.prepareStatement(SqlQueries.DELETE_BOOK_KEYWORD_QUERY);
+            PreparedStatement statement = connection.prepareStatement(MySqlQueries.DELETE_BOOK_KEYWORD_QUERY);
             statement.setLong(1, book.getId());
             statement.setLong(2, keyword.getId());
 

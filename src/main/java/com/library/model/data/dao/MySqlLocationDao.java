@@ -29,7 +29,7 @@ public class MySqlLocationDao implements LocationDao {
 
         try {
             PreparedStatement getLocationStatement = connection
-                    .prepareStatement(SqlQueries.GET_LOCATION_QUERY);
+                    .prepareStatement(MySqlQueries.GET_LOCATION_QUERY);
             getLocationStatement.setLong(1, locationId);
 
             ResultSet rs = getLocationStatement.executeQuery();
@@ -59,7 +59,7 @@ public class MySqlLocationDao implements LocationDao {
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(SqlQueries.SAVE_LOCATION_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(MySqlQueries.SAVE_LOCATION_QUERY, Statement.RETURN_GENERATED_KEYS);
             insertStatement.setLong(1, location.getBookcaseId());
             insertStatement.setInt(2, location.getShelfNumber());
             insertStatement.setInt(3, location.getCellNumber());
@@ -92,7 +92,7 @@ public class MySqlLocationDao implements LocationDao {
     public void saveBookToLocation(long locationId, long bookId) {
 
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(SqlQueries.SAVE_BOOK_TO_LOCATION_QUERY);
+            PreparedStatement updateStatement = connection.prepareStatement(MySqlQueries.SAVE_BOOK_TO_LOCATION_QUERY);
             updateStatement.setLong(1, bookId);
             updateStatement.setLong(2, locationId);
 
@@ -110,7 +110,7 @@ public class MySqlLocationDao implements LocationDao {
     public void deleteBookFromAllLocations(Book book) {
 
         try{
-            PreparedStatement statement = connection.prepareStatement(SqlQueries.DELETE_BOOK_FROM_ALL_LOCATIONS_QUERY);
+            PreparedStatement statement = connection.prepareStatement(MySqlQueries.DELETE_BOOK_FROM_ALL_LOCATIONS_QUERY);
             statement.setLong(1, book.getId());
 
             statement.execute();
@@ -127,7 +127,7 @@ public class MySqlLocationDao implements LocationDao {
 
         try {
 
-            PreparedStatement updateStatement = connection.prepareStatement(SqlQueries.UPDATE_LOCATION_OCCUPIED_QUERY);
+            PreparedStatement updateStatement = connection.prepareStatement(MySqlQueries.UPDATE_LOCATION_OCCUPIED_QUERY);
             updateStatement.setBoolean(1, isOccupied);
             updateStatement.setLong(2, locationId);
 
@@ -146,7 +146,7 @@ public class MySqlLocationDao implements LocationDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(SqlQueries.DELETE_LOCATION_QUERY);
+                    .prepareStatement(MySqlQueries.DELETE_LOCATION_QUERY);
             deleteStatement.setLong(1, location.getId());
 
             deleteStatement.execute();
@@ -162,7 +162,7 @@ public class MySqlLocationDao implements LocationDao {
     public int getBookQuantity(long book_id) {
 
         try {
-            PreparedStatement getStatement = connection.prepareStatement(SqlQueries.GET_BOOK_QUANTITY_QUERY);
+            PreparedStatement getStatement = connection.prepareStatement(MySqlQueries.GET_BOOK_QUANTITY_QUERY);
             getStatement.setLong(1, book_id);
 
             ResultSet rs = getStatement.executeQuery();
@@ -192,9 +192,9 @@ public class MySqlLocationDao implements LocationDao {
             PreparedStatement selectStatement;
 
             if (onlyFreeLocations) {
-                selectStatement = connection.prepareStatement(SqlQueries.GET_FREE_LOCATIONS_QUERY);
+                selectStatement = connection.prepareStatement(MySqlQueries.GET_FREE_LOCATIONS_QUERY);
             } else {
-                selectStatement = connection.prepareStatement(SqlQueries.ALL_LOCATIONS_QUERY);
+                selectStatement = connection.prepareStatement(MySqlQueries.ALL_LOCATIONS_QUERY);
             }
 
 
@@ -221,7 +221,7 @@ public class MySqlLocationDao implements LocationDao {
         Optional<Location> resultOptional = Optional.empty();
 
         try {
-            PreparedStatement findLocationStatement = connection.prepareStatement(SqlQueries.GET_BOOK_LOCATION_QUERY);
+            PreparedStatement findLocationStatement = connection.prepareStatement(MySqlQueries.GET_BOOK_LOCATION_QUERY);
             findLocationStatement.setLong(1, book_id);
             findLocationStatement.setBoolean(2, isOccupied);
 

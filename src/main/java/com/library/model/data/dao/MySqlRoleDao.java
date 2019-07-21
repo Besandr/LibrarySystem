@@ -28,7 +28,7 @@ public class MySqlRoleDao implements RoleDao {
 
         try {
             PreparedStatement getRoleStatement = connection
-                    .prepareStatement(SqlQueries.GET_ROLE_QUERY);
+                    .prepareStatement(MySqlQueries.GET_ROLE_QUERY);
             getRoleStatement.setLong(1, id);
 
             ResultSet rs = getRoleStatement.executeQuery();
@@ -55,7 +55,7 @@ public class MySqlRoleDao implements RoleDao {
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(SqlQueries.ALL_ROLES_QUERY);
+                    .prepareStatement(MySqlQueries.ALL_ROLES_QUERY);
             ResultSet rs = selectStatement.executeQuery();
 
             while (rs.next()) {
@@ -78,7 +78,7 @@ public class MySqlRoleDao implements RoleDao {
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(SqlQueries.SAVE_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(MySqlQueries.SAVE_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS);
 
             insertStatement.setString(1, role.getName());
 
@@ -102,7 +102,7 @@ public class MySqlRoleDao implements RoleDao {
 
         try {
             PreparedStatement updateStatement = connection
-                    .prepareStatement(SqlQueries.UPDATE_ROLE_QUERY);
+                    .prepareStatement(MySqlQueries.UPDATE_ROLE_QUERY);
             updateStatement.setString(1, role.getName());
             updateStatement.setLong(2, role.getId());
 
@@ -120,7 +120,7 @@ public class MySqlRoleDao implements RoleDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(SqlQueries.DELETE_ROLE_QUERY);
+                    .prepareStatement(MySqlQueries.DELETE_ROLE_QUERY);
             deleteStatement.setLong(1, role.getId());
 
             deleteStatement.execute();

@@ -28,7 +28,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement getBookcaseStatement = connection
-                    .prepareStatement(SqlQueries.GET_BOOKCASE_QUERY);
+                    .prepareStatement(MySqlQueries.GET_BOOKCASE_QUERY);
             getBookcaseStatement.setLong(1, id);
 
             ResultSet rs = getBookcaseStatement.executeQuery();
@@ -55,7 +55,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(SqlQueries.ALL_BOOKCASES_QUERY);
+                    .prepareStatement(MySqlQueries.ALL_BOOKCASES_QUERY);
 
             ResultSet rs = selectStatement.executeQuery();
 
@@ -78,7 +78,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(SqlQueries.SAVE_BOOKCASE_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(MySqlQueries.SAVE_BOOKCASE_QUERY, Statement.RETURN_GENERATED_KEYS);
             insertStatement.setInt(1, bookcase.getShelfQuantity());
             insertStatement.setInt(2, bookcase.getCellQuantity());
 
@@ -102,7 +102,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement updateStatement = connection
-                    .prepareStatement(SqlQueries.UPDATE_BOOKCASE_QUERY);
+                    .prepareStatement(MySqlQueries.UPDATE_BOOKCASE_QUERY);
             updateStatement.setInt(1, bookcase.getShelfQuantity());
             updateStatement.setInt(2, bookcase.getCellQuantity());
             updateStatement.setLong(3, bookcase.getId());
@@ -121,7 +121,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(SqlQueries.DELETE_BOOKCASE_QUERY);
+                    .prepareStatement(MySqlQueries.DELETE_BOOKCASE_QUERY);
             deleteStatement.setLong(1, bookcase.getId());
 
             deleteStatement.execute();
