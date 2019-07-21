@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -56,11 +55,11 @@ public class UserService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> getUserByLoginInfoCommand(manager, email, hashedPassword));
 
-        return checkAndCastToOptional(executingResult);
+        return checkAndCastObjectToOptional(executingResult);
     }
 
     //Commands which is needed to be executed in corresponding public service methods
-    protected boolean createNewUserCommand(DaoManager manager, User user) throws SQLException {
+    boolean createNewUserCommand(DaoManager manager, User user) throws SQLException {
 
         UserDao userDao = (UserDao) manager.getUserDao();
         long id = userDao.save(user);
@@ -71,7 +70,7 @@ public class UserService extends Service{
         }
     }
 
-    protected Optional<User> getUserByLoginInfoCommand(DaoManager manager, String email, String password) throws SQLException {
+    Optional<User> getUserByLoginInfoCommand(DaoManager manager, String email, String password) throws SQLException {
 
         UserDao dao = (UserDao) manager.getUserDao();
 
@@ -84,7 +83,7 @@ public class UserService extends Service{
      * @param passwordToHash - password which is need to be hashed
      * @return - hashed version of password
      */
-    protected String hashPassword(String passwordToHash) {
+    String hashPassword(String passwordToHash) {
 
         final String salt = "nox#!9Z7";
 

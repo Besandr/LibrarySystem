@@ -48,7 +48,7 @@ public class LocationService extends Service {
         return instance;
     }
 
-    protected boolean addBooksToStorageCommand(DaoManager manager, long bookId, int booksQuantity) throws SQLException {
+    boolean addBooksToStorageCommand(DaoManager manager, long bookId, int booksQuantity) throws SQLException {
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
         List<Location> locations = locationDao.getAllLocations(true);
 
@@ -63,7 +63,7 @@ public class LocationService extends Service {
         return EXECUTING_SUCCESSFUL;
     }
 
-    protected boolean addBookcaseToStorageCommand(DaoManager manager, Bookcase bookcase) throws SQLException {
+    boolean addBookcaseToStorageCommand(DaoManager manager, Bookcase bookcase) throws SQLException {
         BookcaseDao bookcaseDao =(BookcaseDao) manager.getBookcaseDao();
         long bookcaseId = bookcaseDao.save(bookcase);
         bookcase.setId(bookcaseId);

@@ -51,11 +51,7 @@ public class LoanService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllUnapprovedLoans());
 
-        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
-            return (List) executingResult;
-        } else {
-            return new ArrayList<>();
-        }
+        return checkAndCastObjectToList(executingResult);
     }
 
     /**
@@ -68,11 +64,7 @@ public class LoanService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllActiveLoans());
 
-        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
-            return (List) executingResult;
-        } else {
-            return new ArrayList<>();
-        }
+        return checkAndCastObjectToList(executingResult);
     }
 
     /**
@@ -87,11 +79,8 @@ public class LoanService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoansByUser(user));
 
-        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
-            return (List) executingResult;
-        } else {
-            return new ArrayList<>();
-        }
+        return checkAndCastObjectToList(executingResult);
+
     }
 
     /**
@@ -106,11 +95,8 @@ public class LoanService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByUser(user));
 
-        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
-            return (List) executingResult;
-        } else {
-            return new ArrayList<>();
-        }
+        return checkAndCastObjectToList(executingResult);
+
     }
 
     /**
@@ -124,11 +110,8 @@ public class LoanService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllLoansByUser(user));
 
-        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
-            return (List) executingResult;
-        } else {
-            return new ArrayList<>();
-        }
+        return checkAndCastObjectToList(executingResult);
+
     }
 
     /**
@@ -142,11 +125,8 @@ public class LoanService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByBook(book));
 
-        if (Objects.nonNull(executingResult) && executingResult instanceof List) {
-            return (List) executingResult;
-        } else {
-            return new ArrayList<>();
-        }
+        return checkAndCastObjectToList(executingResult);
+
     }
 
     /**
@@ -182,7 +162,7 @@ public class LoanService extends Service{
     }
 
     //Commands which is needed to be executed in corresponding public service methods
-    protected boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
+    boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
 
         LoanDao loanDao = (LoanDao) manager.getLoanDao();
         Optional<Loan> loan = loanDao.get(loanId);
@@ -210,7 +190,7 @@ public class LoanService extends Service{
         }
     }
 
-    protected boolean returnBookCommand(DaoManager manager, long loanId) throws SQLException {
+    boolean returnBookCommand(DaoManager manager, long loanId) throws SQLException {
 
         LoanDao loanDao = (LoanDao) manager.getLoanDao();
         Optional<Loan> loan;
@@ -240,7 +220,7 @@ public class LoanService extends Service{
      * @param manager - {@code DadManager} for accessing {@code Dao} is needed
      * @param loan - returned loan
      */
-    protected void updateUsersKarma(DaoManager manager, Optional<Loan> loan) throws SQLException {
+    void updateUsersKarma(DaoManager manager, Optional<Loan> loan) throws SQLException {
 
         LocalDate today = LocalDate.now();
 
