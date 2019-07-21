@@ -72,7 +72,6 @@ public class SqlQueries {
     public static final String DELETE_USER_QUERY = "DELETE FROM library_system.user WHERE user_id = ?;";
     public static final String UPDATE_USER_INFO_QUERY = "UPDATE library_system.user SET " +
             "email = ?," +
-            "password = ?, " +
             "phone = ?, " +
             "first_name = ?, " +
             "last_name = ? " +

@@ -124,11 +124,10 @@ public class MySqlUserDao implements UserDao {
             PreparedStatement updateStatement = connection
                     .prepareStatement(SqlQueries.UPDATE_USER_INFO_QUERY);
             updateStatement.setString(1, user.getEmail());
-            updateStatement.setString(2, user.getPassword());
-            updateStatement.setString(3, user.getPhone());
-            updateStatement.setString(4, user.getFirstName());
-            updateStatement.setString(5, user.getLastName());
-            updateStatement.setLong(6, user.getId());
+            updateStatement.setString(2, user.getPhone());
+            updateStatement.setString(3, user.getFirstName());
+            updateStatement.setString(4, user.getLastName());
+            updateStatement.setLong(5, user.getId());
 
             updateStatement.execute();
 

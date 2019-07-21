@@ -58,6 +58,20 @@ public class UserService extends Service{
         return checkAndCastObjectToOptional(executingResult);
     }
 
+    /**
+     * Replaces old user's personal data to the data from given user
+     * @param user - object with a new user's data
+     * @return - boolean result of method executing
+     */
+    public boolean updateUsersProfile(User user) {
+
+        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> updateUsersProfileCommand(manager, user));
+
+        return checkAndCastExecutingResult(executingResult);
+    }
+
     //Commands which is needed to be executed in corresponding public service methods
     boolean createNewUserCommand(DaoManager manager, User user) throws SQLException {
 
@@ -75,6 +89,15 @@ public class UserService extends Service{
         UserDao dao = (UserDao) manager.getUserDao();
 
         return dao.getUserByEmailAndPassword(email, password);
+    }
+
+    boolean updateUsersProfileCommand(DaoManager manager, User user) throws SQLException {
+
+        UserDao userDao = (UserDao) manager.getUserDao();
+
+        userDao.update(user);
+
+        return EXECUTING_SUCCESSFUL;
     }
 
     /**
