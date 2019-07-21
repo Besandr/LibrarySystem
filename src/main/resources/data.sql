@@ -71,9 +71,9 @@ UPDATE library_system.location SET book_id = 6, is_occupied = true WHERE locatio
 
 INSERT INTO library_system.role (name) VALUES ('Administrator'), ('Borrower');
 
-/*Passwords are hashed. Admin password is "asdf", users password is "123"*/
+/*Passwords are hashed. Admin's password is "asdf", users' password is "123"*/
 INSERT INTO library_system.user (email, password, phone, first_name, last_name, role_id) VALUES
-('guru@gmail.com', 'tO��IX���Wس�(�f�L�h��y�{�83�+�m.!�Gj�]ȟ)��X�7�[q��#��', '+49257367367', 'Linus', 'Torvalds', '1'),
+('guru@gmail.com', '���H�*��0�YNXP���@8K��(B��]���:e��t�\n��U�+��y.�AD^', '+49257367367', 'Linus', 'Torvalds', '1'),
 ('jekie@gmail.com', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380501112233', 'Evgeniy', 'Kovalchuk', 2),
 ('evil_user@mail.ru', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380631234567', 'Tomas', 'Smith', 2),
 ('sweetie@yahoo.com', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380675557777', 'Nastya', 'Stremilova', 2);
