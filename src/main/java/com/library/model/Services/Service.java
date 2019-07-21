@@ -1,6 +1,7 @@
 package com.library.model.Services;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class Service {
 
@@ -12,6 +13,14 @@ public abstract class Service {
             return (Boolean) executingResult;
         } else {
             return false;
+        }
+    }
+
+    protected static <T> Optional<T> checkAndCastToOptional(Object optionalCandidate) {
+        if (Objects.nonNull(optionalCandidate) && optionalCandidate instanceof Optional) {
+            return (Optional<T>) optionalCandidate;
+        } else {
+            return Optional.empty();
         }
     }
 }

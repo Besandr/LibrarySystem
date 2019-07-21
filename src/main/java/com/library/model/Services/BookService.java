@@ -138,7 +138,7 @@ public class BookService extends Service{
 
         bookDao.update(bookDto.getBook());
         // If updating fails the manager in caller method will return null.
-        return true;
+        return EXECUTING_SUCCESSFUL;
 
     }
 
@@ -165,7 +165,7 @@ public class BookService extends Service{
         //Filling a junction table author_book
         manager.getAuthorBookDao().saveAuthorBookJunction(bookDto.getBook(), newAuthors);
 
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
     protected synchronized boolean updateBookKeywordsSetCommand(DaoManager manager, BookDto bookDto) throws SQLException {
@@ -191,7 +191,7 @@ public class BookService extends Service{
         //Filling a junction table keyword_book
         manager.getBookKeywordDao().saveBookKeywordsJunction(bookDto.getBook(), newKeywords);
 
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
     protected BookDto createBookDtoFromBook(DaoManager manager, Book book) throws SQLException {
@@ -315,10 +315,10 @@ public class BookService extends Service{
         long bookId = manager.getBookDao().save(book);
         if (bookId < 0) {
             //There is such a book in the DB
-            return false;
+            return EXECUTING_SUCCESSFUL;
         } else {
             book.setId(bookId);
-            return true;
+            return EXECUTING_FAILED;
         }
     }
 

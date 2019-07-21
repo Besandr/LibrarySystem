@@ -56,11 +56,7 @@ public class UserService extends Service{
 
         Object executingResult = daoManager.executeAndClose(manager -> getUserByLoginInfoCommand(manager, email, hashedPassword));
 
-        if (Objects.nonNull(executingResult) && executingResult instanceof Optional) {
-            return (Optional<User>) executingResult;
-        } else {
-            return Optional.empty();
-        }
+        return checkAndCastToOptional(executingResult);
     }
 
     //Commands which is needed to be executed in corresponding public service methods

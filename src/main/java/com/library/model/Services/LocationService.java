@@ -53,14 +53,14 @@ public class LocationService extends Service {
         List<Location> locations = locationDao.getAllLocations(true);
 
         if (locations.size() < booksQuantity) {
-            return false;
+            return EXECUTING_FAILED;
         }
 
         for (int i = 0; i < booksQuantity; i++) {
             locationDao.saveBookToLocation(locations.get(i).getId(), bookId);
         }
 
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
     protected boolean addBookcaseToStorageCommand(DaoManager manager, Bookcase bookcase) throws SQLException {
@@ -79,20 +79,20 @@ public class LocationService extends Service {
                 locationDao.save(location);
             }
         }
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
-    private Object removeBookFromStorageCommand(DaoManager manager, Book book) throws SQLException {
+    private boolean removeBookFromStorageCommand(DaoManager manager, Book book) throws SQLException {
 
         LoanDtoDao loanDtoDao = manager.getLoanDtoDao();
         if (!loanDtoDao.getActiveLoansByBook(book).isEmpty()) {
-            return false;
+            return EXECUTING_FAILED;
         }
 
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
         locationDao.deleteBookFromAllLocations(book);
 
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
     private LocationService(){}
