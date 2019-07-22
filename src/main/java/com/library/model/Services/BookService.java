@@ -176,7 +176,6 @@ public class BookService extends Service{
         List<Book> bookList = bookDao.getAllBookParameterized(author, keyword, partOfTitle);
 
         List<BookDto> bookDtos = new ArrayList<>();
-
         for (Book book : bookList) {
             bookDtos.add(createBookDtoFromBook(manager, book));
         }
@@ -405,10 +404,10 @@ public class BookService extends Service{
         long bookId = manager.getBookDao().save(book);
         if (bookId < 0) {
             //There is such a book in the DB
-            return EXECUTING_SUCCESSFUL;
+            return EXECUTING_FAILED;
         } else {
             book.setId(bookId);
-            return EXECUTING_FAILED;
+            return EXECUTING_SUCCESSFUL;
         }
     }
 
@@ -420,7 +419,7 @@ public class BookService extends Service{
      * a {@code DaoException} will be thrown and handled by {@code DaoManager}
      * @throws SQLException - if the manager can't give a Dao needed
      */
-    private boolean deleteBook(DaoManager manager, Book book) throws SQLException {
+    boolean deleteBook(DaoManager manager, Book book) throws SQLException {
 
         BookDao bookDao = (BookDao) manager.getBookDao();
 
