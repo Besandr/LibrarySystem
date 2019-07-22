@@ -13,10 +13,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Service class which has methods bound with location operations
+ */
 public class LocationService extends Service {
 
     private static final LocationService instance = new LocationService();
 
+    /**
+     * Adds a new bookcase to the library storage and creates free locations
+     * provided by it
+     * @param bookcase - new library's bookcase
+     * @return - boolean representation of result of method executing
+     */
     public boolean addBookcaseToStorage(Bookcase bookcase) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -26,6 +35,13 @@ public class LocationService extends Service {
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Adds given quantity of books to storage. Added books occupy free
+     * locations in the storage
+     * @param bookId - id of book which is needed to be added
+     * @param booksQuantity - quantity of book which is needed to be added
+     * @return - boolean representation of result of method executing
+     */
     public boolean addBooksToStorage(long bookId, int booksQuantity) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -35,6 +51,11 @@ public class LocationService extends Service {
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Removes the given book from the storage
+     * @param book - id of book which is needed to be removed
+     * @return - boolean representation of result of method executing
+     */
     public boolean removeBookFromStorage(Book book) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -46,6 +67,28 @@ public class LocationService extends Service {
 
     public static LocationService getInstance() {
         return instance;
+    }
+
+    //Commands which is needed to be executed in corresponding public service methods
+    boolean addBookcaseToStorageCommand(DaoManager manager, Bookcase bookcase) throws SQLException {
+        //saving the bookcase
+        BookcaseDao bookcaseDao =(BookcaseDao) manager.getBookcaseDao();
+        long bookcaseId = bookcaseDao.save(bookcase);
+        bookcase.setId(bookcaseId);
+
+        //creating new locations provided by the new bookcase
+        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        for (int i = 1; i <= bookcase.getShelfQuantity(); i++) {
+            for (int j = 1; j <= bookcase.getCellQuantity(); j++) {
+                Location location = Location.builder()
+                        .bookcaseId(bookcaseId)
+                        .shelfNumber(i)
+                        .cellNumber(j)
+                        .build();
+                locationDao.save(location);
+            }
+        }
+        return EXECUTING_SUCCESSFUL;
     }
 
     boolean addBooksToStorageCommand(DaoManager manager, long bookId, int booksQuantity) throws SQLException {
@@ -60,25 +103,6 @@ public class LocationService extends Service {
             locationDao.saveBookToLocation(locations.get(i).getId(), bookId);
         }
 
-        return EXECUTING_SUCCESSFUL;
-    }
-
-    boolean addBookcaseToStorageCommand(DaoManager manager, Bookcase bookcase) throws SQLException {
-        BookcaseDao bookcaseDao =(BookcaseDao) manager.getBookcaseDao();
-        long bookcaseId = bookcaseDao.save(bookcase);
-        bookcase.setId(bookcaseId);
-
-        LocationDao locationDao = (LocationDao) manager.getLocationDao();
-        for (int i = 1; i <= bookcase.getShelfQuantity(); i++) {
-            for (int j = 1; j <= bookcase.getCellQuantity(); j++) {
-                Location location = Location.builder()
-                        .bookcaseId(bookcaseId)
-                        .shelfNumber(i)
-                        .cellNumber(j)
-                        .build();
-                locationDao.save(location);
-            }
-        }
         return EXECUTING_SUCCESSFUL;
     }
 

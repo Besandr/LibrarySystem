@@ -16,6 +16,11 @@ public class BookService extends Service{
 
     private final static BookService instance = new BookService();
 
+    /**
+     * Adds a new book to the library's book catalogue
+     * @param bookDto - DTO object contains the new book
+     * @return - the boolean type result of executing this method
+     */
     public boolean addBookToCatalogue(BookDto bookDto) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -25,6 +30,11 @@ public class BookService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Removes a book from the library's book catalogue
+     * @param bookDto - DTO object contains the book need to be removed
+     * @return - the boolean type result of executing this method
+     */
     public boolean removeBookFromCatalogue(BookDto bookDto) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -34,6 +44,12 @@ public class BookService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Updates a book's fields properties
+     * @param bookDto - DTO object contains the book which properties
+     *                is need to be updated
+     * @return - the boolean type result of executing this method
+     */
     public boolean updateBookProperties(BookDto bookDto) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -43,6 +59,12 @@ public class BookService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Updates a book's authors
+     * @param bookDto - DTO object contains the book which authors
+     *                is need to be updated
+     * @return - the boolean type result of executing this method
+     */
     public boolean updateBookAuthorsSet(BookDto bookDto) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -52,6 +74,12 @@ public class BookService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Updates a book's keywords
+     * @param bookDto - DTO object contains the book which keywords
+     *                is need to be updated
+     * @return - the boolean type result of executing this method
+     */
     public boolean updateBookKeywordsSet(BookDto bookDto) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -61,6 +89,10 @@ public class BookService extends Service{
         return checkAndCastExecutingResult(executingResult);
     }
 
+    /**
+     * Gets the list with all keywords in the library
+     * @return the list with all keywords in the library
+     */
     public List<Keyword> getAllKeywords(){
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
@@ -69,6 +101,10 @@ public class BookService extends Service{
         return checkAndCastObjectToList(executingResult);
     }
 
+    /**
+     * Gets the list with all authors in the library
+     * @return the list with all authors in the library
+     */
     public List<Author> getAllAuthors(){
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -78,6 +114,15 @@ public class BookService extends Service{
         return checkAndCastObjectToList(executingResult);
     }
 
+    /**
+     * Finds all the books which fits to the given combinations
+     * of criteria: author, keyword, part of title. Any of this
+     * parameters may present or may not.
+     * @param author - author of target books
+     * @param keyword - keyword of target books
+     * @param partOfTitle - part of title or whole title of target books
+     * @return a list with {@code BookDto} contains the target books
+     */
     public List<BookDto> findBooks(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
@@ -87,33 +132,34 @@ public class BookService extends Service{
         return checkAndCastObjectToList(executingResult);
     }
 
+    //Commands which is needed to be executed in corresponding public service methods
     synchronized boolean addBookToCatalogueCommand(DaoManager manager, BookDto bookDto) throws SQLException {
-
+        //trying to save the new book to the library's catalogue
         boolean isSavingBookSuccessful = saveBook(manager, bookDto.getBook());
         if (!isSavingBookSuccessful) {
-            return false;
+            return EXECUTING_FAILED;
         }
-
+        //saving authors and keywords of the new book
         saveAuthors(manager, bookDto.getAuthors());
         saveKeywords(manager, bookDto.getKeywords());
         //Filling junction tables author_book & book_keyword
         manager.getAuthorBookDao().saveAuthorBookJunction(bookDto.getBook(), bookDto.getAuthors());
         manager.getBookKeywordDao().saveBookKeywordsJunction(bookDto.getBook(), bookDto.getKeywords());
 
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
     synchronized boolean removeBookFromCatalogueCommand(DaoManager manager, BookDto bookDto) throws SQLException {
-
+        //trying to delete the book from the library's catalogue
         boolean isDeletingBookSuccessful = deleteBook(manager, bookDto.getBook());
         if (!isDeletingBookSuccessful) {
-            return false;
+            return EXECUTING_FAILED;
         }
-
+        //saving authors and keywords of the new book
         deleteAuthors(manager, bookDto.getAuthors());
         deleteKeywords(manager, bookDto.getKeywords());
 
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
     List<Keyword> getAllKeywordsCommand(DaoManager manager) throws SQLException {
@@ -200,6 +246,13 @@ public class BookService extends Service{
         return EXECUTING_SUCCESSFUL;
     }
 
+    /**
+     * Creates a {@code BookDto}(with Authors and Keywords) from a given book.
+     * @param manager - {@code DaoManager} for accessing daos needed
+     * @param book - book from which DTO is need to created
+     * @return the object which contains given book and its authors and keywords
+     * @throws SQLException - if manager can't give a Dao needed
+     */
     BookDto createBookDtoFromBook(DaoManager manager, Book book) throws SQLException {
 
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
@@ -217,9 +270,9 @@ public class BookService extends Service{
 
     /**
      * Iterates through given collection, finds new authors and saves them
-     * @param manager - {@DaoManager} for accessing needed {@code Dao}
+     * @param manager - {@code DaoManager} for accessing needed {@code Dao}
      * @param authors - collection of authors need to be checked and saved
-     * @throws SQLException
+     * @throws SQLException - if manager can't give a Dao needed
      */
     synchronized void saveAuthors(DaoManager manager, Collection<Author> authors) throws SQLException {
 
@@ -238,7 +291,7 @@ public class BookService extends Service{
                 } else {
                     // Current author is already in the DB. We need get him and takes
                     // his id.
-                    Optional<Author> dbAuthor = getAuthorByName(authorDao, author);
+                    Optional<Author> dbAuthor = getAuthorByName(authorDao, author.getFirstName(), author.getLastName());
                     if (dbAuthor.isPresent()) {
                         author.setId(dbAuthor.get().getId());
                     }
@@ -248,11 +301,11 @@ public class BookService extends Service{
     }
 
     /**
-     * Checks each author in the given {@Collection} on having a book in the catalogue. If authors doesn't have any
+     * Checks each author in the given {@code Collection} on having a book in the catalogue. If authors doesn't have any
      * book - deletes him.
-     * @param manager - {@DaoManager} for accessing needed {@code Dao}
+     * @param manager - {@code DaoManager} for accessing needed {@code Dao}
      * @param authors - collection of authors need to be checked
-     * @throws SQLException
+     * @throws SQLException - if manager can't give a Dao needed
      */
     synchronized void deleteAuthors(DaoManager manager, Collection<Author> authors) throws SQLException {
 
@@ -266,6 +319,13 @@ public class BookService extends Service{
         }
     }
 
+    /**
+     * Checks each keyword in the given {@code Collection} on having a book in the catalogue. If keywords doesn't have any
+     * book - deletes him.
+     * @param manager - {@code DaoManager} for accessing needed {@code Dao}
+     * @param keywords - collection of keywords need to be checked
+     * @throws SQLException - if manager can't give a Dao needed
+     */
     synchronized void deleteKeywords(DaoManager manager, Collection<Keyword> keywords) throws SQLException {
 
         BookKeywordDao bookKeywordDao = manager.getBookKeywordDao();
@@ -278,12 +338,25 @@ public class BookService extends Service{
         }
     }
 
-    Optional<Author> getAuthorByName(AuthorDao dao, Author author) {
+    /**
+     * Gets an author(with id) from the storage by its first and last names
+     * @param dao - dao for fetching the author data from the storage
+     * @param firstName - the authors first name
+     * @param lastName - the authors second name
+     * @return - the target author
+     */
+    Optional<Author> getAuthorByName(AuthorDao dao, String firstName, String lastName) {
 
-        return dao.getByName(author.getFirstName(), author.getLastName());
+        return dao.getByName(firstName, lastName);
 
     }
 
+    /**
+     * Iterates through given collection, finds new keywords and saves them
+     * @param manager - {@code DaoManager} for accessing needed {@code Dao}
+     * @param keywordSet - collection of keywords need to be checked and saved
+     * @throws SQLException - if the manager can't give a Dao needed
+     */
     void saveKeywords(DaoManager manager, Collection<Keyword> keywordSet) throws SQLException {
 
         KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
@@ -301,7 +374,7 @@ public class BookService extends Service{
                 } else {
                     // Current keyword is already in the DB. We need get it and takes
                     // its id.
-                    Optional<Keyword> dbKeyword = getKeywordByWord(keywordDao, keyword);
+                    Optional<Keyword> dbKeyword = getKeywordByWord(keywordDao, keyword.getWord());
                     if (dbKeyword.isPresent()) {
                         keyword.setId(dbKeyword.get().getId());
                     }
@@ -310,12 +383,23 @@ public class BookService extends Service{
         }
     }
 
-    Optional<Keyword> getKeywordByWord(KeywordDao dao, Keyword keyword) {
-
-        return dao.getByWord(keyword.getWord());
-
+    /**
+     * Gets the keyword(with id) object from the storage by its word
+     * @param dao - dao for fetching the keywords data from the storage
+     * @param word - the keyword's word
+     * @return - the target keyword
+     */
+    Optional<Keyword> getKeywordByWord(KeywordDao dao, String word) {
+        return dao.getByWord(word);
     }
 
+    /**
+     * Tries to save the given book in the storage
+     * @param manager - {@code DaoManager} for accessing needed {@code Dao}
+     * @param book - book needed to be saved
+     * @return - the boolean representation of saving operation result
+     * @throws SQLException - if the manager can't give a Dao needed
+     */
     boolean saveBook(DaoManager manager, Book book) throws SQLException {
 
         long bookId = manager.getBookDao().save(book);
@@ -328,13 +412,21 @@ public class BookService extends Service{
         }
     }
 
+    /**
+     * Tries to delete the given book from storage
+     * @param manager - {@code DaoManager} for accessing needed {@code Dao}
+     * @param book - book needed to be deleted
+     * @return - {@code true} if deleting is successful. If deleting fails
+     * a {@code DaoException} will be thrown and handled by {@code DaoManager}
+     * @throws SQLException - if the manager can't give a Dao needed
+     */
     private boolean deleteBook(DaoManager manager, Book book) throws SQLException {
 
         BookDao bookDao = (BookDao) manager.getBookDao();
 
         bookDao.delete(book);
         // If deleting fails the manager in caller method will return null.
-        return true;
+        return EXECUTING_SUCCESSFUL;
     }
 
     public static BookService getInstance() {
