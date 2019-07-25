@@ -1,6 +1,6 @@
 package com.library.web.controller.actions;
 
-import com.library.web.controller.ActionServletConfigurator;
+import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class ChangeLanguageActionTest {
     ActionForm form;
 
     @Mock
-    ActionServletConfigurator configurator;
+    ServletResources resources;
 
     @Before
     public void mockInit(){
@@ -53,7 +53,7 @@ public class ChangeLanguageActionTest {
         ArgumentCaptor previousRequestPathCaptor = ArgumentCaptor.forClass(Object.class);
         doNothing().when(session).setAttribute(eq("previousRequestPath"), previousRequestPathCaptor.capture());
 
-        String returnedValue = new ChangeLanguageAction().execute(request, response, form, configurator);
+        String returnedValue = new ChangeLanguageAction().execute(request, response, form, resources);
 
         assertEquals("Method execute() should set correct language code",
                 "ru", languageCodeCaptor.getValue());
@@ -67,7 +67,7 @@ public class ChangeLanguageActionTest {
 
     @Test
     public void executeShouldNotChangeLanguage(){
-        new ChangeLanguageAction().execute(request, response, form, configurator);
+        new ChangeLanguageAction().execute(request, response, form, resources);
 
         verify(session, never()).setAttribute(eq("language"), any());
     }

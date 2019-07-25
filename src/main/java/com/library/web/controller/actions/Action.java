@@ -1,6 +1,6 @@
 package com.library.web.controller.actions;
 
-import com.library.web.controller.ActionServletConfigurator;
+import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,9 +30,9 @@ public abstract class Action {
      * @param request the request need to be processed
      * @param response the response to user
      * @param form - form need to be processed by this action
-     * @param servletConfigurator - configurations of servlet
+     * @param resources - servlet's resources
      * @return - path where servlet should redirect request
      */
     public abstract String execute(HttpServletRequest request, HttpServletResponse response,
-                                   ActionForm form, ActionServletConfigurator servletConfigurator);
+                                   ActionForm form, ServletResources resources);
 }

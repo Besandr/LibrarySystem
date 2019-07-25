@@ -1,7 +1,7 @@
 package com.library.web.controller.actions;
 
 import com.library.model.enums.Languages;
-import com.library.web.controller.ActionServletConfigurator;
+import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,12 +18,12 @@ public class ChangeLanguageAction extends Action{
      * @param request the request with a another language parameter
      * @param response the response to user
      * @param form this action not need form
-     * @param servletConfigurator - configurations of servlet
+     * @param resources - servlet's resources
      * @return path to page from what the language has been changed
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response,
-                          ActionForm form, ActionServletConfigurator servletConfigurator) {
+                          ActionForm form, ServletResources resources) {
 
         String chosenLanguage = request.getParameter("chosenLanguage");
 
