@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<servlet-config>
+
+    <forms>
+        <form>
+            <name>userRegistrationForm</name>
+            <type>com.library.web.controller.forms.UserRegistrationForm</type>
+        </form>
+    </forms>
+
+    <action-mappings>
+        <action>
+            <path>/register.do</path>
+            <type>com.library.web.controller.actions.RegisterUserAction</type>
+            <name>userRegistrationForm</name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/registration.jsp</input>
+        </action>
+        <action>
+            <path>/registration</path>
+            <type>com.library.web.controller.actions.ShowRegistrationPageAction</type>
+            <name>ShowRegistrationPage</name>
+        </action>
+        <action>
+            <path>/changeLanguage</path>
+            <type>com.library.web.controller.actions.ChangeLanguageAction</type>
+            <name>ChangeLanguage</name>
+        </action>
+    </action-mappings>
+
+    <forwards>
+        <entry>
+            <key>ShowTitlePage</key>
+            <value>/WEB-INF/jsp/titlePage.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowRegistrationPage</key>
+            <value>/WEB-INF/jsp/registration.jsp</value>
+        </entry>
+        <entry>
+            <key>successPage</key>
+            <value>/WEB-INF/jsp/successfulRedirect.jsp</value>
+        </entry>
+    </forwards>
+
+</servlet-config>
