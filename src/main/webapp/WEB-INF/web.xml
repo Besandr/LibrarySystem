@@ -5,32 +5,33 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-  <display-name>Library system</display-name>
+    <display-name>Library system</display-name>
 
-  <filter>
+    <filter>
     <filter-name>EncodingFilter</filter-name>
     <filter-class>com.library.web.filters.EncodingFilter</filter-class>
     <init-param>
       <param-name>encoding</param-name>
       <param-value>UTF-8</param-value>
     </init-param>
-  </filter>
-  <filter-mapping>
+    </filter>
+    <filter-mapping>
     <filter-name>EncodingFilter</filter-name>
     <url-pattern>/</url-pattern>
-  </filter-mapping>
+    </filter-mapping>
 
-  <listener>
+    <listener>
     <listener-class>com.library.web.listeners.StartApplicationListener</listener-class>
-  </listener>
+    </listener>
 
-  <servlet>
-    <servlet-name>FrontControllerServlet</servlet-name>
-    <servlet-class>com.library.web.controller.FrontControllerServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FrontControllerServlet</servlet-name>
+    <servlet>
+        <servlet-name>ActionServlet</servlet-name>
+        <servlet-class>com.library.web.controller.ActionServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>ActionServlet</servlet-name>
     <url-pattern>/</url-pattern>
-  </servlet-mapping>
+    </servlet-mapping>
 
 </web-app>
