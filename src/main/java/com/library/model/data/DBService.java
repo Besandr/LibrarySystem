@@ -25,6 +25,7 @@ public class DBService {
     private static BasicDataSource ds;
 
     static {
+        registerDriver();
         initDataSource();
     }
 
@@ -66,7 +67,18 @@ public class DBService {
         return ds.getConnection();
     }
 
-    public DataSource getDataSource(){
+    /**
+     * Registers the database connection driver
+     */
+    private static void registerDriver() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    DataSource getDataSource(){
         return ds;
     }
 
