@@ -120,7 +120,7 @@ public class UserService extends Service{
 
         byte[] hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
 
-        return new String(hashedPassword);
+        return new String(hashedPassword, StandardCharsets.UTF_8);
     }
 
     public static UserService getInstance() {
