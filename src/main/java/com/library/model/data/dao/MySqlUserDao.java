@@ -1,6 +1,7 @@
 package com.library.model.data.dao;
 
 import com.library.model.data.DBUtils;
+import com.library.model.data.entity.Role;
 import com.library.model.data.entity.User;
 import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -97,7 +98,7 @@ public class MySqlUserDao implements UserDao {
             insertStatement.setString(3, user.getPhone());
             insertStatement.setString(4, user.getFirstName());
             insertStatement.setString(5, user.getLastName());
-            insertStatement.setLong(6, user.getRoleId());
+            insertStatement.setString(6, user.getRole().name());
 
             insertStatement.executeUpdate();
 
@@ -234,14 +235,14 @@ public class MySqlUserDao implements UserDao {
      * @throws SQLException if the columnLabels is not valid;
      * if a database access error occurs or result set is closed
      */
-    protected User getUserFromResultRow(ResultSet rs) throws SQLException {
+    User getUserFromResultRow(ResultSet rs) throws SQLException {
          return User.builder()
                 .id(rs.getLong("user_id"))
                 .email(rs.getString("email"))
                 .phone(rs.getString("phone"))
                 .firstName(rs.getString("first_name"))
                 .lastName(rs.getString("last_name"))
-                .roleId(rs.getLong("role_id"))
+                .role(Role.valueOf(rs.getString("role")))
                 .karma(rs.getInt("karma"))
                 .build();
     }

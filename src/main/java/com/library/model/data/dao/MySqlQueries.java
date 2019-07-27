@@ -63,15 +63,7 @@ class MySqlQueries {
     static final String GET_BOOK_LOCATION_QUERY = "SELECT * FROM library_system.location WHERE book_id = ? AND is_occupied = ? LIMIT 1;";
     static final String GET_BOOK_QUANTITY_QUERY = "SELECT COUNT(*) FROM library_system.location WHERE book_id = ? AND is_occupied = TRUE;";
 
-
-
-    static final String SAVE_ROLE_QUERY = "INSERT INTO library_system.role (name) VALUES (?);";
-    static final String DELETE_ROLE_QUERY = "DELETE FROM library_system.role WHERE role_id = ?;";
-    static final String UPDATE_ROLE_QUERY = "UPDATE library_system.role SET name = ? WHERE role_id = ?;";
-    static final String ALL_ROLES_QUERY = "SELECT * FROM library_system.role;";
-    static final String GET_ROLE_QUERY = "SELECT * FROM library_system.role WHERE role_id = ?;";
-
-    static final String SAVE_USER_QUERY = "INSERT INTO library_system.user (email, password, phone, first_name, last_name, role_id)" +
+    static final String SAVE_USER_QUERY = "INSERT INTO library_system.user (email, password, phone, first_name, last_name, role)" +
             " VALUES (?, ?, ?, ?, ?, ?);";
     static final String DELETE_USER_QUERY = "DELETE FROM library_system.user WHERE user_id = ?;";
     static final String UPDATE_USER_INFO_QUERY = "UPDATE library_system.user SET " +
@@ -81,7 +73,7 @@ class MySqlQueries {
             "last_name = ? " +
             "WHERE user_id = ?;";
     static final String UPDATE_USER_KARMA_QUERY = "UPDATE library_system.user SET karma = karma + ? WHERE user_id = ?;";
-    static final String UPDATE_USER_ROLE_QUERY = "UPDATE library_system.user SET role_id = ? WHERE user_id = ?;";
+    static final String UPDATE_USER_ROLE_QUERY = "UPDATE library_system.user SET role = ? WHERE user_id = ?;";
     static final String ALL_USERS_QUERY = "SELECT * FROM library_system.user;";
     static final String GET_USER_QUERY = "SELECT * FROM library_system.user WHERE user_id = ?;";
     static final String GET_USER_BY_EMAIL_AND_PASSWORD_QUERY = "SELECT * FROM library_system.user WHERE email = ? AND password = ?;";

@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 	`phone` varchar(15) NOT NULL UNIQUE,
 	`first_name` varchar(30) NOT NULL,
 	`last_name` varchar(30) NOT NULL,
-	`role_id` bigint NOT NULL,
+	`role` varchar(20) NOT NULL,
 	`karma` int NOT NULL DEFAULT '3',
 	PRIMARY KEY (`user_id`)
 );
@@ -61,12 +61,6 @@ CREATE TABLE IF NOT EXISTS `author_book` (
     UNIQUE KEY (author_id, book_id)
 );
 
-CREATE TABLE IF NOT EXISTS `role` (
-	`role_id` bigint NOT NULL AUTO_INCREMENT,
-	`name` varchar(15) NOT NULL UNIQUE,
-	PRIMARY KEY (`role_id`)
-);
-
 CREATE TABLE IF NOT EXISTS `location` (
 	`location_id` bigint NOT NULL AUTO_INCREMENT,
 	`book_id` bigint,
@@ -87,8 +81,6 @@ CREATE TABLE IF NOT EXISTS `bookcase` (
 ALTER TABLE `book_keyword` ADD CONSTRAINT `book_keyword_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`)  ON DELETE CASCADE;
 
 ALTER TABLE `book_keyword` ADD CONSTRAINT `book_keyword_fk1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword`(`keyword_id`) ON DELETE CASCADE;
-
-ALTER TABLE `user` ADD CONSTRAINT `user_fk0` FOREIGN KEY (`role_id`) REFERENCES `role`(`role_id`)  ON DELETE NO ACTION;
 
 ALTER TABLE `loan` ADD CONSTRAINT `loan_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE;
 

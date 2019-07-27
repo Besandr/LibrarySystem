@@ -2,6 +2,7 @@ package com.library.model.Services;
 
 import com.library.model.data.DaoManager;
 import com.library.model.data.dao.UserDao;
+import com.library.model.data.entity.Role;
 import com.library.model.data.entity.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,21 +58,5 @@ public class UserServiceTest {
         String anotherPassword = "World";
         String anotherHash = service.hashPassword(anotherPassword);
         assertNotEquals("hashPassword method must return different hashes for different passwords", hashedPassword, anotherHash);
-    }
-
-    @Test
-    public void a() {
-        UserService service = UserService.getInstance();
-
-        User user = User.builder()
-                .email("rsdg.com")
-                .password("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890")
-                .phone("2eg4f3")
-                .firstName("Вова")
-                .lastName("Львовский")
-                .roleId(2)
-                .build();
-
-        service.createNewUser(user);
     }
 }

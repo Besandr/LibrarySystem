@@ -69,14 +69,13 @@ UPDATE library_system.location SET book_id = 4, is_occupied = true WHERE locatio
 UPDATE library_system.location SET book_id = 5, is_occupied = true WHERE location_id = 7;
 UPDATE library_system.location SET book_id = 6, is_occupied = true WHERE location_id = 8;
 
-INSERT INTO library_system.role (name) VALUES ('Administrator'), ('Borrower');
 
 /*Passwords are hashed. Admin's password is "asdf", users' password is "123"*/
-INSERT INTO library_system.user (email, password, phone, first_name, last_name, role_id) VALUES
-('guru@gmail.com', '���H�*��0�YNXP���@8K��(B��]���:e��t�\n��U�+��y.�AD^', '+49257367367', 'Linus', 'Torvalds', '1'),
-('jekie@gmail.com', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380501112233', 'Evgeniy', 'Kovalchuk', 2),
-('evil_user@mail.ru', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380631234567', 'Tomas', 'Smith', 2),
-('sweetie@yahoo.com', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380675557777', 'Nastya', 'Stremilova', 2);
+INSERT INTO library_system.user (email, password, phone, first_name, last_name, role) VALUES
+('guru@gmail.com', '���H�*��0�YNXP���@8K��(B��]���:e��t�\n��U�+��y.�AD^', '+49257367367', 'Linus', 'Torvalds', 'ADMINISTRATOR'),
+('jekie@gmail.com', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380501112233', 'Evgeniy', 'Kovalchuk', 'USER'),
+('evil_user@mail.ru', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380631234567', 'Tomas', 'Smith', 'USER'),
+('sweetie@yahoo.com', 'm��=/箠s�yI��ɾ�MѦ��F)��!��%�:�f��?|�nUއUqrgu��Z��ď�-w�', '+380675557777', 'Nastya', 'Stremilova', 'USER');
 
 UPDATE library_system.user SET karma = 2 WHERE user_id = 3;
 

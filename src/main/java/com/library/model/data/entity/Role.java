@@ -1,13 +1,8 @@
 package com.library.model.data.entity;
 
-import lombok.Builder;
-import lombok.Data;
+public enum Role {
 
-@Data
-@Builder
-public class Role {
+    ADMINISTRATOR, USER
 
-    private long id;
-
-    private String name;
 }
+

@@ -19,7 +19,7 @@ public class User {
 
     private String lastName;
 
-    private long roleId;
+    private Role role;
 
     private int karma;
 }

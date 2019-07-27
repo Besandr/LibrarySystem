@@ -3,6 +3,7 @@ package com.library.model.Services;
 import com.library.model.data.DaoManager;
 import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.UserDao;
+import com.library.model.data.entity.Role;
 import com.library.model.data.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,23 +21,46 @@ public class UserService extends Service{
 
     private static final Logger log = LogManager.getLogger(UserService.class);
 
-    public static final UserService instance = new UserService();
+    private static final UserService instance = new UserService();
 
     /**
      * Creates(saves) a new user.
-     * @param user - user which is need to be saved
-     * @return {@code true} if saving is successful
-     *         and {@code false} if it is not
+     * @param firstName - the user's first name
+     * @param lastName - the user's last name
+     * @param email - the user's e-mail
+     * @param phone - the user's phone number
+     * @param password - the user's password
+     * @return an {@code Optional} with created user if saving
+     * was successful or an empty {@code Optional} if it wasn't
      */
-    public boolean createNewUser(User user) {
+    public Optional<User> createNewUser(String firstName,
+                                 String lastName,
+                                 String email,
+                                 String phone,
+                                 String password) {
 
-        user.setPassword(hashPassword(user.getPassword()));
+        User user = User.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .phone(phone)
+                .role(Role.USER)
+                .karma(3)
+                .build();
+
+        user.setPassword(hashPassword(password));
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> createNewUserCommand(manager, user));
 
-        return checkAndCastExecutingResult(executingResult);
+        if (checkAndCastExecutingResult(executingResult)) {
+            //Erasing unnecessary for caller password
+            user.setPassword("");
+            return Optional.of(user);
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**
