@@ -51,29 +51,29 @@ public class UserRegistrationForm extends ActionForm {
 
         Matcher matcher = pattern.matcher(firstName);
         if (!matcher.matches()) {
-            errors.addError("firstName", "First name field must contains only characters");
+            errors.addError("firstName", "registration.error.firstName");
         }
 
         matcher = pattern.matcher(lastName);
         if (!matcher.matches()) {
-            errors.addError("lastName", "Last name field must contains only characters");
+            errors.addError("lastName", "registration.error.lastName");
         }
 
         if (!email.matches("^[A-z]+@[A-z]+\\.[A-z]+$")) {
-            errors.addError("email", "You have to enter a valid e-mail");
+            errors.addError("email", "registration.error.email");
         }
 
         if (!phone.matches("^\\d{10,15}$")) {
-            errors.addError("phone", "Phone must consist of 10 to 15 digits");
+            errors.addError("phone", "registration.error.phone");
         }
 
         if (password.length() < 5) {
-            errors.addError("password", "Password must have at least 5 characters");
+            errors.addError("password", "registration.error.password");
             eraseWrongPasswords();
         }
 
         if (!password.equals(confirmPassword)) {
-            errors.addError("confirmPassword", "Password confirmation doesn't match with password");
+            errors.addError("confirmPassword", "registration.error.confirmPassword");
             eraseWrongPasswords();
         }
 
