@@ -41,6 +41,10 @@
             <input>/WEB-INF/jsp/registration.jsp</input>
         </action>
         <action>
+            <path>/title</path>
+            <type>com.library.web.controller.actions.ShowTitlePageAction</type>
+        </action>
+        <action>
             <path>/registration</path>
             <type>com.library.web.controller.actions.ShowUserRegistrationPageAction</type>
         </action>

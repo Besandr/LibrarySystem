@@ -5,11 +5,13 @@
 <html>
 <head>
     <c:import url="header.jsp"/>
+
     <c:if test="${empty sessionScope.language}">
         <c:set var="language" value="${applicationScope.language}" scope="session"/>
     </c:if>
     <fmt:setLocale value="${sessionScope.language}" />
     <fmt:setBundle basename="textContent" />
+
     <title><fmt:message key="login.title"/></title>
 </head>
 <body>
@@ -25,15 +27,18 @@
                 <fmt:message key="${errors.errorsMap['email']}"/>
             </c:if>
         </label>
-        <h3><fmt:message key="password"/></h3>
         <label>
+            <h3><fmt:message key="password"/></h3>
             <input name="password" type="password" value="${form.password}" required>
             <c:if test="${errors.errorsMap['password'] != null}">
-                <fmt:message key="login.error.password"/>
+                <fmt:message key="${errors.errorsMap['password']}"/>
             </c:if>
         </label>
         <button><fmt:message key="header.login"/></button>
     </form>
+</div>
+<div>
+    <a href="registration"><fmt:message key="login.registration"/></a>
 </div>
 </body>
 </html>
