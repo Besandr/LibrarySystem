@@ -4,12 +4,35 @@
 
     <forms>
         <form>
+            <name>userLoginForm</name>
+            <type>com.library.web.controller.forms.UserLoginForm</type>
+        </form>
+        <form>
             <name>userRegistrationForm</name>
             <type>com.library.web.controller.forms.UserRegistrationForm</type>
         </form>
     </forms>
 
     <action-mappings>
+        <action>
+            <path>/</path>
+            <type>com.library.web.controller.actions.ShowTitlePageAction</type>
+        </action>
+        <action>
+            <path>/login</path>
+            <type>com.library.web.controller.actions.ShowLoginPageAction</type>
+        </action>
+        <action>
+            <path>/login.do</path>
+            <type>com.library.web.controller.actions.LoginAction</type>
+            <name>userLoginForm</name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/login.jsp</input>
+        </action>
+        <action>
+            <path>/logout</path>
+            <type>com.library.web.controller.actions.LogoutAction</type>
+        </action>
         <action>
             <path>/register.do</path>
             <type>com.library.web.controller.actions.RegisterUserAction</type>
@@ -19,13 +42,11 @@
         </action>
         <action>
             <path>/registration</path>
-            <type>com.library.web.controller.actions.ShowRegistrationPageAction</type>
-            <name>ShowRegistrationPage</name>
+            <type>com.library.web.controller.actions.ShowUserRegistrationPageAction</type>
         </action>
         <action>
             <path>/changeLanguage</path>
             <type>com.library.web.controller.actions.ChangeLanguageAction</type>
-            <name>ChangeLanguage</name>
         </action>
     </action-mappings>
 
@@ -33,6 +54,10 @@
         <entry>
             <key>ShowTitlePage</key>
             <value>/WEB-INF/jsp/titlePage.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowLoginPage</key>
+            <value>/WEB-INF/jsp/login.jsp</value>
         </entry>
         <entry>
             <key>ShowRegistrationPage</key>
