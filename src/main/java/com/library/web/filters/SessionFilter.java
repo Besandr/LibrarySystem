@@ -20,7 +20,7 @@ public class SessionFilter implements Filter {
         HttpSession session = ((HttpServletRequest) request).getSession();
 
         storeRequestPath(session, ((HttpServletRequest) request).getServletPath());
-
+        log.debug("Referent path: " + session.getAttribute("referentUrl"));
         chain.doFilter(request, response);
     }
 
@@ -31,10 +31,10 @@ public class SessionFilter implements Filter {
      * @param servletPath - current servlet path
      */
     private void storeRequestPath(HttpSession session, String servletPath) {
-        String previousPath = (String) session.getAttribute("previousRequestPath");
-        if (!previousPath.equals(servletPath)) {
-            session.setAttribute("prePreviousRequestPath", previousPath);
-            session.setAttribute("previousRequestPath", servletPath);
+        String previousPath = (String) session.getAttribute("currentRequestPath");
+        if (!servletPath.equals(previousPath)) {
+            session.setAttribute("previousRequestPath", previousPath);
+            session.setAttribute("currentRequestPath", servletPath);
             log.debug("Previous stored path: " + previousPath + ". Current servlet path: " + servletPath);
         }
     }
