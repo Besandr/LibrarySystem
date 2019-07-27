@@ -32,9 +32,6 @@ public class ChangeLanguageAction extends Action{
             request.getSession().setAttribute("language", Languages.valueOf(chosenLanguage).getCode());
         }
 
-        //setting the previousRequestPath parameter
-        //to the path the changing language request comes from
-        //end returning from method this path
-        return (String) request.getSession().getAttribute("previousRequestPath");
+        return getRedirectToReferer(request, resources);
     }
 }

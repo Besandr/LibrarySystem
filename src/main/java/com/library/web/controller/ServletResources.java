@@ -16,6 +16,7 @@ public class ServletResources {
 
     private final ActionFactory actionFactory;
     private final FormFactory formFactory;
+    private final String REDIRECT_PREFIX = "redirect:";
 
     /**
      * Contains forwards names as {@code key} and resource paths as {@code value}
@@ -51,5 +52,34 @@ public class ServletResources {
         } else {
             return forward;
         }
+    }
+
+    /**
+     * Creates from given path special encoded path to
+     * show that this path is should be redirected
+     * @param path - the given plain path
+     * @return - the path for redirection
+     */
+    public String createRedirectPath(String path) {
+        return REDIRECT_PREFIX + path;
+    }
+
+    /**
+     * Creates from given special encoded redirect path a
+     * plain path (with ho special prefix)
+     * @param pathWithPrefix the special encoded redirect path
+     * @return - the plain decoded path
+     */
+    String getRedirectPath(String pathWithPrefix) {
+        return pathWithPrefix.substring(REDIRECT_PREFIX.length());
+    }
+
+    /**
+     * Checks whether given path is redirecting path
+     * @param path - a path for checking
+     * @return - a boolean result of path checking
+     */
+    boolean isRedirect(String path) {
+        return path.startsWith(REDIRECT_PREFIX);
     }
 }

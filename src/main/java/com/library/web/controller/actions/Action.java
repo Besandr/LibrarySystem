@@ -35,4 +35,21 @@ public abstract class Action {
      */
     public abstract String execute(HttpServletRequest request, HttpServletResponse response,
                                    ActionForm form, ServletResources resources);
+
+    /**
+     * Receives a referer URL and creates from it redirecting path.
+     * @return a path for redirection or the path for forwarding to
+     * the title page
+     */
+    String getRedirectToReferer(HttpServletRequest request, ServletResources resources) {
+        String referentUrl = request.getHeader("referer");
+        String redirectPath;
+        if (referentUrl == null) {
+            //Sets referent URL pointing to the title page
+            redirectPath = resources.getForward("ShowTitlePage");
+        } else {
+            redirectPath = resources.createRedirectPath(referentUrl);
+        }
+        return redirectPath;
+    }
 }

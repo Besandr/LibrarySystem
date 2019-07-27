@@ -6,7 +6,6 @@ import com.library.web.controller.forms.ActionForm;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Objects;
 
 /**
  * Action for forwarding request to title page
@@ -36,11 +35,7 @@ public class ShowLoginPageAction extends Action {
         //Is referent URL session attribute not exist
         if (session.getAttribute("referentUrl") == null) {
             //Setting the referent URL
-            String referentUrl = (String) session.getAttribute("previousRequestPath");
-            //Is pre-previous request path session attribute not exist
-            if (referentUrl == null) {
-                referentUrl = resources.getForward("ShowTitlePage");
-            }
+            String referentUrl = getRedirectToReferer(request, resources);
             session.setAttribute("referentUrl", referentUrl);
         }
     }

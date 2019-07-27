@@ -5,11 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Creates new session and stores request's servlet path as a session attribute
+ * Creates new session if it wasn't created earlier
  */
 public class SessionFilter implements Filter {
 
@@ -17,31 +16,9 @@ public class SessionFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpSession session = ((HttpServletRequest) request).getSession();
+       ((HttpServletRequest) request).getSession();
 
-        storeRequestPath(session, ((HttpServletRequest) request).getServletPath());
-        log.debug("Referent path: " + session.getAttribute("referentUrl"));
         chain.doFilter(request, response);
     }
 
-    /**
-     * Stores last two request's servlet paths like a two-slot stack.
-     * If current request is the same as previous - doesn't save it
-     * @param session - the user's session
-     * @param servletPath - current servlet path
-     */
-    private void storeRequestPath(HttpSession session, String servletPath) {
-        String previousPath = (String) session.getAttribute("currentRequestPath");
-        if (!servletPath.equals(previousPath)) {
-            session.setAttribute("previousRequestPath", previousPath);
-            session.setAttribute("currentRequestPath", servletPath);
-            log.debug("Previous stored path: " + previousPath + ". Current servlet path: " + servletPath);
-        }
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig){}
-
-    @Override
-    public void destroy() {}
 }
