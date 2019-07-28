@@ -14,11 +14,11 @@ public interface BookDao extends Dao<Book> {
 
     /**
      * Finds all books in a DB according to search parameters(with all ar with any of them)
-     * @param author - {@code Optional} which may or may not contains one of the book authors
-     * @param keyword - {@code Optional} which may or may not contains one of the book keywords
+     * @param authorId - id of the book author
+     * @param keywordId - id of the book keyword
      * @param partOfTitle - string with the book title or with a part of it
      * @return - list with all books correspond to the given criteria
      */
-    List<Book> getAllBookParameterized(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle);
+    List<Book> getAllBookParameterized(long authorId, long keywordId, String partOfTitle);
 
 }

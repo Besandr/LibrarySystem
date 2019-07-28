@@ -1,9 +1,7 @@
 package com.library.model.data.dao;
 
 import com.library.model.data.DBUtils;
-import com.library.model.data.entity.Author;
 import com.library.model.data.entity.Book;
-import com.library.model.data.entity.Keyword;
 import com.library.model.exceptions.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,19 +61,20 @@ public class MySqlBookDao implements BookDao {
      */
     @Override
     public List<Book> getAll() {
-        return getAllBookParameterized(Optional.empty(), Optional.empty(), "");
+        final long EMPTY_ID = -1L;
+        return getAllBookParameterized(EMPTY_ID, EMPTY_ID, "");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Book> getAllBookParameterized(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) {
+    public List<Book> getAllBookParameterized(long authorId, long keywordId, String partOfTitle) {
 
         List<Book> books = new ArrayList<>();
 
         try{
-            PreparedStatement statement = getPreparedStatement(author, keyword, partOfTitle);
+            PreparedStatement statement = getPreparedStatement(authorId, keywordId, partOfTitle);
 
             ResultSet rs = statement.executeQuery();
 
@@ -94,13 +93,21 @@ public class MySqlBookDao implements BookDao {
         return books;
     }
 
-    protected PreparedStatement getPreparedStatement(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) throws SQLException {
+    /**
+     * Gives {@code PreparedStatement} depending on data
+     * existence in every of three methods argument
+     * @param authorId - the author's ID
+     * @param keywordId - the keyword's ID
+     * @param partOfTitle - part of book's title or whole title
+     * @return - statement for getting books information from DB
+     */
+    private PreparedStatement getPreparedStatement(long authorId, long keywordId, String partOfTitle) throws SQLException {
 
         StringBuilder queryBuilder = new StringBuilder(MySqlQueries.ALL_BOOKS_QUERY_HEAD_PART);
-        if (author.isPresent()) {
+        if (authorId > 0) {
             queryBuilder.append(" ").append(MySqlQueries.ALL_BOOKS_QUERY_AUTHOR_PART);
         }
-        if (keyword.isPresent()) {
+        if (keywordId > 0) {
             queryBuilder.append(" ").append(MySqlQueries.ALL_BOOKS_QUERY_KEYWORD_PART);
         }
         queryBuilder.append(" ").append(MySqlQueries.ALL_BOOKS_QUERY_TAIL_PART);
@@ -108,11 +115,11 @@ public class MySqlBookDao implements BookDao {
         PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
 
         int parameterIndex = 1;
-        if (author.isPresent()) {
-            statement.setLong(parameterIndex++, author.get().getId());
+        if (authorId > 0) {
+            statement.setLong(parameterIndex++, authorId);
         }
-        if (keyword.isPresent()) {
-            statement.setLong(parameterIndex++, keyword.get().getId());
+        if (keywordId > 0) {
+            statement.setLong(parameterIndex++, keywordId);
         }
         statement.setString(parameterIndex, "%" + partOfTitle + "%");
 
@@ -183,7 +190,7 @@ public class MySqlBookDao implements BookDao {
         }
     }
 
-    protected long insertRowIntoBookTable(Book book) throws SQLException {
+    private long insertRowIntoBookTable(Book book) throws SQLException {
 
         PreparedStatement insertStatement = connection
                 .prepareStatement(MySqlQueries.SAVE_BOOK_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -197,13 +204,12 @@ public class MySqlBookDao implements BookDao {
         return DBUtils.getIdFromStatement(insertStatement);
     }
 
-    protected Book getBookFromResultRow(ResultSet rs) throws SQLException {
-        Book book = Book.builder()
+    Book getBookFromResultRow(ResultSet rs) throws SQLException {
+        return Book.builder()
                 .id(rs.getLong("book_id"))
                 .title(rs.getString("title"))
                 .year(rs.getInt("year"))
                 .description(rs.getString("description"))
                 .build();
-        return book;
     }
 }

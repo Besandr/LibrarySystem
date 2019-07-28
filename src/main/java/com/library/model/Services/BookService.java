@@ -118,16 +118,16 @@ public class BookService extends Service{
      * Finds all the books which fits to the given combinations
      * of criteria: author, keyword, part of title. Any of this
      * parameters may present or may not.
-     * @param author - author of target books
-     * @param keyword - keyword of target books
+     * @param authorId - author's ID of target books
+     * @param keywordId - keyword's ID of target books
      * @param partOfTitle - part of title or whole title of target books
      * @return a list with {@code BookDto} contains the target books
      */
-    public List<BookDto> findBooks(Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) {
+    public List<BookDto> findBooks(long authorId, long keywordId, String partOfTitle) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> findBooksCommand(manager, author, keyword, partOfTitle));
+        Object executingResult = daoManager.executeAndClose(manager -> findBooksCommand(manager, authorId, keywordId, partOfTitle));
 
         return checkAndCastObjectToList(executingResult);
     }
@@ -170,10 +170,10 @@ public class BookService extends Service{
         return manager.getAuthorDao().getAll();
     }
 
-    List<BookDto> findBooksCommand(DaoManager manager, Optional<Author> author, Optional<Keyword> keyword, String partOfTitle) throws SQLException {
+    List<BookDto> findBooksCommand(DaoManager manager, long authorId, long keywordId, String partOfTitle) throws SQLException {
 
         BookDao bookDao = (BookDao) manager.getBookDao();
-        List<Book> bookList = bookDao.getAllBookParameterized(author, keyword, partOfTitle);
+        List<Book> bookList = bookDao.getAllBookParameterized(authorId, keywordId, partOfTitle);
 
         List<BookDto> bookDtos = new ArrayList<>();
         for (Book book : bookList) {

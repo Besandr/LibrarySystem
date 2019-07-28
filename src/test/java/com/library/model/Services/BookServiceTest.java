@@ -392,7 +392,7 @@ public class BookServiceTest {
         bookList.add(mockBook);
         bookList.add(mockBook);
 
-        when(mockBookDao.getAllBookParameterized(Optional.empty(), Optional.empty(), "")).thenReturn(bookList);
+        when(mockBookDao.getAllBookParameterized(-1, -1, "")).thenReturn(bookList);
         doReturn(mockBookDto).when(mockService).createBookDtoFromBook(mockManager, mockBook);
 
         List<BookDto> expectedList = new ArrayList<>();
@@ -400,7 +400,7 @@ public class BookServiceTest {
         expectedList.add(mockBookDto);
 
         assertEquals("findBooksCommand(...) should return expected list",
-                expectedList, mockService.findBooksCommand(mockManager, Optional.empty(), Optional.empty(), ""));
+                expectedList, mockService.findBooksCommand(mockManager, -1, -1, ""));
     }
 
     @Test
@@ -410,7 +410,7 @@ public class BookServiceTest {
         bookList.add(mockBook);
         bookList.add(mockBook);
 
-        when(mockBookDao.getAllBookParameterized(Optional.empty(), Optional.empty(), "")).thenReturn(bookList);
+        when(mockBookDao.getAllBookParameterized(-1, -1, "")).thenReturn(bookList);
         doReturn(mockBookDto).when(mockService).createBookDtoFromBook(mockManager, mockBook);
 
         List<BookDto> notExpectedList = new ArrayList<>();
@@ -419,6 +419,6 @@ public class BookServiceTest {
         notExpectedList.add(mockBookDto);
 
         assertNotEquals("findBooksCommand(...) should not return notExpectedList list",
-                notExpectedList, mockService.findBooksCommand(mockManager, Optional.empty(), Optional.empty(), ""));
+                notExpectedList, mockService.findBooksCommand(mockManager, -1, -1, ""));
     }
 }
