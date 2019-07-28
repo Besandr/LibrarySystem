@@ -4,6 +4,14 @@
 
     <forms>
         <form>
+            <name>bookSearchForm</name>
+            <type>com.library.web.controller.forms.BookSearchForm</type>
+        </form>
+        <form>
+            <name>OrderBookForm</name>
+            <type>com.library.web.controller.forms.OrderBookForm</type>
+        </form>
+        <form>
             <name>userLoginForm</name>
             <type>com.library.web.controller.forms.UserLoginForm</type>
         </form>
@@ -21,6 +29,20 @@
         <action>
             <path>/bookSearch</path>
             <type>com.library.web.controller.actions.ShowBookSearchPageAction</type>
+        </action>
+        <action>
+            <path>/bookSearch.do</path>
+            <type>com.library.web.controller.actions.BookSearchAction</type>
+            <name>bookSearchForm</name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/bookSearch.jsp</input>
+        </action>
+        <action>
+            <path>/orderBook.do</path>
+            <type>com.library.web.controller.actions.OrderBookAction</type>
+            <name>OrderBookForm</name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/bookSearch.jsp</input>
         </action>
         <action>
             <path>/login</path>
