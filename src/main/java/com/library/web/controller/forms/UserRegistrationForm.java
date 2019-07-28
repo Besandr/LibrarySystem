@@ -30,12 +30,12 @@ public class UserRegistrationForm extends ActionForm {
      */
     @Override
     public void fill(HttpServletRequest request) {
-        firstName = request.getParameter("firstName") == null ? "" : request.getParameter("firstName");
-        lastName = request.getParameter("lastName") == null ? "" : request.getParameter("lastName");
-        email = request.getParameter("email") == null ? "" : request.getParameter("email");
-        phone = request.getParameter("phone") == null ? "" : request.getParameter("phone");
-        password = request.getParameter("password") == null ? "" : request.getParameter("password");
-        confirmPassword = request.getParameter("confirmPassword") == null ? "" : request.getParameter("confirmPassword");
+        firstName = getPropertyFromRequest(request, "firstName");
+        lastName = getPropertyFromRequest(request, "lastName");
+        email = getPropertyFromRequest(request, "email");
+        phone = getPropertyFromRequest(request, "phone");
+        password = getPropertyFromRequest(request, "password");
+        confirmPassword = getPropertyFromRequest(request, "confirmPassword");
     }
 
     /**

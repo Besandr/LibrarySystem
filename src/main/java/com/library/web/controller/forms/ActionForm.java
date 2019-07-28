@@ -23,4 +23,15 @@ public abstract class ActionForm {
      */
     public abstract void fill(HttpServletRequest request);
 
+    /**
+     * Gives a string value for property from the given request
+     * @param request - request with target parameter
+     * @param propertyName - target property's name
+     * @return - string value of target property or an
+     * empty {@code String} if property wasn't found
+     */
+    String getPropertyFromRequest(HttpServletRequest request, String propertyName) {
+        String parameter = request.getParameter(propertyName);
+        return parameter == null ? "" : parameter;
+    }
 }

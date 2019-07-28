@@ -23,8 +23,8 @@ public class UserLoginForm extends ActionForm {
      */
     @Override
     public void fill(HttpServletRequest request) {
-        email = request.getParameter("email") == null ? "" : request.getParameter("email");
-        password = request.getParameter("password") == null ? "" : request.getParameter("password");
+        email = getPropertyFromRequest(request, "email");
+        password = getPropertyFromRequest(request, "password");
     }
 
     /**
