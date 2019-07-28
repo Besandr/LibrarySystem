@@ -19,6 +19,10 @@
             <type>com.library.web.controller.actions.ShowTitlePageAction</type>
         </action>
         <action>
+            <path>/bookSearch</path>
+            <type>com.library.web.controller.actions.ShowBookSearchPageAction</type>
+        </action>
+        <action>
             <path>/login</path>
             <type>com.library.web.controller.actions.ShowLoginPageAction</type>
         </action>
@@ -34,6 +38,10 @@
             <type>com.library.web.controller.actions.LogoutAction</type>
         </action>
         <action>
+            <path>/registration</path>
+            <type>com.library.web.controller.actions.ShowUserRegistrationPageAction</type>
+        </action>
+        <action>
             <path>/register.do</path>
             <type>com.library.web.controller.actions.RegisterUserAction</type>
             <name>userRegistrationForm</name>
@@ -43,10 +51,6 @@
         <action>
             <path>/title</path>
             <type>com.library.web.controller.actions.ShowTitlePageAction</type>
-        </action>
-        <action>
-            <path>/registration</path>
-            <type>com.library.web.controller.actions.ShowUserRegistrationPageAction</type>
         </action>
         <action>
             <path>/changeLanguage</path>
@@ -66,6 +70,10 @@
         <entry>
             <key>ShowRegistrationPage</key>
             <value>/WEB-INF/jsp/registration.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowBookSearchPage</key>
+            <value>/WEB-INF/jsp/bookSearch.jsp</value>
         </entry>
         <entry>
             <key>successPage</key>
