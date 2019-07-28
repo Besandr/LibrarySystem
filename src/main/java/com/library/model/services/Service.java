@@ -1,4 +1,4 @@
-package com.library.model.Services;
+package com.library.model.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Parent abstract class for all the Services of model layer
+ * Parent abstract class for all the services of model layer
  */
 public abstract class Service {
 

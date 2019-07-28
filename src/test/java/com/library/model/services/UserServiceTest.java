@@ -1,8 +1,7 @@
-package com.library.model.Services;
+package com.library.model.services;
 
 import com.library.model.data.DaoManager;
 import com.library.model.data.dao.UserDao;
-import com.library.model.data.entity.Role;
 import com.library.model.data.entity.User;
 import org.junit.Before;
 import org.junit.Test;

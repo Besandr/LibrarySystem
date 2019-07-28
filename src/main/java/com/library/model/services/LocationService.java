@@ -1,4 +1,4 @@
-package com.library.model.Services;
+package com.library.model.services;
 
 import com.library.model.data.DaoManager;
 import com.library.model.data.DaoManagerFactory;
@@ -11,7 +11,6 @@ import com.library.model.data.entity.Location;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Service class which has methods bound with location operations

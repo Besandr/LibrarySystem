@@ -1,4 +1,4 @@
-package com.library.model.Services;
+package com.library.model.services;
 
 import com.library.model.data.DaoManager;
 import com.library.model.data.dao.*;

@@ -1,17 +1,15 @@
-package com.library.model.Services;
+package com.library.model.services;
 
 import com.library.model.data.DaoManager;
 import com.library.model.data.dao.LoanDao;
 import com.library.model.data.entity.Loan;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)

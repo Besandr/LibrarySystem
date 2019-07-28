@@ -1,4 +1,4 @@
-package com.library.model.Services;
+package com.library.model.services;
 
 import com.library.model.data.DaoManager;
 import com.library.model.data.dao.BookcaseDao;
@@ -6,7 +6,6 @@ import com.library.model.data.dao.LocationDao;
 import com.library.model.data.entity.Bookcase;
 import com.library.model.data.entity.Location;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
