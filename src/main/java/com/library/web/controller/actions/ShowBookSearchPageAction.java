@@ -1,6 +1,7 @@
 package com.library.web.controller.actions;
 
 import com.library.model.services.BookService;
+import com.library.model.services.Service;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
  * Action for showing the book search page
  */
 public class ShowBookSearchPageAction extends Action {
+
+    private BookService bookService;
 
     /**
      * Attaches to the session attributes with authors
@@ -36,8 +39,7 @@ public class ShowBookSearchPageAction extends Action {
      * @param request - the request for access to user's session
      */
     private void setAuthorsAttribute(HttpServletRequest request) {
-        BookService service = BookService.getInstance();
-        request.getSession().setAttribute("authors", service.getAllAuthors());
+        request.getSession().setAttribute("authors", bookService.getAllAuthors());
     }
 
     /**
@@ -46,8 +48,10 @@ public class ShowBookSearchPageAction extends Action {
      * @param request - the request for access to user's session
      */
     private void setKeywordsAttribute(HttpServletRequest request) {
-        BookService service = BookService.getInstance();
-        request.getSession().setAttribute("keywords", service.getAllKeywords());
+        request.getSession().setAttribute("keywords", bookService.getAllKeywords());
     }
 
+    public void setBookService(Service bookService) {
+        this.bookService = (BookService) bookService;
+    }
 }

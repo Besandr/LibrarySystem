@@ -1,5 +1,6 @@
 package com.library.web.controller.actions;
 
+import com.library.model.services.Service;
 import com.library.model.services.UserService;
 import com.library.model.data.entity.User;
 import com.library.web.controller.ActionErrors;
@@ -17,6 +18,8 @@ import java.util.Optional;
  * Action for login user in the system
  */
 public class LoginAction extends Action {
+
+    private UserService userService;
 
     public static final Logger log = LogManager.getLogger(LoginAction.class);
 
@@ -56,9 +59,8 @@ public class LoginAction extends Action {
      * an empty {@code Optional}
      */
     private Optional<User> getUserAccount(ActionForm form) {
-        UserService service = UserService.getInstance();
         UserLoginForm loginForm =(UserLoginForm) form;
-        return service.getUserByLoginInfo(loginForm.getEmail(), loginForm.getPassword());
+        return userService.getUserByLoginInfo(loginForm.getEmail(), loginForm.getPassword());
     }
 
     /**
@@ -71,5 +73,9 @@ public class LoginAction extends Action {
 
         ((UserLoginForm) form).setPassword("");
         request.setAttribute("form", form);
+    }
+
+    public void setUserService(Service userService) {
+        this.userService = (UserService) userService;
     }
 }

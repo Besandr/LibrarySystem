@@ -3,9 +3,8 @@ package com.library.web.controller;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
+import java.util.List;
 
 /**
  * Container for action's parameters which is read
@@ -41,5 +40,12 @@ class ActionConfig {
      * Path from what coming request to this action
      */
     private String input;
+
+    /**
+     * Service dependencies need to be injected in Action
+     */
+    @XmlElementWrapper(name = "service-dependencies")
+    @XmlElement(name = "dependency")
+    private List<ServiceDependencyConfig> serviceDependencyList;
 
 }

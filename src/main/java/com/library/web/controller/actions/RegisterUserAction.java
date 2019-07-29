@@ -1,5 +1,6 @@
 package com.library.web.controller.actions;
 
+import com.library.model.services.Service;
 import com.library.model.services.UserService;
 import com.library.model.data.entity.User;
 import com.library.web.controller.ActionErrors;
@@ -15,6 +16,8 @@ import java.util.Optional;
  * Action for registering user
  */
 public class RegisterUserAction extends Action {
+
+    private UserService userService;
 
     /**
      * Uses {@code UserService} for registering a new user. After
@@ -52,7 +55,7 @@ public class RegisterUserAction extends Action {
 
     private Optional<User> createUser(ActionForm form) {
         UserRegistrationForm userForm = (UserRegistrationForm) form;
-        return UserService.getInstance().createNewUser(
+        return userService.createNewUser(
                 userForm.getFirstName(),
                 userForm.getLastName(),
                 userForm.getEmail(),
@@ -70,5 +73,9 @@ public class RegisterUserAction extends Action {
 
         ((UserRegistrationForm) form).setPassword("");
         request.setAttribute("form", form);
+    }
+
+    public void setUserService(Service userService) {
+        this.userService = (UserService) userService;
     }
 }

@@ -2,6 +2,7 @@ package com.library.web.controller.actions;
 
 import com.library.model.services.BookService;
 import com.library.model.data.dto.BookDto;
+import com.library.model.services.Service;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 import com.library.web.controller.forms.BookSearchForm;
@@ -14,6 +15,8 @@ import java.util.List;
  * Action for searching book for ordering
  */
 public class BookSearchAction extends Action {
+
+    private BookService bookService;
 
     /**
      * Finds all book which fits to user's book search
@@ -39,13 +42,12 @@ public class BookSearchAction extends Action {
      * @return list with searching results
      */
     private List<BookDto> getBooksList(ActionForm form) {
-        BookService service = BookService.getInstance();
 
         long author = getIdFromString(((BookSearchForm)form).getAuthorId());
         long keyword = getIdFromString(((BookSearchForm)form).getKeywordId());
         String bookTitle = ((BookSearchForm)form).getBookTitle();
 
-        return service.findBooks(author, keyword, bookTitle);
+        return bookService.findBooks(author, keyword, bookTitle);
     }
 
     /**
@@ -67,5 +69,9 @@ public class BookSearchAction extends Action {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    public void setBookService(Service bookService) {
+        this.bookService = (BookService) bookService;
     }
 }

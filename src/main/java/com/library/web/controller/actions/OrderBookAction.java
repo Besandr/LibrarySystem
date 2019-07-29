@@ -2,6 +2,7 @@ package com.library.web.controller.actions;
 
 import com.library.model.data.entity.User;
 import com.library.model.services.LoanService;
+import com.library.model.services.Service;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 import com.library.web.controller.forms.OrderBookForm;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpSession;
  * Action for ordering a book by an user
  */
 public class OrderBookAction extends Action {
+
+    private LoanService loanService;
 
     /**
      * Takes target book's ID from {@code form} and creates
@@ -49,9 +52,8 @@ public class OrderBookAction extends Action {
     private boolean makeApplyForBook(HttpServletRequest request, ActionForm form) {
         long bookId = Long.parseLong(((OrderBookForm) form).getBookId());
         long userId = ((User) request.getSession().getAttribute("currentUser")).getId();
-        LoanService service = LoanService.getInstance();
 
-        return service.saveApplyForBook(bookId, userId);
+        return loanService.saveApplyForBook(bookId, userId);
     }
 
     /**
@@ -62,5 +64,9 @@ public class OrderBookAction extends Action {
      */
     private void removeBookSearchAttributes(HttpSession session) {
         session.removeAttribute("books");
+    }
+
+    public void setLoanService(Service loanService) {
+        this.loanService = (LoanService) loanService;
     }
 }

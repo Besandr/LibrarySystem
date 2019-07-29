@@ -29,6 +29,12 @@
         <action>
             <path>/bookSearch</path>
             <type>com.library.web.controller.actions.ShowBookSearchPageAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.model.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
         </action>
         <action>
             <path>/bookSearch.do</path>
@@ -36,6 +42,12 @@
             <name>bookSearchForm</name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.model.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
         </action>
         <action>
             <path>/orderBook.do</path>
@@ -43,6 +55,12 @@
             <name>OrderBookForm</name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.model.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
         </action>
         <action>
             <path>/login</path>
@@ -54,6 +72,12 @@
             <name>userLoginForm</name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/login.jsp</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.model.services.UserService</class>
+                    <name>userService</name>
+                </dependency>
+            </service-dependencies>
         </action>
         <action>
             <path>/logout</path>
@@ -69,6 +93,12 @@
             <name>userRegistrationForm</name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/registration.jsp</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.model.services.UserService</class>
+                    <name>userService</name>
+                </dependency>
+            </service-dependencies>
         </action>
         <action>
             <path>/title</path>

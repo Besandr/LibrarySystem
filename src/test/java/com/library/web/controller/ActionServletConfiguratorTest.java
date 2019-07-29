@@ -1,7 +1,5 @@
 package com.library.web.controller;
 
-import com.library.web.controller.forms.ActionForm;
-import com.library.web.controller.forms.UserRegistrationForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,7 +75,7 @@ public class ActionServletConfiguratorTest {
         configurator.setUpFactories(actionServletConfig, actionFactory, formFactory);
 
         verify(actionFactory, times(1))
-                .addAction("testPath", "testType", true, "testInput");
+                .addAction("testPath", "testType", true, "testInput", actionConfig.getServiceDependencyList());
 
         verify(configurator, times(1)).addFormToFormFactory(action, actionServletConfig, formFactory);
     }
@@ -97,7 +95,7 @@ public class ActionServletConfiguratorTest {
         configurator.setUpFactories(actionServletConfig, actionFactory, formFactory);
 
         verify(actionFactory, times(1))
-                .addAction("testPath", "testType", false, null);
+                .addAction("testPath", "testType", false, null, actionConfig.getServiceDependencyList());
 
         verify(configurator, never()).addFormToFormFactory(action, actionServletConfig, formFactory);
     }

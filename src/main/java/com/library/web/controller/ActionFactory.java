@@ -1,10 +1,15 @@
 package com.library.web.controller;
 
+import com.library.model.services.Service;
+import com.library.model.services.ServiceFactory;
 import com.library.web.controller.actions.Action;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Creates {@code Action}.
@@ -39,9 +44,11 @@ public class ActionFactory {
      * @param actionClassName - the full qualified class name of target {@code Action}
      * @param needValidate - is target {@code Action} needs a {@code ActionForm} marker
      * @param inputPath - path from where request to target {@code Action} comes from
+     * @param serviceDependencyList - list with service dependencies need to be injected
+     *                              in a new action
      */
-    void addAction(String actionPath, String actionClassName, boolean needValidate, String inputPath) {
-        Action action = createAction(actionClassName, needValidate, inputPath);
+    void addAction(String actionPath, String actionClassName, boolean needValidate, String inputPath, List<ServiceDependencyConfig> serviceDependencyList) {
+        Action action = createAction(actionClassName, needValidate, inputPath, serviceDependencyList);
         actions.put(actionPath, action);
     }
 
@@ -50,10 +57,12 @@ public class ActionFactory {
      * @param actionClassName - the full qualified class name of target {@code Action}
      * @param needValidate - is target {@code Action} needs a {@code ActionForm} marker
      * @param inputPath - path from where request to target {@code Action} comes from
+     * @param serviceDependencyList  - list with service dependencies need to be injected
+     *                               in a new action
      * @return target {@code Action} or throws {@code IllegalArgumentException} if
      * exceptions occurred during creating of the action
      */
-    Action createAction(String actionClassName, boolean needValidate, String inputPath) {
+    Action createAction(String actionClassName, boolean needValidate, String inputPath, List<ServiceDependencyConfig> serviceDependencyList) {
         try {
             Class actionClass = Class.forName(actionClassName);
             Action action = (Action) actionClass.newInstance();
@@ -61,15 +70,47 @@ public class ActionFactory {
             action.setNeedValidate(needValidate);
             action.setInputPath(inputPath);
 
+            if (serviceDependencyList != null
+                    && !serviceDependencyList.isEmpty()) {
+                createActionDependencies(action, actionClass, serviceDependencyList, new ServiceFactory());
+            }
+
             return action;
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             log.fatal(String.format("Can't create action class by name: %s. Cause: %s", actionClassName, e.getMessage()));
             throw new IllegalArgumentException(e);
+        } catch (NoSuchMethodException | InvocationTargetException e) {
+            log.fatal(String.format("Can't set dependency in action class: %s. Cause: %s", actionClassName, e.getMessage()));
+            throw new IllegalArgumentException(e);
         }
     }
 
-    public static ActionFactory getInstance() {
+    /**
+     * Sets local {@code Action} variables with {@code Service} classes given in a
+     * {@code serviceDependencyList} via setter methods
+     * @param action - the action for service dependency injection
+     * @param actionClass - the action full qualified class name
+     * @param serviceDependencyList - list with service dependencies
+     *                              which contains {@code Service} class names
+     *                              and local variables names
+     * @param serviceFactory - factory for getting {@code Service} objects
+     * @throws NoSuchMethodException if a setter method is not found.
+     * @throws InvocationTargetException if the setter method
+     *      *              throws an exception.
+     * @throws IllegalAccessException if setter method is inaccessible
+     */
+    private void createActionDependencies(Action action, Class<?> actionClass, List<ServiceDependencyConfig> serviceDependencyList, ServiceFactory serviceFactory) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        for (ServiceDependencyConfig dependency: serviceDependencyList){
+            String setterName = "set"
+                    + dependency.serviceVarName.substring(0, 1).toUpperCase()
+                    + dependency.serviceVarName.substring(1);
+            Method setter = actionClass.getDeclaredMethod(setterName, Service.class);
+            setter.invoke(action, serviceFactory.getService(dependency.serviceClass));
+        }
+    }
+
+    static ActionFactory getInstance() {
         return ourInstance;
     }
 

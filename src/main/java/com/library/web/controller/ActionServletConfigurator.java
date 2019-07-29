@@ -76,7 +76,8 @@ class ActionServletConfigurator {
             actionFactory.addAction(actionConfig.getPath(),
                     actionConfig.getType(),
                     needValidate,
-                    actionConfig.getInput());
+                    actionConfig.getInput(),
+                    actionConfig.getServiceDependencyList());
 
             if (needValidate) {
                 //Adding form info needed to this action to {@code FormFactory}
