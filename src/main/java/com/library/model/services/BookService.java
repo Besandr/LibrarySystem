@@ -14,7 +14,11 @@ import java.util.stream.Collectors;
 
 public class BookService extends Service{
 
-    private final static BookService instance = new BookService();
+    private DaoManagerFactory daoManagerFactory;
+
+    BookService(DaoManagerFactory daoManagerFactory) {
+        this.daoManagerFactory = daoManagerFactory;
+    }
 
     /**
      * Adds a new book to the library's book catalogue
@@ -23,7 +27,7 @@ public class BookService extends Service{
      */
     public boolean addBookToCatalogue(BookDto bookDto) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, bookDto));
 
@@ -37,7 +41,7 @@ public class BookService extends Service{
      */
     public boolean removeBookFromCatalogue(BookDto bookDto) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> removeBookFromCatalogueCommand(manager, bookDto));
 
@@ -52,7 +56,7 @@ public class BookService extends Service{
      */
     public boolean updateBookProperties(BookDto bookDto) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> updateBookPropertiesCommand(manager, bookDto));
 
@@ -67,7 +71,7 @@ public class BookService extends Service{
      */
     public boolean updateBookAuthorsSet(BookDto bookDto) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> updateBookAuthorsSetCommand(manager, bookDto));
 
@@ -82,7 +86,7 @@ public class BookService extends Service{
      */
     public boolean updateBookKeywordsSet(BookDto bookDto) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> updateBookKeywordsSetCommand(manager, bookDto));
 
@@ -94,7 +98,7 @@ public class BookService extends Service{
      * @return the list with all keywords in the library
      */
     public List<Keyword> getAllKeywords(){
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> getAllKeywordsCommand(daoManager));
 
@@ -107,7 +111,7 @@ public class BookService extends Service{
      */
     public List<Author> getAllAuthors(){
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> getAllAuthorsCommand(manager));
 
@@ -125,7 +129,7 @@ public class BookService extends Service{
      */
     public List<BookDto> findBooks(long authorId, long keywordId, String partOfTitle) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> findBooksCommand(manager, authorId, keywordId, partOfTitle));
 
@@ -291,9 +295,7 @@ public class BookService extends Service{
                     // Current author is already in the DB. We need get him and takes
                     // his id.
                     Optional<Author> dbAuthor = getAuthorByName(authorDao, author.getFirstName(), author.getLastName());
-                    if (dbAuthor.isPresent()) {
-                        author.setId(dbAuthor.get().getId());
-                    }
+                    dbAuthor.ifPresent(value -> author.setId(value.getId()));
                 }
             }
         }
@@ -374,9 +376,7 @@ public class BookService extends Service{
                     // Current keyword is already in the DB. We need get it and takes
                     // its id.
                     Optional<Keyword> dbKeyword = getKeywordByWord(keywordDao, keyword.getWord());
-                    if (dbKeyword.isPresent()) {
-                        keyword.setId(dbKeyword.get().getId());
-                    }
+                    dbKeyword.ifPresent(value -> keyword.setId(value.getId()));
                 }
             }
         }
@@ -428,9 +428,4 @@ public class BookService extends Service{
         return EXECUTING_SUCCESSFUL;
     }
 
-    public static BookService getInstance() {
-        return instance;
-    }
-
-    private BookService(){}
 }

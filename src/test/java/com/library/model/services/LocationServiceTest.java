@@ -1,6 +1,7 @@
 package com.library.model.services;
 
 import com.library.model.data.DaoManager;
+import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.BookcaseDao;
 import com.library.model.data.dao.LocationDao;
 import com.library.model.data.entity.Bookcase;
@@ -41,7 +42,7 @@ public class LocationServiceTest {
 
     @Before
     public void initSetUp() throws SQLException {
-        mockService = spy(LocationService.getInstance());
+        mockService = spy(new LocationService(new DaoManagerFactory()));
         when(mockDaoManager.getLocationDao()).thenReturn(mockLocationDao);
         when(mockDaoManager.getBookcaseDao()).thenReturn(mockBookcaseDao);
     }

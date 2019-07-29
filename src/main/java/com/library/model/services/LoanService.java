@@ -19,7 +19,11 @@ import java.util.Optional;
  */
 public class LoanService extends Service{
 
-    private static final LoanService instance = new LoanService();
+    private DaoManagerFactory daoManagerFactory;
+
+    LoanService(DaoManagerFactory daoManagerFactory) {
+        this.daoManagerFactory = daoManagerFactory;
+    }
 
     /**
      * Saves an apply for book by creating a loan which
@@ -31,7 +35,7 @@ public class LoanService extends Service{
      */
     public boolean saveApplyForBook(long bookId, long userId) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Loan loan = Loan.builder()
                 .bookId(bookId)
@@ -53,7 +57,7 @@ public class LoanService extends Service{
      */
     public List<LoanDto> getAllUnapprovedLoans(){
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllUnapprovedLoans());
 
@@ -66,7 +70,7 @@ public class LoanService extends Service{
      */
     public List<LoanDto> getAllActiveLoans(){
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllActiveLoans());
 
@@ -81,7 +85,7 @@ public class LoanService extends Service{
      */
     public List<LoanDto> getUnapprovedLoansByUser(User user){
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoansByUser(user));
 
@@ -97,7 +101,7 @@ public class LoanService extends Service{
      */
     public List<LoanDto> getActiveLoansByUser(User user) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByUser(user));
 
@@ -112,7 +116,7 @@ public class LoanService extends Service{
      */
     public List<LoanDto> getAllLoansByUser(User user) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllLoansByUser(user));
 
@@ -127,7 +131,7 @@ public class LoanService extends Service{
      */
     public List<LoanDto> getActiveLoansByBook(Book book) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getActiveLoansByBook(book));
 
@@ -143,7 +147,7 @@ public class LoanService extends Service{
      */
     public boolean approveLoan(long loanId) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         synchronized (this) {
             Object executingResult = daoManager.executeTransaction(manager -> approveLoanCommand(manager, loanId));
@@ -160,7 +164,7 @@ public class LoanService extends Service{
      */
     public boolean returnBook(long loanId) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> returnBookCommand(manager, loanId));
 
@@ -236,11 +240,5 @@ public class LoanService extends Service{
             userDao.updateKarma(loan.get().getUserId(), -1);
         }
     }
-
-    public static LoanService getInstance() {
-        return instance;
-    }
-
-    private LoanService(){}
 
 }

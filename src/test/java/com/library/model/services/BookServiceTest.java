@@ -1,6 +1,7 @@
 package com.library.model.services;
 
 import com.library.model.data.DaoManager;
+import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.*;
 import com.library.model.data.dto.BookDto;
 import com.library.model.data.entity.Author;
@@ -53,7 +54,7 @@ public class BookServiceTest {
 
     @Before
     public void initMocks() throws SQLException {
-        mockService = spy(BookService.getInstance());
+        mockService = spy(new BookService(new DaoManagerFactory()));
         when(mockManager.getBookDao()).thenReturn(mockBookDao);
         when(mockBookDto.getBook()).thenReturn(mockBook);
         when(mockManager.getAuthorDao()).thenReturn(mockAuthorDao);

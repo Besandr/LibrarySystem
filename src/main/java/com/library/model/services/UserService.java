@@ -21,7 +21,11 @@ public class UserService extends Service{
 
     private static final Logger log = LogManager.getLogger(UserService.class);
 
-    private static final UserService instance = new UserService();
+    private DaoManagerFactory daoManagerFactory;
+
+    UserService(DaoManagerFactory daoManagerFactory) {
+        this.daoManagerFactory = daoManagerFactory;
+    }
 
     /**
      * Creates(saves) a new user.
@@ -50,7 +54,7 @@ public class UserService extends Service{
 
         user.setPassword(hashPassword(password));
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> createNewUserCommand(manager, user));
 
@@ -75,7 +79,7 @@ public class UserService extends Service{
         // to get hash of the password first
         String hashedPassword = hashPassword(password);
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> getUserByLoginInfoCommand(manager, email, hashedPassword));
 
@@ -89,7 +93,7 @@ public class UserService extends Service{
      */
     public boolean updateUsersProfile(User user) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> updateUsersProfileCommand(manager, user));
 
@@ -147,9 +151,4 @@ public class UserService extends Service{
         return new String(hashedPassword, StandardCharsets.UTF_8);
     }
 
-    public static UserService getInstance() {
-        return instance;
-    }
-
-    private UserService(){}
 }

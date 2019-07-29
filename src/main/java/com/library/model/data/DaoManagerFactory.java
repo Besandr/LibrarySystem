@@ -10,9 +10,9 @@ public class DaoManagerFactory {
      * and initializing them with {@code DataSource}
      * @return new {@code DaoManager} object
      */
-    public static DaoManager createDaoManager() {
+    public DaoManager createDaoManager() {
         return new DaoManager(DBService.getInstance().getDataSource());
     }
 
-    private DaoManagerFactory(){}
+    public DaoManagerFactory(){}
 }

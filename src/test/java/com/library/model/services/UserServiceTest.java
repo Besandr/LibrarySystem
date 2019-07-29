@@ -1,6 +1,7 @@
 package com.library.model.services;
 
 import com.library.model.data.DaoManager;
+import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.UserDao;
 import com.library.model.data.entity.User;
 import org.junit.Before;
@@ -31,7 +32,7 @@ public class UserServiceTest {
 
     @Before
     public void initSetUp() throws SQLException {
-        mockService = spy(UserService.getInstance());
+        mockService = spy(new UserService(new DaoManagerFactory()));
         when(mockDaoManager.getUserDao()).thenReturn(mockUserDao);
     }
 
@@ -45,7 +46,7 @@ public class UserServiceTest {
     @Test
     public void testHashPassword(){
 
-        UserService service = UserService.getInstance();
+        UserService service = new UserService(new DaoManagerFactory());
 
         String password = "Hello";
         String hashedPassword = service.hashPassword(password);

@@ -1,6 +1,7 @@
 package com.library.model.services;
 
 import com.library.model.data.DaoManager;
+import com.library.model.data.DaoManagerFactory;
 import com.library.model.data.dao.LoanDao;
 import com.library.model.data.entity.Loan;
 import org.junit.Before;
@@ -29,7 +30,7 @@ public class LoanServiceTest {
 
     @Before
     public void initSetUp() throws SQLException {
-        mockService = spy(LoanService.getInstance());
+        mockService = spy(new LoanService(new DaoManagerFactory()));
         when(mockManager.getLoanDao()).thenReturn(mockLoanDao);
     }
 

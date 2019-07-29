@@ -17,7 +17,11 @@ import java.util.List;
  */
 public class LocationService extends Service {
 
-    private static final LocationService instance = new LocationService();
+    private DaoManagerFactory daoManagerFactory;
+
+    LocationService(DaoManagerFactory daoManagerFactory) {
+        this.daoManagerFactory = daoManagerFactory;
+    }
 
     /**
      * Adds a new bookcase to the library storage and creates free locations
@@ -27,7 +31,7 @@ public class LocationService extends Service {
      */
     public boolean addBookcaseToStorage(Bookcase bookcase) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> addBookcaseToStorageCommand(manager, bookcase));
 
@@ -43,7 +47,7 @@ public class LocationService extends Service {
      */
     public boolean addBooksToStorage(long bookId, int booksQuantity) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> addBooksToStorageCommand(manager, bookId, booksQuantity));
 
@@ -57,15 +61,11 @@ public class LocationService extends Service {
      */
     public boolean removeBookFromStorage(Book book) {
 
-        DaoManager daoManager = DaoManagerFactory.createDaoManager();
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeTransaction(manager -> removeBookFromStorageCommand(manager, book));
 
         return checkAndCastExecutingResult(executingResult);
-    }
-
-    public static LocationService getInstance() {
-        return instance;
     }
 
     //Commands which is needed to be executed in corresponding public service methods
@@ -117,7 +117,5 @@ public class LocationService extends Service {
 
         return EXECUTING_SUCCESSFUL;
     }
-
-    private LocationService(){}
 
 }
