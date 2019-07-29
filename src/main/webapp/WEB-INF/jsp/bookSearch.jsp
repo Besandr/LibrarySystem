@@ -99,5 +99,11 @@
         </table>
     </div>
 </c:if>
+
+<c:if test="${not empty orderResult}">
+    <div>
+        <fmt:message key="${orderResult}"/>
+    </div>
+</c:if>
 </body>
 </html>

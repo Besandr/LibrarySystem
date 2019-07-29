@@ -98,6 +98,10 @@
             <value>/WEB-INF/jsp/bookSearch.jsp</value>
         </entry>
         <entry>
+            <key>ShowUserCabinetPage</key>
+            <value>/WEB-INF/jsp/userCabinet.jsp</value>
+        </entry>
+        <entry>
             <key>successPage</key>
             <value>/WEB-INF/jsp/successfulRedirect.jsp</value>
         </entry>
