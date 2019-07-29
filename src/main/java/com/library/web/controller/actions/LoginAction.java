@@ -40,7 +40,7 @@ public class LoginAction extends Action {
 
             redirectPath = (String) request.getSession().getAttribute("referentUrl");
             request.getSession().removeAttribute("referentUrl");
-            request.getSession().setAttribute("currentUser", user.get());
+            request.getSession().setAttribute("loginedUser", user.get());
 
         } else {
             //User is not found. Adds errors to the request and forward to

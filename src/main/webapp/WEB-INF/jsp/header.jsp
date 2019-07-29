@@ -27,9 +27,9 @@
 
 <div>
     <c:choose>
-        <c:when test="${sessionScope.currentUser != null}">
+        <c:when test="${sessionScope.loginedUser != null}">
             <div>
-                    ${sessionScope.currentUser.firstName} ${sessionScope.currentUser.lastName}
+                    ${sessionScope.loginedUser.firstName} ${sessionScope.loginedUser.lastName}
             </div>
             <div>
                 <a href="logout" onclick="return confirm('<fmt:message key="logout.confirm"/>')">
