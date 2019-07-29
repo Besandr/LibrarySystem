@@ -22,14 +22,22 @@ public class LoanService extends Service{
     private static final LoanService instance = new LoanService();
 
     /**
-     * Saves an apply for loan which is needed to be approved
-     * @param loan - a new loan at "apply for" stage
+     * Saves an apply for book by creating a loan which
+     * is needed to be approved
+     * @param bookId - ID of ordered book
+     * @param userId - ID of user ordered the book
      * @return {@code true} if saving is successful
-     *         and {@code false} if it is not
+     * and {@code false} if it is not
      */
-    public boolean saveApplyForLoan(Loan loan) {
+    public boolean saveApplyForBook(long bookId, long userId) {
 
         DaoManager daoManager = DaoManagerFactory.createDaoManager();
+
+        Loan loan = Loan.builder()
+                .bookId(bookId)
+                .userId(userId)
+                .applyDate(LocalDate.now())
+                .build();
 
         Object executingResult = daoManager.executeAndClose(manager -> {
             manager.getLoanDao().save(loan);
