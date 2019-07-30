@@ -51,7 +51,7 @@ public class OrderBookAction extends Action {
      */
     private boolean makeApplyForBook(HttpServletRequest request, ActionForm form) {
         long bookId = Long.parseLong(((OrderBookForm) form).getBookId());
-        long userId = ((User) request.getSession().getAttribute("loginedUser")).getId();
+        long userId = ((User) request.getSession().getAttribute("loggedInUser")).getId();
 
         return loanService.saveApplyForBook(bookId, userId);
     }

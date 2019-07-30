@@ -41,9 +41,9 @@ public class LoginAction extends Action {
         Optional<User> user = getUserAccount(form);
         if (user.isPresent()) {
 
-            session.setAttribute("loginedUser", user.get());
+            session.setAttribute("loggedInUser", user.get());
 
-            // It is possible a situation when not logined user will try to
+            // It is possible a situation when not logged in user will try to
             // access a constrained resource and he will be redirected to
             // login page. If it is so the session will have a path(postponed)
             // to the requested constrained resource. After successful login

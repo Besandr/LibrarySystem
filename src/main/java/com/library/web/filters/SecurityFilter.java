@@ -23,8 +23,8 @@ public class SecurityFilter implements Filter {
     private static final Logger log = LogManager.getLogger(SecurityFilter.class);
 
     /**
-     * Checks is resource constrained. If it is, redirects unlogined users
-     * to login page. If logined user tries to request a constrained resource
+     * Checks is resource constrained. If it is, redirects not logged in users
+     * to login page. If logged in user tries to request a constrained resource
      * checks user's rights for this request. If user hasn't enough rights for
      * this redirects him to access denied page.
      * Before redirecting the user to the login page saves the request path and
@@ -47,7 +47,7 @@ public class SecurityFilter implements Filter {
         log.debug("Request path" + ((HttpServletRequest) req).getServletPath());
 
         if (isResourceConstrained(resourcePath, securityConstraints)) {
-            if (isUserLogined(session)) {
+            if (isUserLoggedIn(session)) {
 
                 if (isUserAuthorized(session, resourcePath, securityConstraints)) {
                     allowPassing((HttpServletRequest) req, resp, chain);
@@ -100,12 +100,12 @@ public class SecurityFilter implements Filter {
     }
 
     /**
-     * Checks whether current user logined
+     * Checks whether current user logged in
      * @param session - session of current user
-     * @return {@code true} if user logined and {@code false} if it doesn't
+     * @return {@code true} if user logged in and {@code false} if it doesn't
      */
-    private boolean isUserLogined(HttpSession session) {
-        return session.getAttribute("loginedUser") != null;
+    private boolean isUserLoggedIn(HttpSession session) {
+        return session.getAttribute("loggedInUser") != null;
     }
 
     /**
@@ -117,7 +117,7 @@ public class SecurityFilter implements Filter {
      * @return {@code true} if user authorized and {@code false} if it doesn't
      */
     private boolean isUserAuthorized(HttpSession session, String resourcePath, Map<String, List<Role>> securityConstraints) {
-        Role userRole = ((User) session.getAttribute("loginedUser")).getRole();
+        Role userRole = ((User) session.getAttribute("loggedInUser")).getRole();
         List<Role> allowedRoles = securityConstraints.get(securityConstraints.keySet()
                 .stream()
                 .filter(resourcePath::startsWith)

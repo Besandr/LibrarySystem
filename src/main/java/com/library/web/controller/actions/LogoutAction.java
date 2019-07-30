@@ -21,7 +21,7 @@ public class LogoutAction extends Action {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
-        request.getSession().removeAttribute("loginedUser");
+        request.getSession().removeAttribute("loggedInUser");
         return resources.getForward("ShowTitlePage");
     }
 }

@@ -29,9 +29,9 @@
 
 <div>
     <c:choose>
-        <c:when test="${sessionScope.loginedUser != null}">
+        <c:when test="${sessionScope.loggedInUser != null}">
             <div>
-                ${sessionScope.loginedUser.firstName} ${sessionScope.loginedUser.lastName}
+                ${sessionScope.loggedInUser.firstName} ${sessionScope.loggedInUser.lastName}
             </div>
             <div>
                 <a href="${contextPath}/cabinet">

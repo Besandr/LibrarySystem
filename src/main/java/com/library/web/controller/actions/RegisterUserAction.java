@@ -42,7 +42,7 @@ public class RegisterUserAction extends Action {
         if (userOptional.isPresent()) {
             redirectPath = (String) request.getSession().getAttribute("referentUrl");
             request.getSession().removeAttribute("referentUrl");
-            request.getSession().setAttribute("loginedUser", userOptional.get());
+            request.getSession().setAttribute("loggedInUser", userOptional.get());
         } else {
             //User is not created. Adds errors to the request and forward to
             //user for the next registration try.

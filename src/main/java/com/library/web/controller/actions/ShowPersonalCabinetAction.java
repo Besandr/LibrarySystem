@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowPersonalCabinetAction extends Action{
 
     /**
-     * Redirects logined user to his personal cabinet
+     * Redirects logged in user to his personal cabinet
      * depending on his role
      * @param request the request need to be processed
      * @param response the response to user
@@ -26,7 +26,7 @@ public class ShowPersonalCabinetAction extends Action{
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
 
-        User user = (User) request.getSession().getAttribute("loginedUser");
+        User user = (User) request.getSession().getAttribute("loggedInUser");
 
         return getCabinetPathByRole(user.getRole(), resources);
     }
