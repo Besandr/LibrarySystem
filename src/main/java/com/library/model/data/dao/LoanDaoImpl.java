@@ -15,13 +15,13 @@ import java.util.Optional;
 /**
  * Implementing of AuthorDao for working with a MySql server
  */
-public class MySqlLoanDao implements LoanDao {
+public class LoanDaoImpl implements LoanDao {
 
     private static final Logger log = LogManager.getLogger(LoanDao.class);
 
     private Connection connection;
 
-    public MySqlLoanDao(Connection connection) {
+    public LoanDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -35,7 +35,7 @@ public class MySqlLoanDao implements LoanDao {
 
         try {
             PreparedStatement getLoanStatement = connection
-                    .prepareStatement(MySqlQueries.GET_LOAN_QUERY);
+                    .prepareStatement(DBQueries.GET_LOAN_QUERY);
             getLoanStatement.setLong(1, loanId);
 
             ResultSet rs = getLoanStatement.executeQuery();
@@ -61,7 +61,7 @@ public class MySqlLoanDao implements LoanDao {
     @Override
     public List<Loan> getAll() {
 
-        return createLoansListFromQuery(MySqlQueries.ALL_LOANS_QUERY);
+        return createLoansListFromQuery(DBQueries.ALL_LOANS_QUERY);
     }
 
     /**
@@ -72,7 +72,7 @@ public class MySqlLoanDao implements LoanDao {
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(MySqlQueries.SAVE_LOAN_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(DBQueries.SAVE_LOAN_QUERY, Statement.RETURN_GENERATED_KEYS);
             insertStatement.setLong(1, loan.getBookId());
             insertStatement.setLong(2, loan.getUserId());
             insertStatement.setObject(3, loan.getApplyDate());
@@ -106,7 +106,7 @@ public class MySqlLoanDao implements LoanDao {
     public void updateLoanAndExpiredDate(long loanId, LocalDate loanDate, LocalDate expiredDate) {
 
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(MySqlQueries.UPDATE_LOAN_AND_EXPIRED_DATE_QUERY);
+            PreparedStatement updateStatement = connection.prepareStatement(DBQueries.UPDATE_LOAN_AND_EXPIRED_DATE_QUERY);
             updateStatement.setObject(1, loanDate);
             updateStatement.setObject(2, expiredDate);
             updateStatement.setLong(3, loanId);
@@ -128,7 +128,7 @@ public class MySqlLoanDao implements LoanDao {
     public void updateReturnDate(long loanId, LocalDate returnDate) {
 
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(MySqlQueries.UPDATE_RETURN_DATE_QUERY);
+            PreparedStatement updateStatement = connection.prepareStatement(DBQueries.UPDATE_RETURN_DATE_QUERY);
             updateStatement.setObject(1, returnDate);
             updateStatement.setLong(2, loanId);
 
@@ -150,7 +150,7 @@ public class MySqlLoanDao implements LoanDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(MySqlQueries.DELETE_LOAN_QUERY);
+                    .prepareStatement(DBQueries.DELETE_LOAN_QUERY);
             deleteStatement.setLong(1, loan.getId());
 
             deleteStatement.execute();

@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class MySqlBookcaseDao implements BookcaseDao {
+public class BookcaseDaoImpl implements BookcaseDao {
 
     private static final Logger log = LogManager.getLogger(BookcaseDao.class);
 
     private Connection connection;
 
-    public MySqlBookcaseDao(Connection connection) {
+    public BookcaseDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -28,7 +28,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement getBookcaseStatement = connection
-                    .prepareStatement(MySqlQueries.GET_BOOKCASE_QUERY);
+                    .prepareStatement(DBQueries.GET_BOOKCASE_QUERY);
             getBookcaseStatement.setLong(1, id);
 
             ResultSet rs = getBookcaseStatement.executeQuery();
@@ -55,7 +55,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(MySqlQueries.ALL_BOOKCASES_QUERY);
+                    .prepareStatement(DBQueries.ALL_BOOKCASES_QUERY);
 
             ResultSet rs = selectStatement.executeQuery();
 
@@ -78,7 +78,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(MySqlQueries.SAVE_BOOKCASE_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(DBQueries.SAVE_BOOKCASE_QUERY, Statement.RETURN_GENERATED_KEYS);
             insertStatement.setInt(1, bookcase.getShelfQuantity());
             insertStatement.setInt(2, bookcase.getCellQuantity());
 
@@ -102,7 +102,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement updateStatement = connection
-                    .prepareStatement(MySqlQueries.UPDATE_BOOKCASE_QUERY);
+                    .prepareStatement(DBQueries.UPDATE_BOOKCASE_QUERY);
             updateStatement.setInt(1, bookcase.getShelfQuantity());
             updateStatement.setInt(2, bookcase.getCellQuantity());
             updateStatement.setLong(3, bookcase.getId());
@@ -121,7 +121,7 @@ public class MySqlBookcaseDao implements BookcaseDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(MySqlQueries.DELETE_BOOKCASE_QUERY);
+                    .prepareStatement(DBQueries.DELETE_BOOKCASE_QUERY);
             deleteStatement.setLong(1, bookcase.getId());
 
             deleteStatement.execute();

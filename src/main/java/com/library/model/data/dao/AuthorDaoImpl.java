@@ -15,13 +15,13 @@ import java.util.Optional;
 /**
  * Implementing of AuthorDao for working with a MySql server
  */
-public class MySqlAuthorDao implements AuthorDao {
+public class AuthorDaoImpl implements AuthorDao {
 
-    private static final Logger log = LogManager.getLogger(MySqlAuthorDao.class);
+    private static final Logger log = LogManager.getLogger(AuthorDaoImpl.class);
 
     private Connection connection;
 
-    public MySqlAuthorDao(Connection connection) {
+    public AuthorDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -35,7 +35,7 @@ public class MySqlAuthorDao implements AuthorDao {
 
         try {
             PreparedStatement getAuthorStatement = connection
-                    .prepareStatement(MySqlQueries.GET_AUTHOR_QUERY);
+                    .prepareStatement(DBQueries.GET_AUTHOR_QUERY);
             getAuthorStatement.setLong(1, id);
 
             ResultSet rs = getAuthorStatement.executeQuery();
@@ -65,7 +65,7 @@ public class MySqlAuthorDao implements AuthorDao {
 
         try {
             PreparedStatement getAuthorStatement = connection
-                    .prepareStatement(MySqlQueries.GET_AUTHOR_BY_NAME_QUERY);
+                    .prepareStatement(DBQueries.GET_AUTHOR_BY_NAME_QUERY);
             getAuthorStatement.setString(1, firstName);
             getAuthorStatement.setString(2, lastName);
 
@@ -96,7 +96,7 @@ public class MySqlAuthorDao implements AuthorDao {
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(MySqlQueries.ALL_AUTHORS_QUERY);
+                    .prepareStatement(DBQueries.ALL_AUTHORS_QUERY);
 
             ResultSet rs = selectStatement.executeQuery();
 
@@ -125,7 +125,7 @@ public class MySqlAuthorDao implements AuthorDao {
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(MySqlQueries.GET_AUTHORS_BY_BOOK_QUERY);
+                    .prepareStatement(DBQueries.GET_AUTHORS_BY_BOOK_QUERY);
             selectStatement.setLong(1, book.getId());
 
             ResultSet rs = selectStatement.executeQuery();
@@ -153,7 +153,7 @@ public class MySqlAuthorDao implements AuthorDao {
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(MySqlQueries.SAVE_AUTHOR_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(DBQueries.SAVE_AUTHOR_QUERY, Statement.RETURN_GENERATED_KEYS);
 
             insertStatement.setString(1, author.getFirstName());
             insertStatement.setString(2, author.getLastName());
@@ -181,7 +181,7 @@ public class MySqlAuthorDao implements AuthorDao {
 
         try {
             PreparedStatement updateStatement = connection
-                    .prepareStatement(MySqlQueries.UPDATE_AUTHOR_QUERY);
+                    .prepareStatement(DBQueries.UPDATE_AUTHOR_QUERY);
             updateStatement.setString(1, author.getFirstName());
             updateStatement.setString(2, author.getLastName());
             updateStatement.setLong(3, author.getId());
@@ -203,7 +203,7 @@ public class MySqlAuthorDao implements AuthorDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(MySqlQueries.DELETE_AUTHOR_QUERY);
+                    .prepareStatement(DBQueries.DELETE_AUTHOR_QUERY);
             deleteStatement.setLong(1, author.getId());
 
             deleteStatement.execute();

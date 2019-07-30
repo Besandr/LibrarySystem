@@ -98,43 +98,43 @@ public class DaoManager {
 
     // Dao getters
     public Dao getAuthorDao() throws SQLException {
-        return new MySqlAuthorDao(getConnection());
+        return new AuthorDaoImpl(getConnection());
     }
 
     public Dao getBookDao() throws SQLException {
-        return new MySqlBookDao(getConnection());
+        return new BookDaoImpl(getConnection());
     }
 
     public AuthorBookDao getAuthorBookDao() throws SQLException {
-        return new MySqlAuthorBookDao(getConnection());
+        return new AuthorBookDaoImpl(getConnection());
     }
 
     public Dao getKeywordDao() throws SQLException {
-        return new MySqlKeywordDao(getConnection());
+        return new KeywordDaoImpl(getConnection());
     }
 
     public BookKeywordDao getBookKeywordDao() throws SQLException {
-        return new MySqlBookKeywordDao(getConnection());
+        return new BookKeywordDaoImpl(getConnection());
     }
 
     public Dao getLocationDao() throws SQLException {
-        return new MySqlLocationDao(getConnection());
+        return new LocationDaoImpl(getConnection());
     }
 
     public Dao getLoanDao() throws SQLException {
-        return new MySqlLoanDao(getConnection());
+        return new LoanDaoImpl(getConnection());
     }
 
     public Dao getBookcaseDao() throws SQLException {
-        return new MySqlBookcaseDao(getConnection());
+        return new BookcaseDaoImpl(getConnection());
     }
 
     public Dao getUserDao() throws SQLException {
-        return new MySqlUserDao(getConnection());
+        return new UserDaoImpl(getConnection());
     }
 
     public LoanDtoDao getLoanDtoDao() throws SQLException {
-        return new MySqlLoanDtoDao(this, getConnection());
+        return new LoanDtoDaoImpl(this, getConnection());
     }
 
     DaoManager(){}

@@ -4,7 +4,7 @@ package com.library.model.data.dao;
  * This class contains queries to a MySql Server
  * which are executed by DAOs.
  */
-class MySqlQueries {
+class DBQueries {
 
     static final String SAVE_AUTHOR_QUERY = "INSERT INTO library_system.author (first_name, last_name) VALUES (?, ?);";
     static final String DELETE_AUTHOR_QUERY = "DELETE FROM library_system.author WHERE author_id = ?;";

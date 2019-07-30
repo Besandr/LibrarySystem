@@ -14,13 +14,13 @@ import java.util.Optional;
 /**
  * Implementing of BookDao for working with a MySql server
  */
-public class MySqlBookDao implements BookDao {
+public class BookDaoImpl implements BookDao {
 
-    private static final Logger log = LogManager.getLogger(MySqlBookDao.class);
+    private static final Logger log = LogManager.getLogger(BookDaoImpl.class);
 
     private Connection connection;
 
-    public MySqlBookDao(Connection connection) {
+    public BookDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -35,7 +35,7 @@ public class MySqlBookDao implements BookDao {
         try {
 
             PreparedStatement getBookStatement = connection
-                    .prepareStatement(MySqlQueries.GET_BOOK_QUERY);
+                    .prepareStatement(DBQueries.GET_BOOK_QUERY);
 
             getBookStatement.setLong(1, bookId);
 
@@ -103,14 +103,14 @@ public class MySqlBookDao implements BookDao {
      */
     private PreparedStatement getPreparedStatement(long authorId, long keywordId, String partOfTitle) throws SQLException {
 
-        StringBuilder queryBuilder = new StringBuilder(MySqlQueries.ALL_BOOKS_QUERY_HEAD_PART);
+        StringBuilder queryBuilder = new StringBuilder(DBQueries.ALL_BOOKS_QUERY_HEAD_PART);
         if (authorId > 0) {
-            queryBuilder.append(" ").append(MySqlQueries.ALL_BOOKS_QUERY_AUTHOR_PART);
+            queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_QUERY_AUTHOR_PART);
         }
         if (keywordId > 0) {
-            queryBuilder.append(" ").append(MySqlQueries.ALL_BOOKS_QUERY_KEYWORD_PART);
+            queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_QUERY_KEYWORD_PART);
         }
-        queryBuilder.append(" ").append(MySqlQueries.ALL_BOOKS_QUERY_TAIL_PART);
+        queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_QUERY_TAIL_PART);
 
         PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
 
@@ -155,7 +155,7 @@ public class MySqlBookDao implements BookDao {
 
         try {
             PreparedStatement updateStatement = connection
-                    .prepareStatement(MySqlQueries.UPDATE_BOOK_QUERY);
+                    .prepareStatement(DBQueries.UPDATE_BOOK_QUERY);
             updateStatement.setString(1, book.getTitle());
             updateStatement.setInt(2, book.getYear());
             updateStatement.setString(3, book.getDescription());
@@ -178,7 +178,7 @@ public class MySqlBookDao implements BookDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(MySqlQueries.DELETE_BOOK_QUERY);
+                    .prepareStatement(DBQueries.DELETE_BOOK_QUERY);
             deleteStatement.setLong(1, book.getId());
 
             deleteStatement.execute();
@@ -193,7 +193,7 @@ public class MySqlBookDao implements BookDao {
     private long insertRowIntoBookTable(Book book) throws SQLException {
 
         PreparedStatement insertStatement = connection
-                .prepareStatement(MySqlQueries.SAVE_BOOK_QUERY, Statement.RETURN_GENERATED_KEYS);
+                .prepareStatement(DBQueries.SAVE_BOOK_QUERY, Statement.RETURN_GENERATED_KEYS);
 
         insertStatement.setString(1, book.getTitle());
         insertStatement.setInt(2, book.getYear());

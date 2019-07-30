@@ -15,13 +15,13 @@ import java.util.Set;
 /**
  * Implementing of AuthorBookDao for working with a MySql server
  */
-public class MySqlAuthorBookDao implements AuthorBookDao{
+public class AuthorBookDaoImpl implements AuthorBookDao{
 
-    private final static Logger log = LogManager.getLogger(MySqlAuthorBookDao.class);
+    private final static Logger log = LogManager.getLogger(AuthorBookDaoImpl.class);
 
     private Connection connection;
 
-    public MySqlAuthorBookDao(Connection connection) {
+    public AuthorBookDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -32,7 +32,7 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
     public void saveAuthorBookJunction(Book book, Set<Author> authors) {
 
         try {
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.INSERT_AUTHOR_BOOK_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.INSERT_AUTHOR_BOOK_QUERY);
 
             for (Author author : authors) {
                 statement.setLong(1, author.getId());
@@ -54,7 +54,7 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
     @Override
     public void deleteAuthorBookJunction(Author author, Book book) {
         try{
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.DELETE_AUTHOR_BOOK_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.DELETE_AUTHOR_BOOK_QUERY);
             statement.setLong(1, author.getId());
             statement.setLong(2, book.getId());
 
@@ -75,7 +75,7 @@ public class MySqlAuthorBookDao implements AuthorBookDao{
     public boolean doesAuthorHasBooks(Author author) {
 
         try{
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.COUNT_BOOKS_OF_AUTHOR_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.COUNT_BOOKS_OF_AUTHOR_QUERY);
             statement.setLong(1, author.getId());
             //Result set will contain only one string with given author books quantity
             ResultSet rs = statement.executeQuery();

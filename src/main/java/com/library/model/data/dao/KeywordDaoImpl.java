@@ -15,13 +15,13 @@ import java.util.Optional;
 /**
  * Implementing of KeywordDao for working with a MySql server
  */
-public class MySqlKeywordDao implements KeywordDao{
+public class KeywordDaoImpl implements KeywordDao{
 
     private static final Logger log = LogManager.getLogger(KeywordDao.class);
 
     private Connection connection;
 
-    public MySqlKeywordDao(Connection connection) {
+    public KeywordDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -35,7 +35,7 @@ public class MySqlKeywordDao implements KeywordDao{
 
         try {
             PreparedStatement getKeywordStatement = connection
-                    .prepareStatement(MySqlQueries.GET_KEYWORD_QUERY);
+                    .prepareStatement(DBQueries.GET_KEYWORD_QUERY);
             getKeywordStatement.setLong(1, id);
 
             ResultSet rs = getKeywordStatement.executeQuery();
@@ -65,7 +65,7 @@ public class MySqlKeywordDao implements KeywordDao{
 
         try {
             PreparedStatement getKeywordStatement = connection
-                    .prepareStatement(MySqlQueries.GET_KEYWORD_BY_WORD_QUERY);
+                    .prepareStatement(DBQueries.GET_KEYWORD_BY_WORD_QUERY);
             getKeywordStatement.setString(1, word);
 
             ResultSet rs = getKeywordStatement.executeQuery();
@@ -95,7 +95,7 @@ public class MySqlKeywordDao implements KeywordDao{
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(MySqlQueries.ALL_KEYWORDS_QUERY);
+                    .prepareStatement(DBQueries.ALL_KEYWORDS_QUERY);
 
             ResultSet rs = selectStatement.executeQuery();
 
@@ -123,7 +123,7 @@ public class MySqlKeywordDao implements KeywordDao{
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(MySqlQueries.GET_KEYWORDS_BY_BOOK_QUERY);
+                    .prepareStatement(DBQueries.GET_KEYWORDS_BY_BOOK_QUERY);
             selectStatement.setLong(1, book.getId());
 
             ResultSet rs = selectStatement.executeQuery();
@@ -151,7 +151,7 @@ public class MySqlKeywordDao implements KeywordDao{
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(MySqlQueries.SAVE_KEYWORD_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(DBQueries.SAVE_KEYWORD_QUERY, Statement.RETURN_GENERATED_KEYS);
             insertStatement.setString(1, keyword.getWord());
 
             insertStatement.executeUpdate();
@@ -177,7 +177,7 @@ public class MySqlKeywordDao implements KeywordDao{
 
         try {
             PreparedStatement updateStatement = connection
-                    .prepareStatement(MySqlQueries.UPDATE_KEYWORD_QUERY);
+                    .prepareStatement(DBQueries.UPDATE_KEYWORD_QUERY);
             updateStatement.setString(1, keyword.getWord());
             updateStatement.setLong(2, keyword.getId());
 
@@ -198,7 +198,7 @@ public class MySqlKeywordDao implements KeywordDao{
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(MySqlQueries.DELETE_KEYWORD_QUERY);
+                    .prepareStatement(DBQueries.DELETE_KEYWORD_QUERY);
             deleteStatement.setLong(1, keyword.getId());
 
             deleteStatement.execute();

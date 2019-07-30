@@ -15,13 +15,13 @@ import java.util.Optional;
 /**
  * Implementing of BookDao for working with a MySql server
  */
-public class MySqlUserDao implements UserDao {
+public class UserDaoImpl implements UserDao {
 
     private static final Logger log = LogManager.getLogger(UserDao.class);
 
     private Connection connection;
 
-    public MySqlUserDao(Connection connection) {
+    public UserDaoImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -35,7 +35,7 @@ public class MySqlUserDao implements UserDao {
 
         try {
             PreparedStatement getUserStatement = connection
-                    .prepareStatement(MySqlQueries.GET_USER_QUERY);
+                    .prepareStatement(DBQueries.GET_USER_QUERY);
             getUserStatement.setLong(1, id);
 
             ResultSet rs = getUserStatement.executeQuery();
@@ -65,7 +65,7 @@ public class MySqlUserDao implements UserDao {
 
         try {
             PreparedStatement selectStatement = connection
-                    .prepareStatement(MySqlQueries.ALL_USERS_QUERY);
+                    .prepareStatement(DBQueries.ALL_USERS_QUERY);
 
             ResultSet rs = selectStatement.executeQuery();
 
@@ -92,7 +92,7 @@ public class MySqlUserDao implements UserDao {
 
         try {
             PreparedStatement insertStatement = connection
-                    .prepareStatement(MySqlQueries.SAVE_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    .prepareStatement(DBQueries.SAVE_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
             insertStatement.setString(1, user.getEmail());
             insertStatement.setString(2, user.getPassword());
             insertStatement.setString(3, user.getPhone());
@@ -123,7 +123,7 @@ public class MySqlUserDao implements UserDao {
 
         try {
             PreparedStatement updateStatement = connection
-                    .prepareStatement(MySqlQueries.UPDATE_USER_INFO_QUERY);
+                    .prepareStatement(DBQueries.UPDATE_USER_INFO_QUERY);
             updateStatement.setString(1, user.getEmail());
             updateStatement.setString(2, user.getPhone());
             updateStatement.setString(3, user.getFirstName());
@@ -147,7 +147,7 @@ public class MySqlUserDao implements UserDao {
 
         try {
             PreparedStatement deleteStatement = connection
-                    .prepareStatement(MySqlQueries.DELETE_USER_QUERY);
+                    .prepareStatement(DBQueries.DELETE_USER_QUERY);
             deleteStatement.setLong(1, user.getId());
 
             deleteStatement.execute();
@@ -166,7 +166,7 @@ public class MySqlUserDao implements UserDao {
     public void updateKarma(long userId, int delta) {
 
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(MySqlQueries.UPDATE_USER_KARMA_QUERY);
+            PreparedStatement updateStatement = connection.prepareStatement(DBQueries.UPDATE_USER_KARMA_QUERY);
             updateStatement.setInt(1, delta);
             updateStatement.setLong(2, userId);
 
@@ -186,7 +186,7 @@ public class MySqlUserDao implements UserDao {
     public void updateRole(long userId, long roleId) {
 
         try {
-            PreparedStatement updateStatement = connection.prepareStatement(MySqlQueries.UPDATE_USER_ROLE_QUERY);
+            PreparedStatement updateStatement = connection.prepareStatement(DBQueries.UPDATE_USER_ROLE_QUERY);
             updateStatement.setLong(1, roleId);
             updateStatement.setLong(2, userId);
 
@@ -207,7 +207,7 @@ public class MySqlUserDao implements UserDao {
     @Override
     public Optional<User> getUserByEmailAndPassword(String email, String password) {
         try{
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.GET_USER_BY_EMAIL_AND_PASSWORD_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_USER_BY_EMAIL_AND_PASSWORD_QUERY);
             statement.setString(1, email);
             statement.setString(2, password);
 

@@ -20,14 +20,14 @@ import java.util.List;
  * Contains methods for creating LoanDto by getting their data
  * from select query to DB
  */
-public class MySqlLoanDtoDao implements LoanDtoDao{
+public class LoanDtoDaoImpl implements LoanDtoDao{
 
     private static final Logger log = LogManager.getLogger(LoanDao.class);
 
     private DaoManager manager;
     private Connection connection;
 
-    public MySqlLoanDtoDao(DaoManager manager, Connection connection) {
+    public LoanDtoDaoImpl(DaoManager manager, Connection connection) {
         this.manager = manager;
         this.connection = connection;
     }
@@ -36,7 +36,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
      * {@inheritDoc}
      */
     public List<LoanDto> getAllUnapprovedLoans() {
-        return createLoanDtoListFromQuery(MySqlQueries.GET_UNAPPROVED_LOANS_QUERY);
+        return createLoanDtoListFromQuery(DBQueries.GET_UNAPPROVED_LOANS_QUERY);
     }
 
     /**
@@ -44,7 +44,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
      */
     @Override
     public List<LoanDto> getAllActiveLoans() {
-        return createLoanDtoListFromQuery(MySqlQueries.GET_ACTIVE_LOANS_QUERY);
+        return createLoanDtoListFromQuery(DBQueries.GET_ACTIVE_LOANS_QUERY);
     }
 
     /**
@@ -54,7 +54,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
     public List<LoanDto> getUnapprovedLoansByUser(User user) {
 
         try{
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.GET_UNAPPROVED_LOANS_BY_USER_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_UNAPPROVED_LOANS_BY_USER_QUERY);
             statement.setLong(1, user.getId());
 
             return createLoanDtoListFromResultSet(statement.executeQuery());
@@ -73,7 +73,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
     public List<LoanDto> getActiveLoansByUser(User user) {
 
         try{
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.GET_ACTIVE_LOANS_BY_USER_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ACTIVE_LOANS_BY_USER_QUERY);
             statement.setLong(1, user.getId());
 
             return createLoanDtoListFromResultSet(statement.executeQuery());
@@ -91,7 +91,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
     @Override
     public List<LoanDto> getAllLoansByUser(User user) {
         try{
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.GET_ALL_LOANS_BY_USER_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ALL_LOANS_BY_USER_QUERY);
             statement.setLong(1, user.getId());
 
             return createLoanDtoListFromResultSet(statement.executeQuery());
@@ -110,7 +110,7 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
     public List<LoanDto> getActiveLoansByBook(Book book) {
 
         try{
-            PreparedStatement statement = connection.prepareStatement(MySqlQueries.GET_ACTIVE_LOANS_BY_BOOK_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ACTIVE_LOANS_BY_BOOK_QUERY);
             statement.setLong(1, book.getId());
 
             ResultSet rs = statement.executeQuery();
@@ -160,9 +160,9 @@ public class MySqlLoanDtoDao implements LoanDtoDao{
 
         while (rs.next()) {
 
-            Loan loan = ((MySqlLoanDao) manager.getLoanDao()).getLoanFromResultRow(rs);
-            Book book = ((MySqlBookDao) manager.getBookDao()).getBookFromResultRow(rs);
-            User user = ((MySqlUserDao) manager.getUserDao()).getUserFromResultRow(rs);
+            Loan loan = ((LoanDaoImpl) manager.getLoanDao()).getLoanFromResultRow(rs);
+            Book book = ((BookDaoImpl) manager.getBookDao()).getBookFromResultRow(rs);
+            User user = ((UserDaoImpl) manager.getUserDao()).getUserFromResultRow(rs);
 
             LoanDto dto = LoanDto.builder()
                     .loan(loan)
