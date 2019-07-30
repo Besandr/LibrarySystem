@@ -31,7 +31,12 @@
     <c:choose>
         <c:when test="${sessionScope.loginedUser != null}">
             <div>
-                    ${sessionScope.loginedUser.firstName} ${sessionScope.loginedUser.lastName}
+                ${sessionScope.loginedUser.firstName} ${sessionScope.loginedUser.lastName}
+            </div>
+            <div>
+                <a href="${contextPath}/cabinet">
+                    <fmt:message key="header.cabinet"/>
+                </a>
             </div>
             <div>
                 <a href="${contextPath}/logout" onclick="return confirm('<fmt:message key="logout.confirm"/>')">

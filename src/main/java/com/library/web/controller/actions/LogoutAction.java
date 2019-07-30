@@ -17,11 +17,11 @@ public class LogoutAction extends Action {
      * @param response the response to user
      * @param form - form need to be processed by this action
      * @param resources - servlet's resources
-     * @return redirect path to page from which the logout was executed
+     * @return redirect path to the title page
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
         request.getSession().removeAttribute("loginedUser");
-        return getRedirectToReferer(request, resources);
+        return resources.getForward("ShowTitlePage");
     }
 }

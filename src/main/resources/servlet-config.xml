@@ -105,6 +105,10 @@
             <type>com.library.web.controller.actions.ShowTitlePageAction</type>
         </action>
         <action>
+            <path>/cabinet</path>
+            <type>com.library.web.controller.actions.ShowPersonalCabinetAction</type>
+        </action>
+        <action>
             <path>/changeLanguage</path>
             <type>com.library.web.controller.actions.ChangeLanguageAction</type>
         </action>
@@ -132,6 +136,10 @@
             <value>/WEB-INF/jsp/userCabinet.jsp</value>
         </entry>
         <entry>
+            <key>ShowAdminCabinetPage</key>
+            <value>/WEB-INF/jsp/adminCabinet.jsp</value>
+        </entry>
+        <entry>
             <key>ShowAccessDeniedPage</key>
             <value>/WEB-INF/jsp/accessDenied.jsp</value>
         </entry>
@@ -152,6 +160,13 @@
             <url-pattern>/admin</url-pattern>
             <allowed-roles>
                 <role>ADMINISTRATOR</role>
+            </allowed-roles>
+        </resource>
+        <resource>
+            <url-pattern>/cabinet</url-pattern>
+            <allowed-roles>
+                <role>ADMINISTRATOR</role>
+                <role>USER</role>
             </allowed-roles>
         </resource>
     </security-constraint>
