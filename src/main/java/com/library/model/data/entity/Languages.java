@@ -1,10 +1,23 @@
-package com.library.model.enums;
+package com.library.model.data.entity;
 
+import lombok.Getter;
+
+/**
+ * All supported by system languages for the view
+ */
+@Getter
 public enum Languages {
 
     ENGLISH("English", "en"), RUSSIAN("Русский","ru"), UKRAINIAN("Українська","ua");
 
+    /**
+     * View language's name
+     */
     String name;
+
+    /**
+     * Inner language's code
+     */
     String code;
 
     Languages(String name, String code) {
@@ -16,15 +29,7 @@ public enum Languages {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getCode() {
         return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 }
