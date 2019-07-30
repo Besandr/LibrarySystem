@@ -2,15 +2,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<c:if test="${empty sessionScope.language}">
+    <c:set var="language" value="${applicationScope.language}" scope="session"/>
+</c:if>
+<fmt:setLocale value="${sessionScope.language}" />
+<fmt:setBundle basename="textContent" />
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <html>
 <head>
     <c:import url="header.jsp"/>
-
-    <c:if test="${empty sessionScope.language}">
-        <c:set var="language" value="${applicationScope.language}" scope="session"/>
-    </c:if>
-    <fmt:setLocale value="${sessionScope.language}" />
-    <fmt:setBundle basename="textContent" />
 
     <title><fmt:message key="bookSearch.title"/></title>
 </head>
@@ -20,7 +22,7 @@
 </div>
 <br>
 <div>
-    <form action="bookSearch.do">
+    <form action="${contextPath}/bookSearch.do">
 
         <label>
             <fmt:message key="bookSearch.author"/>
@@ -69,7 +71,7 @@
             <c:forEach var="bookDTO" items="${books}">
                 <tr>
                     <td>
-                        <form action="user/orderBook.do" method="post">
+                        <form action="${contextPath}/user/orderBook.do" method="post">
                             <input type="text" name="bookId" value="${bookDTO.book.id}" hidden>
                             <button><fmt:message key="bookSearch.result.order"/></button>
                         </form>

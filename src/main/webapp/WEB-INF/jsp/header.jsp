@@ -8,12 +8,14 @@
 <fmt:setLocale value="${sessionScope.language}" />
 <fmt:setBundle basename="textContent" />
 
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <div>
-    <a href="title"><fmt:message key="header.home" /></a>
+    <a href="${contextPath}/title"><fmt:message key="header.home" /></a>
 </div>
 <br>
 <div>
-    <form action="changeLanguage">
+    <form action="${contextPath}/changeLanguage">
         <select name="chosenLanguage" onchange="this.form.submit()">
             <option disabled selected value><fmt:message key="header.chooseLanguage"/></option>
             <c:forEach var="languageOption" items="${applicationScope.languages}">
@@ -32,14 +34,14 @@
                     ${sessionScope.loginedUser.firstName} ${sessionScope.loginedUser.lastName}
             </div>
             <div>
-                <a href="logout" onclick="return confirm('<fmt:message key="logout.confirm"/>')">
+                <a href="${contextPath}/logout" onclick="return confirm('<fmt:message key="logout.confirm"/>')">
                     <fmt:message key="logout.button"/>
                 </a>
             </div>
         </c:when>
         <c:otherwise>
             <div>
-                <a href="login">
+                <a href="${contextPath}/login">
                     <fmt:message key="header.login"/>
                 </a>
             </div>
