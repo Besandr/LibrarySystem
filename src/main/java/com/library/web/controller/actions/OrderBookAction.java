@@ -1,8 +1,8 @@
 package com.library.web.controller.actions;
 
-import com.library.model.data.entity.User;
-import com.library.model.services.LoanService;
-import com.library.model.services.Service;
+import com.library.repository.entity.User;
+import com.library.services.LoanService;
+import com.library.services.Service;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 import com.library.web.controller.forms.OrderBookForm;

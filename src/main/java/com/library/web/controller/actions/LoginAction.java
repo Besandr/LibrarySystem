@@ -1,8 +1,8 @@
 package com.library.web.controller.actions;
 
-import com.library.model.services.Service;
-import com.library.model.services.UserService;
-import com.library.model.data.entity.User;
+import com.library.services.Service;
+import com.library.services.UserService;
+import com.library.repository.entity.User;
 import com.library.web.controller.ActionErrors;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
@@ -29,7 +29,7 @@ public class LoginAction extends Action {
      * from DB and sets it as session attribute
      * {@inheritDoc}
      * @return - a path to the page where user came from for login or path
-     * to login page for re-entering user login data if user is not found in DB
+     * to login page for re-entering user login repository if user is not found in DB
      * or path to postponed request
      */
     @Override
@@ -58,7 +58,7 @@ public class LoginAction extends Action {
 
         } else {
             //User is not found. Adds errors to the request and forward to
-            //user for re-entering data
+            //user for re-entering repository
             setRequestErrorAttributes(request, form);
             redirectPath = resources.getForward("ShowLoginPage");
         }
@@ -79,7 +79,7 @@ public class LoginAction extends Action {
     /**
      * Gives an {@code Optional} with {@code User} if user with given
      * combination of e-mail and password exist
-     * @param form - form with users e-mail & password data
+     * @param form - form with users e-mail & password repository
      * @return - the target {@code Optional} with {@code User} or
      * an empty {@code Optional}
      */

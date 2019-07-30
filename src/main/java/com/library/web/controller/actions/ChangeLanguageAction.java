@@ -1,6 +1,6 @@
 package com.library.web.controller.actions;
 
-import com.library.model.data.entity.Languages;
+import com.library.repository.entity.Languages;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 

@@ -1,7 +1,7 @@
 package com.library.web.filters;
 
-import com.library.model.data.entity.Role;
-import com.library.model.data.entity.User;
+import com.library.repository.entity.Role;
+import com.library.repository.entity.User;
 import com.library.web.controller.ParameterRequestWrapper;
 import com.library.web.controller.ServletResources;
 import org.apache.logging.log4j.LogManager;

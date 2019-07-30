@@ -1,7 +1,7 @@
 package com.library.web.controller.actions;
 
-import com.library.model.services.BookService;
-import com.library.model.services.Service;
+import com.library.services.BookService;
+import com.library.services.Service;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 

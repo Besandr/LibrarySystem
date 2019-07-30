@@ -31,7 +31,7 @@
             <type>com.library.web.controller.actions.ShowBookSearchPageAction</type>
             <service-dependencies>
                 <dependency>
-                    <class>com.library.model.services.BookService</class>
+                    <class>com.library.services.BookService</class>
                     <name>bookService</name>
                 </dependency>
             </service-dependencies>
@@ -44,7 +44,7 @@
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
             <service-dependencies>
                 <dependency>
-                    <class>com.library.model.services.BookService</class>
+                    <class>com.library.services.BookService</class>
                     <name>bookService</name>
                 </dependency>
             </service-dependencies>
@@ -57,7 +57,7 @@
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
             <service-dependencies>
                 <dependency>
-                    <class>com.library.model.services.LoanService</class>
+                    <class>com.library.services.LoanService</class>
                     <name>loanService</name>
                 </dependency>
             </service-dependencies>
@@ -74,7 +74,7 @@
             <input>/WEB-INF/jsp/login.jsp</input>
             <service-dependencies>
                 <dependency>
-                    <class>com.library.model.services.UserService</class>
+                    <class>com.library.services.UserService</class>
                     <name>userService</name>
                 </dependency>
             </service-dependencies>
@@ -95,7 +95,7 @@
             <input>/WEB-INF/jsp/registration.jsp</input>
             <service-dependencies>
                 <dependency>
-                    <class>com.library.model.services.UserService</class>
+                    <class>com.library.services.UserService</class>
                     <name>userService</name>
                 </dependency>
             </service-dependencies>

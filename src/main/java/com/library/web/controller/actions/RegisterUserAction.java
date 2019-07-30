@@ -1,8 +1,8 @@
 package com.library.web.controller.actions;
 
-import com.library.model.services.Service;
-import com.library.model.services.UserService;
-import com.library.model.data.entity.User;
+import com.library.services.Service;
+import com.library.services.UserService;
+import com.library.repository.entity.User;
 import com.library.web.controller.ActionErrors;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
@@ -28,7 +28,7 @@ public class RegisterUserAction extends Action {
      * @param form - form need to be processed by this action
      * @param resources - servlet's resources
      * @return a path to the page where user came from for registering or path
-     * to registering page for re-entering user data if user is already exist in DB
+     * to registering page for re-entering user repository if user is already exist in DB
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response,

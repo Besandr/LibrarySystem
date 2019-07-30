@@ -16,11 +16,11 @@ import java.util.Objects;
  * Front controller of this web-application. It handles
  * all the requests from clients and redirects them to
  * corresponding {@code Action}.
- * If request has html-form data which is need to be
+ * If request has html-form repository which is need to be
  * validated {@code ActionServlet} validates it before
  * executing {@code Action}.
  * If form has errors {@code ActionServlet} forwards
- * request to the form page with errors data attached.
+ * request to the form page with errors repository attached.
  */
 public class ActionServlet extends HttpServlet {
 
@@ -97,8 +97,8 @@ public class ActionServlet extends HttpServlet {
 
     /**
      * Executes an {@code Action}. If {@code Action} need validated html-form
-     * data run form validation before executing. If form has errors forwards
-     * request to the form page with errors data attached.
+     * repository run form validation before executing. If form has errors forwards
+     * request to the form page with errors repository attached.
      * @param userAction - the action need to be executed
      * @param actionPath - path the action is bound with in a {@code servletResources}
      * @param servletResources - the servlet's resources

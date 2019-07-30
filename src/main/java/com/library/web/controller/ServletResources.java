@@ -1,6 +1,6 @@
 package com.library.web.controller;
 
-import com.library.model.data.entity.Role;
+import com.library.repository.entity.Role;
 import com.library.web.controller.actions.Action;
 import com.library.web.controller.forms.ActionForm;
 import lombok.Getter;

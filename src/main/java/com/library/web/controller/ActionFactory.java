@@ -1,7 +1,7 @@
 package com.library.web.controller;
 
-import com.library.model.services.Service;
-import com.library.model.services.ServiceFactory;
+import com.library.services.Service;
+import com.library.services.ServiceFactory;
 import com.library.web.controller.actions.Action;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

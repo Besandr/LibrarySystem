@@ -1,6 +1,6 @@
 package com.library.web.listeners;
 
-import com.library.model.data.entity.Languages;
+import com.library.repository.entity.Languages;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
