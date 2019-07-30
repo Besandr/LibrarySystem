@@ -1,6 +1,7 @@
 package com.library.services;
 
 import com.library.repository.DaoManagerFactory;
+import com.library.web.controller.ServletConfigException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +22,7 @@ public class ServiceFactory {
         if (service == null) {
             String errorText = "Can't find service class: " + serviceClass;
             log.fatal(errorText);
-            throw new RuntimeException(errorText);
+            throw new ServletConfigException(errorText);
         }
         return service;
     }

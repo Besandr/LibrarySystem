@@ -17,7 +17,7 @@ public class ActionFactoryTest {
         assertTrue(returnedAction instanceof ChangeLanguageAction);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ServletConfigException.class)
     public void createActionShouldThrowException() {
         ActionFactory.getInstance().createAction("false class name", false, null, Collections.emptyList());
     }

@@ -59,7 +59,7 @@ public class ActionFactory {
      * @param inputPath - path from where request to target {@code Action} comes from
      * @param serviceDependencyList  - list with service dependencies need to be injected
      *                               in a new action
-     * @return target {@code Action} or throws {@code IllegalArgumentException} if
+     * @return target {@code Action} or throws {@code ServletConfigException} if
      * exceptions occurred during creating of the action
      */
     Action createAction(String actionClassName, boolean needValidate, String inputPath, List<ServiceDependencyConfig> serviceDependencyList) {
@@ -78,11 +78,13 @@ public class ActionFactory {
             return action;
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            log.fatal(String.format("Can't create action class by name: %s. Cause: %s", actionClassName, e.getMessage()));
-            throw new IllegalArgumentException(e);
+            String errorText = String.format("Can't create action class by name: %s. Cause: %s", actionClassName, e.getMessage());
+            log.fatal(errorText);
+            throw new ServletConfigException(errorText, e);
         } catch (NoSuchMethodException | InvocationTargetException e) {
-            log.fatal(String.format("Can't set dependency in action class: %s. Cause: %s", actionClassName, e.getMessage()));
-            throw new IllegalArgumentException(e);
+            String errorText = String.format("Can't set dependency in action class: %s. Cause: %s", actionClassName, e.getMessage());
+            log.fatal(errorText);
+            throw new ServletConfigException(errorText, e);
         }
     }
 

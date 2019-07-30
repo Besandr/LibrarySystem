@@ -60,7 +60,7 @@ class ActionServletConfigurator {
             return (ActionServletConfig) jUnmarshaller.unmarshal(is);
         } catch (JAXBException e) {
             log.fatal("Can't load servlet configuration!");
-            throw new RuntimeException(e);
+            throw new ServletConfigException("Can't load servlet configuration!",e);
         }
     }
 
@@ -94,11 +94,11 @@ class ActionServletConfigurator {
     /**
      * Takes the configuration repository from {@code actionConfig} and
      * uses it for adding {@code ActionForm} class info to {@code FormFactory}
-     * {@code IllegalArgumentException} may be thrown if configuration objects
+     * {@code ServletConfigException} may be thrown if configuration objects
      * contains errors
      * @param actionConfig - the config object which contains information
      *                     needed for adding {@code ActionForm} to {@code FormFactory}
-     * {@code IllegalArgumentException} can be thrown if configuration contains errors
+     * {@code ServletConfigException} can be thrown if configuration contains errors
      * @param actionServletConfig - object which contains servlet configuration repository
      * @param formFactory - the {@code FormFactory} instance
      */
@@ -113,7 +113,7 @@ class ActionServletConfigurator {
         } else {
             String errorText = "In servlet config file action with validation doesn't have matching form";
             log.fatal(errorText);
-            throw new IllegalArgumentException(errorText);
+            throw new ServletConfigException(errorText);
         }
     }
 
