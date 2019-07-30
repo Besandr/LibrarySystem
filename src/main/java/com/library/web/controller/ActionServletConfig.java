@@ -36,4 +36,8 @@ class ActionServletConfig {
      */
     HashMap<String, String> forwards;
 
+    @XmlElementWrapper(name = "security-constraint")
+    @XmlElement(name = "resource")
+    List<ResourceAccessConfig> resourceAccessConfigs;
+
 }

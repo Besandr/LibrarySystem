@@ -69,7 +69,7 @@
             <c:forEach var="bookDTO" items="${books}">
                 <tr>
                     <td>
-                        <form action="orderBook.do" method="post">
+                        <form action="user/orderBook.do" method="post">
                             <input type="text" name="bookId" value="${bookDTO.book.id}" hidden>
                             <button><fmt:message key="bookSearch.result.order"/></button>
                         </form>

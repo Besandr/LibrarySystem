@@ -39,6 +39,7 @@ public class ActionServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         servletResources = new ActionServletConfigurator().createServletResources();
+        getServletContext().setAttribute("servletResources", servletResources);
     }
 
     /**

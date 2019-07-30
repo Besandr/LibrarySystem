@@ -1,11 +1,14 @@
 package com.library.web.controller;
 
+import com.library.model.data.entity.Role;
 import com.library.web.controller.actions.Action;
 import com.library.web.controller.forms.ActionForm;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Facade class for accessing {@code ActionServlet} resources.
@@ -21,12 +24,20 @@ public class ServletResources {
     /**
      * Contains forwards names as {@code key} and resource paths as {@code value}
      */
-    private final HashMap<String, String> forwards;
+    private final Map<String, String> forwards;
 
-    ServletResources(ActionFactory actionFactory, FormFactory formFactory, HashMap<String, String> forwards) {
+    /**
+     * Contains URL-patterns of constrained resources and allowed for access
+     * to them roles
+     */
+    @Getter
+    private final Map<String, List<Role>> securityConstraints;
+
+    ServletResources(ActionFactory actionFactory, FormFactory formFactory, Map<String, String> forwards, Map<String, List<Role>> securityConstraints) {
         this.actionFactory = actionFactory;
         this.formFactory = formFactory;
         this.forwards = forwards;
+        this.securityConstraints = securityConstraints;
     }
 
     Action getAction(String actionPath) {

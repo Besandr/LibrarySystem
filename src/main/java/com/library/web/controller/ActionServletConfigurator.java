@@ -1,5 +1,6 @@
 package com.library.web.controller;
 
+import com.library.model.data.entity.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -7,7 +8,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Configurator of {@code ActionServlet}.
@@ -33,10 +35,13 @@ class ActionServletConfigurator {
                 ActionFactory.getInstance(),
                 FormFactory.getInstance());
 
+        Map<String, List<Role>> securityConstraints =
+                createSecurityConstraints(actionServletConfig.getResourceAccessConfigs());
         return new ServletResources(
                 ActionFactory.getInstance(),
                 FormFactory.getInstance(),
-                actionServletConfig.getForwards());
+                Collections.unmodifiableMap(actionServletConfig.getForwards()),
+                securityConstraints);
     }
 
     /**
@@ -111,4 +116,34 @@ class ActionServletConfigurator {
             throw new IllegalArgumentException(errorText);
         }
     }
+
+    /**
+     * Create mapping between constrained resources and roles which
+     * has access to them
+     * @param resourceConfigs - list with security configuration of
+     *                        each constrained resource
+     * @return {@code Map} with URL-patterns of constrained resources
+     * bound with {@code Role} which has access to them
+     */
+    private Map<String, List<Role>> createSecurityConstraints(List<ResourceAccessConfig> resourceConfigs) {
+        Map<String, List<Role>> securityConstraints = new HashMap<>();
+
+        for (ResourceAccessConfig config : resourceConfigs) {
+            List<Role> roleList = createRoleList(config.getRoles());
+            String urlPattern = config.getUrlPattern();
+            securityConstraints.put(urlPattern, roleList);
+        }
+        return Collections.unmodifiableMap(securityConstraints);
+    }
+
+    /**
+     * Convert list with {@code Role} names to {@code List} with
+     * roles.
+     * @param roles list with {@code Role} names
+     * @return - list with roles converted.
+     */
+    private List<Role> createRoleList(List<String> roles) {
+        return roles.stream().map(Role::valueOf).collect(Collectors.toList());
+    }
+
 }

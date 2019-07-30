@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 /**
@@ -29,18 +30,31 @@ public class LoginAction extends Action {
      * {@inheritDoc}
      * @return - a path to the page where user came from for login or path
      * to login page for re-entering user login data if user is not found in DB
+     * or path to postponed request
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
 
+        HttpSession session = request.getSession();
         String redirectPath;
 
         Optional<User> user = getUserAccount(form);
         if (user.isPresent()) {
 
-            redirectPath = (String) request.getSession().getAttribute("referentUrl");
-            request.getSession().removeAttribute("referentUrl");
-            request.getSession().setAttribute("loginedUser", user.get());
+            session.setAttribute("loginedUser", user.get());
+
+            // It is possible a situation when not logined user will try to
+            // access a constrained resource and he will be redirected to
+            // login page. If it is so the session will have a path(postponed)
+            // to the requested constrained resource. After successful login
+            // we need to restore this path and forward an user to it.
+            String postponedPath = getPostponedPath(session);
+            if (postponedPath != null) {
+                redirectPath = resources.createRedirectPath(postponedPath);
+            } else {
+                redirectPath = (String) request.getSession().getAttribute("referentUrl");
+                session.removeAttribute("referentUrl");
+            }
 
         } else {
             //User is not found. Adds errors to the request and forward to
@@ -49,6 +63,17 @@ public class LoginAction extends Action {
             redirectPath = resources.getForward("ShowLoginPage");
         }
         return redirectPath;
+    }
+
+    /**
+     * Gives a postponed path from {@code session}
+     * @param session - current session which may contents a
+     *                postponed request path
+     * @return path of postponed request or {@code null} if
+     * there is no path postponed
+     */
+    private String getPostponedPath(HttpSession session) {
+        return (String) session.getAttribute("postponedRequestUrl");
     }
 
     /**

@@ -12,14 +12,23 @@
     <fmt:setLocale value="${sessionScope.language}" />
     <fmt:setBundle basename="textContent" />
 
+    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
     <title><fmt:message key="login.title"/></title>
 </head>
 <body>
 <div>
+
     <c:if test="${errors.hasErrors}">
         <p  style="color:red"><fmt:message key="login.error.noSuchUser"/></p>
     </c:if>
-    <form action="login.do" method="post">
+
+<%--    Show message to user redirected to the login page--%>
+    <c:if test="${not empty needAuthentication}">
+        <p style="color:red"><fmt:message key="login.needAuthentication"/> </p>
+    </c:if>
+
+    <form action="${contextPath}/login.do" method="post">
         <label>
             <h3><fmt:message key="email"/></h3>
             <input name="email" type="text" value="${form.email}" required>
@@ -34,6 +43,7 @@
                 <fmt:message key="${errors.errorsMap['password']}"/>
             </c:if>
         </label>
+
         <button><fmt:message key="header.login"/></button>
     </form>
 </div>

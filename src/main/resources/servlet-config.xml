@@ -50,7 +50,7 @@
             </service-dependencies>
         </action>
         <action>
-            <path>/orderBook.do</path>
+            <path>/user/orderBook.do</path>
             <type>com.library.web.controller.actions.OrderBookAction</type>
             <name>OrderBookForm</name>
             <validate>true</validate>
@@ -132,9 +132,28 @@
             <value>/WEB-INF/jsp/userCabinet.jsp</value>
         </entry>
         <entry>
+            <key>ShowAccessDeniedPage</key>
+            <value>/WEB-INF/jsp/accessDenied.jsp</value>
+        </entry>
+        <entry>
             <key>successPage</key>
             <value>/WEB-INF/jsp/successfulRedirect.jsp</value>
         </entry>
     </forwards>
+
+    <security-constraint>
+        <resource>
+            <url-pattern>/user</url-pattern>
+            <allowed-roles>
+                <role>USER</role>
+            </allowed-roles>
+        </resource>
+        <resource>
+            <url-pattern>/admin</url-pattern>
+            <allowed-roles>
+                <role>ADMINISTRATOR</role>
+            </allowed-roles>
+        </resource>
+    </security-constraint>
 
 </servlet-config>
