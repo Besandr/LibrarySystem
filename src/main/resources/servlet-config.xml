@@ -5,7 +5,7 @@
 <servlet-config>
     <!--
     <forms> tag contains forms which is needed for corresponding
-    bound by name actions. Tags <name> for mapping to action and
+    bound by name actions. Tags <formName> for mapping to action and
     <type> of Form class are mandatory
     -->
     <forms>
@@ -32,12 +32,13 @@
      mapping to form and action's dependencies.
      <path> - URL path to action. Mandatory
      <type> - full qualified name of Action class. Mandatory
+     <form-name> - mapped name of Form in group <forms>
      <dependency> - action's service dependency need to be injected. Optional
         <class> - full qualified name of Service class. Mandatory if dependency exists
         <name> - name of local Action's variable which need to be initialized by
         Service object value. Mandatory if dependency exists
      <validate> - true if Action needed html-form data. Optional
-     <name> - mapping to form. Optional
+     <formName> - mapping to form. Optional
      <input> - URL path to html-form. Optional
      -->
     <action-mappings>
@@ -58,7 +59,7 @@
         <action>
             <path>/bookSearch.do</path>
             <type>com.library.web.controller.actions.BookSearchAction</type>
-            <name>bookSearchForm</name>
+            <form-name>bookSearchForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
             <service-dependencies>
@@ -71,7 +72,7 @@
         <action>
             <path>/user/orderBook.do</path>
             <type>com.library.web.controller.actions.OrderBookAction</type>
-            <name>OrderBookForm</name>
+            <form-name>OrderBookForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
             <service-dependencies>
@@ -88,7 +89,7 @@
         <action>
             <path>/login.do</path>
             <type>com.library.web.controller.actions.LoginAction</type>
-            <name>userLoginForm</name>
+            <form-name>userLoginForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/login.jsp</input>
             <service-dependencies>
@@ -109,7 +110,7 @@
         <action>
             <path>/register.do</path>
             <type>com.library.web.controller.actions.RegisterUserAction</type>
-            <name>userRegistrationForm</name>
+            <form-name>userRegistrationForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/registration.jsp</input>
             <service-dependencies>
@@ -136,6 +137,10 @@
                     <name>loanService</name>
                 </dependency>
             </service-dependencies>
+        </action>
+        <action>
+            <path>/admin/approve.do</path>
+            <type>com.library.web.controller.actions.ApproveLoanAction</type>
         </action>
         <action>
             <path>/changeLanguage</path>
@@ -177,6 +182,10 @@
         <entry>
             <key>showUnapprovedLoans</key>
             <value>/WEB-INF/jsp/unapprovedLoans.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowUnapprovedLoansAction</key>
+            <value>/admin/unapprovedLoans</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * Front controller of this web-application. It handles
@@ -107,23 +106,19 @@ public class ActionServlet extends HttpServlet {
     String executeAction(HttpServletRequest request, HttpServletResponse response,
                                  Action userAction, String actionPath, ServletResources servletResources) {
 
-        ActionForm form;
+        ActionForm form = servletResources.getForm(actionPath);
         String redirectPath;
 
-        if (userAction.isNeedValidate()) {
-            form = servletResources.getForm(actionPath);
-            ActionErrors errors = fillAndValidateForm(request, form);
+        ActionErrors errors = fillAndValidateForm(request, form, userAction);
 
-            if (errors.isHasErrors()) {
-                request.setAttribute("form", form);
-                request.setAttribute("errors", errors);
-                redirectPath = userAction.getInputPath();
-            } else {
-                redirectPath = userAction.execute(request, response, form, servletResources);
-            }
+        if (errors.isHasErrors()) {
+            request.setAttribute("form", form);
+            request.setAttribute("errors", errors);
+            redirectPath = userAction.getInputPath();
         } else {
-            redirectPath = userAction.execute(request, response, null, servletResources);
+            redirectPath = userAction.execute(request, response, form, servletResources);
         }
+
         return redirectPath;
     }
 
@@ -142,18 +137,23 @@ public class ActionServlet extends HttpServlet {
      * {@code ActionErrors} with no errors. Otherwise add all the
      * errors occurred to the {@code ActionErrors} and returns it.
      * @param form - the form need to be filled and validated
+     * @param userAction - the current user's action
      * @return - object contains results of validating given form
      */
-    ActionErrors fillAndValidateForm(HttpServletRequest request, ActionForm form) {
+    ActionErrors fillAndValidateForm(HttpServletRequest request, ActionForm form, Action userAction) {
         ActionErrors errors = new ActionErrors();
 
         if (form == null) {
             return errors;
+        } else {
+            form.fill(request);
         }
 
-        form.fill(request);
+        if (userAction.isNeedValidate()) {
+            errors = form.validate();
+        }
 
-        return form.validate();
+        return errors;
     }
 
 }

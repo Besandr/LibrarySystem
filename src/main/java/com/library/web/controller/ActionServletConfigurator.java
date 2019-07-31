@@ -84,7 +84,7 @@ class ActionServletConfigurator {
                     actionConfig.getInput(),
                     actionConfig.getServiceDependencyList());
 
-            if (needValidate) {
+            if (actionConfig.getFormName() != null) {
                 //Adding form info needed to this action to {@code FormFactory}
                 addFormToFormFactory(actionConfig, actionServletConfig, formFactory);
             }
@@ -105,7 +105,7 @@ class ActionServletConfigurator {
     void addFormToFormFactory(ActionConfig actionConfig, ActionServletConfig actionServletConfig, FormFactory formFactory){
         Optional<FormConfig> formConfigOptional = actionServletConfig.getForms()
                 .stream()
-                .filter(f -> actionConfig.getName().equals(f.getName()))
+                .filter(f -> actionConfig.getFormName().equals(f.getName()))
                 .findFirst();
 
         if (formConfigOptional.isPresent()) {

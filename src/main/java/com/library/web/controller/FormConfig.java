@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 class FormConfig {
 
     /**
-     * Action name with which this form bound
+     * Form name in Action config with which this form bound
      */
     private String name;
 

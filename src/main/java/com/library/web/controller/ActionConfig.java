@@ -27,9 +27,10 @@ class ActionConfig {
     private String type;
 
     /**
-     * Action name for inner configs bindings
+     * Form name for binding with action
      */
-    private String name;
+    @XmlElement(name = "form-name")
+    private String formName;
 
     /**
      * Need this action in validated form

@@ -39,7 +39,7 @@ public class ActionServletConfiguratorTest {
         List<FormConfig> formConfigs = Collections.singletonList(testForm);
 
         when(actionServletConfig.getForms()).thenReturn(formConfigs);
-        when(actionConfig.getName()).thenReturn("testName");
+        when(actionConfig.getFormName()).thenReturn("testName");
         when(actionConfig.getPath()).thenReturn("testPath");
 
         new ActionServletConfigurator().addFormToFormFactory(actionConfig, actionServletConfig, formFactory);
@@ -54,7 +54,7 @@ public class ActionServletConfiguratorTest {
         List<FormConfig> formConfigs = Collections.singletonList(testForm);
 
         when(actionServletConfig.getForms()).thenReturn(formConfigs);
-        when(actionConfig.getName()).thenReturn("anotherTestName");
+        when(actionConfig.getFormName()).thenReturn("anotherTestName");
 
         new ActionServletConfigurator().addFormToFormFactory(actionConfig, actionServletConfig, formFactory);
     }
