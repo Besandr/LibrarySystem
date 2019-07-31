@@ -20,6 +20,19 @@
 <div>
     <c:import url="adminControl.jsp"/>
 </div>
+
+<%--Prints loan approving information if exists--%>
+<c:if test="${not empty approvingResult}">
+    <c:choose>
+        <c:when test="${approvingResult == true}">
+            <fmt:message key="unapprovedLoans.approvingSuccessful"/> ${loanId}
+        </c:when>
+        <c:otherwise>
+            <fmt:message key="unapprovedLoans.approvingFailed"/> ${loanId}
+        </c:otherwise>
+    </c:choose>
+</c:if>
+
 <div>
     <table>
         <tr>
@@ -54,7 +67,7 @@
                 <td>${loanDTO.bookQuantity}</td>
                 <td>
                     <form action="${contextPath}/admin/approve.do">
-                        <input type="text" value="${loanDTO.loan.id}" hidden>
+                        <input type="text" name="loanId" value="${loanDTO.loan.id}" hidden>
                         <button><fmt:message key="unapprovedLoans.approve"/> </button>
                     </form>
                 </td>

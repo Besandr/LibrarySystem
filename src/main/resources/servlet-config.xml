@@ -25,6 +25,10 @@
             <name>userRegistrationForm</name>
             <type>com.library.web.controller.forms.UserRegistrationForm</type>
         </form>
+        <form>
+            <name>approveLoanForm</name>
+            <type>com.library.web.controller.forms.ApproveLoanForm</type>
+        </form>
     </forms>
 
     <!--
@@ -141,6 +145,14 @@
         <action>
             <path>/admin/approve.do</path>
             <type>com.library.web.controller.actions.ApproveLoanAction</type>
+            <form-name>approveLoanForm</form-name>
+            <validate>false</validate>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
         </action>
         <action>
             <path>/changeLanguage</path>
