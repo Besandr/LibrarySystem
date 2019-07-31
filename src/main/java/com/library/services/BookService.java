@@ -201,7 +201,7 @@ public class BookService extends Service{
         //Updated authors set doesn't contain removed from book authors
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
         //Getting old book authors list
-        List<Author> deletedAuthors = authorDao.getByBook(bookDto.getBook());
+        List<Author> deletedAuthors = authorDao.getByBookId(bookDto.getBook().getId());
         //Filtering it to remain only deleted from book authors
         deletedAuthors.removeAll(bookDto.getAuthors());
         AuthorBookDao authorBookDao = manager.getAuthorBookDao();
@@ -227,7 +227,7 @@ public class BookService extends Service{
         //Updated keywords set doesn't contain removed from book keywords
         KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
         //Getting old book keywords list
-        List<Keyword> deletedKeywords = keywordDao.getByBook(bookDto.getBook());
+        List<Keyword> deletedKeywords = keywordDao.getByBookId(bookDto.getBook().getId());
         //Filtering it to remain only deleted from book keywords
         deletedKeywords.removeAll(bookDto.getKeywords());
         BookKeywordDao keywordBookDao = manager.getBookKeywordDao();
@@ -259,10 +259,10 @@ public class BookService extends Service{
     BookDto createBookDtoFromBook(DaoManager manager, Book book) throws SQLException {
 
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
-        Set<Author> authorsSet = new HashSet<>(authorDao.getByBook(book));
+        Set<Author> authorsSet = new HashSet<>(authorDao.getByBookId(book.getId()));
 
         KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
-        Set<Keyword> keywordsSet = new HashSet<>(keywordDao.getByBook(book));
+        Set<Keyword> keywordsSet = new HashSet<>(keywordDao.getByBookId(book.getId()));
 
         return BookDto.builder()
                 .book(book)

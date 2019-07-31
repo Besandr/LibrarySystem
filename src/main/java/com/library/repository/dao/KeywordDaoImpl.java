@@ -1,7 +1,6 @@
 package com.library.repository.dao;
 
 import com.library.repository.DBUtils;
-import com.library.repository.entity.Book;
 import com.library.repository.entity.Keyword;
 import com.library.repository.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -118,13 +117,13 @@ public class KeywordDaoImpl implements KeywordDao{
      * {@inheritDoc}
      */
     @Override
-    public List<Keyword> getByBook(Book book) {
+    public List<Keyword> getByBookId(long bookId) {
         List<Keyword> keywords = new ArrayList<>();
 
         try {
             PreparedStatement selectStatement = connection
                     .prepareStatement(DBQueries.GET_KEYWORDS_BY_BOOK_QUERY);
-            selectStatement.setLong(1, book.getId());
+            selectStatement.setLong(1, bookId);
 
             ResultSet rs = selectStatement.executeQuery();
 
@@ -135,7 +134,7 @@ public class KeywordDaoImpl implements KeywordDao{
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get keywords list by Book from DB. Book: %s. Cause: %s", book, e.getMessage());
+            String errorText = String.format("Can't get keywords list by Book from DB. Book: %s. Cause: %s", bookId, e.getMessage());
             log.error(errorText);
             throw new DaoException(errorText, e);
         }
@@ -210,7 +209,7 @@ public class KeywordDaoImpl implements KeywordDao{
         }
     }
 
-    protected Keyword getKeywordFromResultRow(ResultSet rs) throws SQLException {
+    private Keyword getKeywordFromResultRow(ResultSet rs) throws SQLException {
         return Keyword.builder()
                 .id(rs.getLong("keyword_id"))
                 .word(rs.getString("word"))

@@ -1,7 +1,6 @@
 package com.library.repository.dao;
 
 import com.library.repository.entity.Author;
-import com.library.repository.entity.Book;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +21,9 @@ public interface AuthorDao extends Dao<Author> {
 
     /**
      * Gets a list with authors of a given book
-     * @param book - book which authors need to be gotten
+     * @param bookId - ID of book which authors need to be gotten
      * @return a list with authors of a given book or an empty
      *          list if there is no authors of the book
      */
-    List<Author> getByBook(Book book);
+    List<Author> getByBookId(long bookId);
 }

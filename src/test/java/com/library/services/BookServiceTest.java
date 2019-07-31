@@ -156,12 +156,13 @@ public class BookServiceTest {
         Author mockAuthor = mock(Author.class);
         List<Author> authorList = new ArrayList<>();
         authorList.add(mockAuthor);
-        when(mockAuthorDao.getByBook(mockBook)).thenReturn(authorList);
+        when(mockBook.getId()).thenReturn(3L);
+        when(mockAuthorDao.getByBookId(mockBook.getId())).thenReturn(authorList);
 
         Keyword mockKeyword = mock(Keyword.class);
         List<Keyword> keywordList = new ArrayList<>();
         keywordList.add(mockKeyword);
-        when(mockKeywordDao.getByBook(mockBook)).thenReturn(keywordList);
+        when(mockKeywordDao.getByBookId(mockBook.getId())).thenReturn(keywordList);
 
         BookDto expectedDto = BookDto.builder()
                 .book(mockBook)
@@ -316,7 +317,7 @@ public class BookServiceTest {
         Author authorNewInLibrary = Author.builder().firstName("newInLib").id(0).build();
 
         List<Author> oldAuthors = Stream.of(authorDeleted, authorRemainedInLibrary, authorRemainedInBook).collect(Collectors.toList());
-        when(mockAuthorDao.getByBook(mockBook)).thenReturn(oldAuthors);
+        when(mockAuthorDao.getByBookId(mockBook.getId())).thenReturn(oldAuthors);
 
         Set<Author> newAuthors = Stream.of(authorRemainedInBook, authorNewInBook, authorNewInLibrary).collect(Collectors.toSet());
         when(mockBookDto.getAuthors()).thenReturn(newAuthors);
@@ -346,7 +347,7 @@ public class BookServiceTest {
         Keyword keywordNewInLibrary = Keyword.builder().word("newInLib").id(0).build();
 
         List<Keyword> oldKeywords = Stream.of(keywordDeleted, keywordRemainedInLibrary, keywordRemainedInBook).collect(Collectors.toList());
-        when(mockKeywordDao.getByBook(mockBook)).thenReturn(oldKeywords);
+        when(mockKeywordDao.getByBookId(mockBook.getId())).thenReturn(oldKeywords);
 
         Set<Keyword> newKeywords = Stream.of(keywordRemainedInBook, keywordNewInBook, keywordNewInLibrary).collect(Collectors.toSet());
         when(mockBookDto.getKeywords()).thenReturn(newKeywords);

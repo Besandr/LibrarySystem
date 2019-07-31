@@ -1,8 +1,6 @@
 package com.library.repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Contains util methods for DAOs
@@ -31,6 +29,25 @@ public class DBUtils {
     }
 
     /**
+     * Gives a result of query which has only one value in its
+     * executing result - count of rows in a table which satisfies
+     * the query conditions
+     * @param connection to DB
+     * @param query counting query to DB
+     * @return count of rows in a table
+     */
+    public static long getResultOfCountingQuery(Connection connection, String query) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        ResultSet rs = statement.executeQuery();
+        if (rs.next()) {
+            return rs.getLong(1);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
      * Checks is a given exception thrown because of attempt to insert
      * into a table a duplicate entry. In many popular SQL servers such as
      * MySQL, PostgreSQL, and Oracle the exception it this case will return
@@ -41,4 +58,5 @@ public class DBUtils {
     public static boolean isTryingToInsertDuplicate(SQLException e) {
         return "23000".equals(e.getSQLState());
     }
+
 }

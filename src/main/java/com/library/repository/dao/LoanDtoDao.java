@@ -9,11 +9,16 @@ import java.util.List;
 public interface LoanDtoDao {
 
     /**
-     * Gets a list of all unapproved loans.
+     * Gets a list of unapproved loans in chosen range.
      * @return - a list with unapproved loans
      *          or the empty list if there is no any
+     * @param offset of the first loan to return
+     * @param limit the number of loans returned
      */
-    List<LoanDto> getAllUnapprovedLoans();
+    List<LoanDto> getUnapprovedLoans(int offset, int limit);
+
+
+    long getUnapprovedLoansQuantity();
 
     /**
      * Gets a list of active(not returned) loans.

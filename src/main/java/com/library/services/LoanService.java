@@ -54,14 +54,28 @@ public class LoanService extends Service{
     /**
      * Gets a list with all unapproved loans.
      * @return a list with all unapproved loans
+     * @param previousRecordNumber - numer of previous record
+     * @param recordsPerPage - quantity of records per page
      */
-    public List<LoanDto> getAllUnapprovedLoans(){
+    public List<LoanDto> getAllUnapprovedLoans(int previousRecordNumber, int recordsPerPage){
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getAllUnapprovedLoans());
+        Object executingResult = daoManager.executeAndClose(manager -> getAllUnapprovedLoansCommand(manager, previousRecordNumber, recordsPerPage));
 
         return checkAndCastObjectToList(executingResult);
+    }
+
+    /**
+     * Gives a quantity of all unapproved loans
+     * @return a quantity of all unapproved loans
+     */
+    public long getUnapprovedLoansQuantity(){
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoansQuantity());
+
+        return checkAndCastObjectToLong(executingResult);
     }
 
     /**
@@ -172,6 +186,22 @@ public class LoanService extends Service{
     }
 
     //Commands which is needed to be executed in corresponding public service methods
+
+    private List<LoanDto> getAllUnapprovedLoansCommand(DaoManager manager, int previousRecordNumber, int recordsPerPage) throws SQLException {
+        List<LoanDto> loanDtos = manager.getLoanDtoDao().getUnapprovedLoans(previousRecordNumber, recordsPerPage);
+
+        // Adding the authors and books quantity at the storage information
+        AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
+        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        for (LoanDto loanDto : loanDtos) {
+            long bookId = loanDto.getBook().getId();
+            loanDto.setAuthors(authorDao.getByBookId(bookId));
+            loanDto.setBookQuantity(locationDao.getBookQuantity(bookId));
+        }
+
+        return loanDtos;
+    }
+
     boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
 
         LoanDao loanDao = (LoanDao) manager.getLoanDao();

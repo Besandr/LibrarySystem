@@ -33,8 +33,8 @@ public abstract class Service {
      * @return - the casted to {@code Optional} given object or empty
      * {@code Optional} if object is {@code null}
      */
-    static <T> Optional<T> checkAndCastObjectToOptional(Object optionalCandidate) {
-        if (Objects.nonNull(optionalCandidate) && optionalCandidate instanceof Optional) {
+    <T> Optional<T> checkAndCastObjectToOptional(Object optionalCandidate) {
+        if (optionalCandidate instanceof Optional) {
             return (Optional<T>) optionalCandidate;
         } else {
             return Optional.empty();
@@ -44,14 +44,29 @@ public abstract class Service {
     /**
      * Casts the given object to {@code List} type if it is possible
      * @param listCandidate - object need to be casted
-     * @return - the caseted to {@code List} given object or empty
+     * @return - the casted to {@code List} given object or empty
      * {@code List} if object is {@code null}
      */
-    static <T> List<T> checkAndCastObjectToList(Object listCandidate) {
-        if (Objects.nonNull(listCandidate) && listCandidate instanceof List) {
+    <T> List<T> checkAndCastObjectToList(Object listCandidate) {
+        if (listCandidate instanceof List) {
             return (List<T>) listCandidate;
         } else {
             return new ArrayList<>();
         }
     }
+
+    /**
+     * Casts the given object to {@code Long} type if it is possible
+     * @param longCandidate - object need to be casted
+     * @return - the casted to {@code Long} given object or
+     * {@code 0} if object is {@code null}
+     */
+    Long checkAndCastObjectToLong(Object longCandidate) {
+        if (longCandidate instanceof Long) {
+            return (Long) longCandidate;
+        } else {
+            return 0L;
+        }
+    }
+
 }

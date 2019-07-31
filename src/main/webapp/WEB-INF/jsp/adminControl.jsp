@@ -10,15 +10,6 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<html>
-<head>
-    <c:import url="header.jsp"/>
-
-    <title><fmt:message key="adminCabinet.title"/></title>
-</head>
-<body>
-<div>
-    <c:import url="adminControl.jsp"/>
-</div>
-</body>
-</html>
+<a href="${contextPath}/admin/unapprovedLoans">
+    <fmt:message key="adminControl.unapprovedLoans"/>
+</a>

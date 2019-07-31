@@ -1,6 +1,5 @@
 package com.library.repository.dao;
 
-import com.library.repository.entity.Book;
 import com.library.repository.entity.Keyword;
 
 import java.util.List;
@@ -21,9 +20,9 @@ public interface KeywordDao extends Dao<Keyword> {
 
     /**
      * Gets a list with keywords of a given book
-     * @param book - book which authors need to be gotten
+     * @param bookId - ID of book which authors need to be gotten
      * @return a list with keywords of a given book or an empty
      *          list if there is no keywords of the book
      */
-    List<Keyword> getByBook(Book book);
+    List<Keyword> getByBookId(long bookId);
 }

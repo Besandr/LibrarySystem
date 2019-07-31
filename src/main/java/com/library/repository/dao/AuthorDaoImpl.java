@@ -2,7 +2,6 @@ package com.library.repository.dao;
 
 import com.library.repository.DBUtils;
 import com.library.repository.entity.Author;
-import com.library.repository.entity.Book;
 import com.library.repository.DaoException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -119,14 +118,14 @@ public class AuthorDaoImpl implements AuthorDao {
      * {@inheritDoc}
      */
     @Override
-    public List<Author> getByBook(Book book) {
+    public List<Author> getByBookId(long bookId) {
 
         List<Author> authors = new ArrayList<>();
 
         try {
             PreparedStatement selectStatement = connection
                     .prepareStatement(DBQueries.GET_AUTHORS_BY_BOOK_QUERY);
-            selectStatement.setLong(1, book.getId());
+            selectStatement.setLong(1, bookId);
 
             ResultSet rs = selectStatement.executeQuery();
 
@@ -137,7 +136,7 @@ public class AuthorDaoImpl implements AuthorDao {
             rs.close();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get authors list by Book from DB. Book: %s. Cause: %s", book, e.getMessage());
+            String errorText = String.format("Can't get authors list by Book from DB. Book: %s. Cause: %s", bookId, e.getMessage());
             log.error(errorText);
             throw new DaoException(errorText, e);
         }
@@ -215,7 +214,7 @@ public class AuthorDaoImpl implements AuthorDao {
         }
     }
 
-    protected Author getAuthorFromResultRow(ResultSet rs) throws SQLException {
+    private Author getAuthorFromResultRow(ResultSet rs) throws SQLException {
 
         return Author.builder()
                 .id(rs.getLong("author_id"))

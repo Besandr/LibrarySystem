@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<servlet-config>
+<!--File with configuration of ActionServlet-->
 
+<servlet-config>
+    <!--
+    <forms> tag contains forms which is needed for corresponding
+    bound by name actions. Tags <name> for mapping to action and
+    <type> of Form class are mandatory
+    -->
     <forms>
         <form>
             <name>bookSearchForm</name>
@@ -21,6 +27,19 @@
         </form>
     </forms>
 
+    <!--
+    Contains mappings to action depending on request path. Also may contains
+     mapping to form and action's dependencies.
+     <path> - URL path to action. Mandatory
+     <type> - full qualified name of Action class. Mandatory
+     <dependency> - action's service dependency need to be injected. Optional
+        <class> - full qualified name of Service class. Mandatory if dependency exists
+        <name> - name of local Action's variable which need to be initialized by
+        Service object value. Mandatory if dependency exists
+     <validate> - true if Action needed html-form data. Optional
+     <name> - mapping to form. Optional
+     <input> - URL path to html-form. Optional
+     -->
     <action-mappings>
         <action>
             <path>/</path>
@@ -109,11 +128,27 @@
             <type>com.library.web.controller.actions.ShowPersonalCabinetAction</type>
         </action>
         <action>
+            <path>/admin/unapprovedLoans</path>
+            <type>com.library.web.controller.actions.ShowUnapprovedLoansAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/changeLanguage</path>
             <type>com.library.web.controller.actions.ChangeLanguageAction</type>
         </action>
     </action-mappings>
 
+    <!--
+    Mapping between web page files and its names.
+    <entry> - one mapping
+        <key> - web page's name
+        <value> - web page's file
+    -->
     <forwards>
         <entry>
             <key>ShowTitlePage</key>
@@ -140,6 +175,10 @@
             <value>/WEB-INF/jsp/adminCabinet.jsp</value>
         </entry>
         <entry>
+            <key>showUnapprovedLoans</key>
+            <value>/WEB-INF/jsp/unapprovedLoans.jsp</value>
+        </entry>
+        <entry>
             <key>ShowAccessDeniedPage</key>
             <value>/WEB-INF/jsp/accessDenied.jsp</value>
         </entry>
@@ -149,6 +188,14 @@
         </entry>
     </forwards>
 
+    <!--
+    Contains mapping between constrained resources URL and
+    authorized for them roles.
+    <resource> - constrained resource
+        <url-pattern> - URL pattern to constrained resource
+        <role> - role which authorized for visiting
+        constrained resource
+    -->
     <security-constraint>
         <resource>
             <url-pattern>/user</url-pattern>

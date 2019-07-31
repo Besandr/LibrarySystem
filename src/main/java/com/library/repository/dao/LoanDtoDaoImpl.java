@@ -1,5 +1,6 @@
 package com.library.repository.dao;
 
+import com.library.repository.DBUtils;
 import com.library.repository.DaoManager;
 import com.library.repository.dto.LoanDto;
 import com.library.repository.entity.Book;
@@ -35,8 +36,19 @@ public class LoanDtoDaoImpl implements LoanDtoDao{
     /**
      * {@inheritDoc}
      */
-    public List<LoanDto> getAllUnapprovedLoans() {
-        return createLoanDtoListFromQuery(DBQueries.GET_UNAPPROVED_LOANS_QUERY);
+    public List<LoanDto> getUnapprovedLoans(int offset, int limit) {
+        return createLoanDtoListFromQuery(DBQueries.GET_UNAPPROVED_LOANS_QUERY, offset, limit);
+    }
+
+    @Override
+    public long getUnapprovedLoansQuantity() {
+        try{
+            return DBUtils.getResultOfCountingQuery(connection, DBQueries.GET_UNAPPROVED_LOANS_QUANTITY);
+        } catch (SQLException e) {
+            String errorText = "Can't get unapproved loans quantity";
+            log.error(errorText);
+            throw new DaoException(errorText, e);
+        }
     }
 
     /**
@@ -44,7 +56,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao{
      */
     @Override
     public List<LoanDto> getAllActiveLoans() {
-        return createLoanDtoListFromQuery(DBQueries.GET_ACTIVE_LOANS_QUERY);
+        return createLoanDtoListFromQuery(DBQueries.GET_ACTIVE_LOANS_QUERY, 0, Integer.MAX_VALUE);
     }
 
     /**
@@ -128,13 +140,17 @@ public class LoanDtoDaoImpl implements LoanDtoDao{
      * Creates a {@code List} and fills it with LoanDto objects received from
      * executing a given query.
      * @param query - query which result is need to be returned
+     * @param offset of the first loan to return
+     * @param limit the number of loans returned
      * @return - a {@code List} with results of executing the given query.
      * {@code List} can be empty if query has no results
      */
-    protected List<LoanDto> createLoanDtoListFromQuery(String query) {
+    protected List<LoanDto> createLoanDtoListFromQuery(String query, int offset, int limit) {
 
         try {
             PreparedStatement selectStatement = connection.prepareStatement(query);
+            selectStatement.setInt(1, limit);
+            selectStatement.setInt(2, offset);
 
             ResultSet rs = selectStatement.executeQuery();
 
