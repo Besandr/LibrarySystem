@@ -1,7 +1,9 @@
-package com.library.repository.dao;
+package com.library.repository.dao.implementation;
 
 import com.library.repository.DBUtils;
 import com.library.repository.DaoManager;
+import com.library.repository.dao.interfaces.LoanDao;
+import com.library.repository.dao.interfaces.LoanDtoDao;
 import com.library.repository.dto.LoanDto;
 import com.library.repository.entity.Book;
 import com.library.repository.entity.Loan;
@@ -21,7 +23,7 @@ import java.util.List;
  * Contains methods for creating LoanDto by getting their repository
  * from select query to DB
  */
-public class LoanDtoDaoImpl implements LoanDtoDao{
+public class LoanDtoDaoImpl implements LoanDtoDao {
 
     private static final Logger log = LogManager.getLogger(LoanDao.class);
 

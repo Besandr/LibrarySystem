@@ -1,5 +1,6 @@
-package com.library.repository.dao;
+package com.library.repository.dao.implementation;
 
+import com.library.repository.dao.interfaces.BookKeywordDao;
 import com.library.repository.entity.Book;
 import com.library.repository.entity.Keyword;
 import com.library.repository.DaoException;

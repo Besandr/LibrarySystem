@@ -2,8 +2,8 @@ package com.library.services;
 
 import com.library.repository.DaoManager;
 import com.library.repository.DaoManagerFactory;
-import com.library.repository.dao.BookcaseDao;
-import com.library.repository.dao.LocationDao;
+import com.library.repository.dao.interfaces.BookcaseDao;
+import com.library.repository.dao.interfaces.LocationDao;
 import com.library.repository.entity.Bookcase;
 import com.library.repository.entity.Location;
 import org.junit.Before;

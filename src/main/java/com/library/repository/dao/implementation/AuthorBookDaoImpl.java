@@ -1,5 +1,6 @@
-package com.library.repository.dao;
+package com.library.repository.dao.implementation;
 
+import com.library.repository.dao.interfaces.AuthorBookDao;
 import com.library.repository.entity.Author;
 import com.library.repository.entity.Book;
 import com.library.repository.DaoException;
@@ -15,7 +16,7 @@ import java.util.Set;
 /**
  * Implementing of AuthorBookDao for working with a MySql server
  */
-public class AuthorBookDaoImpl implements AuthorBookDao{
+public class AuthorBookDaoImpl implements AuthorBookDao {
 
     private final static Logger log = LogManager.getLogger(AuthorBookDaoImpl.class);
 

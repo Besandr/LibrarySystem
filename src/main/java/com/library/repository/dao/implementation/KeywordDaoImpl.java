@@ -1,6 +1,7 @@
-package com.library.repository.dao;
+package com.library.repository.dao.implementation;
 
 import com.library.repository.DBUtils;
+import com.library.repository.dao.interfaces.KeywordDao;
 import com.library.repository.entity.Keyword;
 import com.library.repository.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +15,7 @@ import java.util.Optional;
 /**
  * Implementing of KeywordDao for working with a MySql server
  */
-public class KeywordDaoImpl implements KeywordDao{
+public class KeywordDaoImpl implements KeywordDao {
 
     private static final Logger log = LogManager.getLogger(KeywordDao.class);
 

@@ -1,6 +1,7 @@
-package com.library.repository.dao;
+package com.library.repository.dao.implementation;
 
 import com.library.repository.DBUtils;
+import com.library.repository.dao.interfaces.LocationDao;
 import com.library.repository.entity.Book;
 import com.library.repository.entity.Location;
 import com.library.repository.DaoException;

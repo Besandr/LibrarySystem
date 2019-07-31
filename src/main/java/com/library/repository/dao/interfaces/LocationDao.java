@@ -1,4 +1,4 @@
-package com.library.repository.dao;
+package com.library.repository.dao.interfaces;
 
 import com.library.repository.entity.Book;
 import com.library.repository.entity.Location;
