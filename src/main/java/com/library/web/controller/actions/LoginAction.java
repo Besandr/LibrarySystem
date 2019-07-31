@@ -52,8 +52,7 @@ public class LoginAction extends Action {
             if (postponedPath != null) {
                 redirectPath = resources.createRedirectPath(postponedPath);
             } else {
-                redirectPath = (String) request.getSession().getAttribute("referentUrl");
-                session.removeAttribute("referentUrl");
+                redirectPath = resources.getForward("ShowTitlePage");
             }
 
         } else {

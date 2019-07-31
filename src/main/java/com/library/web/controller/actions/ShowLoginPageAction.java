@@ -22,21 +22,7 @@ public class ShowLoginPageAction extends Action {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
-        saveReferentUrl(request, resources);
         return resources.getForward("ShowLoginPage");
     }
 
-    /**
-     * Saves the referent URL for possibility to come back there
-     * after login
-     */
-    private void saveReferentUrl(HttpServletRequest request, ServletResources resources) {
-        HttpSession session = request.getSession();
-        //Is referent URL session attribute not exist
-        if (session.getAttribute("referentUrl") == null) {
-            //Setting the referent URL
-            String referentUrl = getRedirectToReferer(request, resources);
-            session.setAttribute("referentUrl", referentUrl);
-        }
-    }
 }

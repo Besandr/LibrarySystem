@@ -10,6 +10,7 @@ import com.library.web.controller.forms.UserRegistrationForm;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 /**
@@ -40,8 +41,7 @@ public class RegisterUserAction extends Action {
 
         //Checking is user created
         if (userOptional.isPresent()) {
-            redirectPath = (String) request.getSession().getAttribute("referentUrl");
-            request.getSession().removeAttribute("referentUrl");
+            redirectPath = getRedirectPath(request.getSession(), resources);
             request.getSession().setAttribute("loggedInUser", userOptional.get());
         } else {
             //User is not created. Adds errors to the request and forward to
@@ -53,6 +53,25 @@ public class RegisterUserAction extends Action {
         return redirectPath;
     }
 
+    /**
+     * It is possible a situation when not logged in user will try to
+     * access a constrained resource and he will be redirected to
+     * login/registration page. If it is so the session will have a path(postponed)
+     * to the requested constrained resource. After successful login
+     * we need to restore this path and forward an user to it.
+     */
+    private String getRedirectPath(HttpSession session, ServletResources resources) {
+        String postponedPath = (String) session.getAttribute("postponedRequestUrl");
+        if (postponedPath != null) {
+            return resources.createRedirectPath(postponedPath);
+        } else {
+            return resources.getForward("ShowTitlePage");
+        }
+    }
+
+    /**
+     * Creates an user from form data
+     */
     private Optional<User> createUser(ActionForm form) {
         UserRegistrationForm userForm = (UserRegistrationForm) form;
         return userService.createNewUser(
