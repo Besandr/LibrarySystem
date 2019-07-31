@@ -32,7 +32,7 @@ public interface Dao<T> {
     long save(T t);
 
     /**
-     * Changes given entity repository in a DB table
+     * Changes given entity data in a DB table
      * @param t - entity with new values
      */
     void update(T t);

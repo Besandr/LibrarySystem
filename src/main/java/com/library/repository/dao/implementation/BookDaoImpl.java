@@ -95,7 +95,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     /**
-     * Gives {@code PreparedStatement} depending on repository
+     * Gives {@code PreparedStatement} depending on data
      * existence in every of three methods argument
      * @param authorId - the author's ID
      * @param keywordId - the keyword's ID

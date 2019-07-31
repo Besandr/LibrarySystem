@@ -18,8 +18,8 @@ public abstract class ActionForm {
     public abstract ActionErrors validate();
 
     /**
-     * Fills current form with repository which given request contains
-     * @param request - the request with form's repository
+     * Fills current form with data which given request contains
+     * @param request - the request with form's data
      */
     public abstract void fill(HttpServletRequest request);
 

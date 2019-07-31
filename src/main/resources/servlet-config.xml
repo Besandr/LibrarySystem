@@ -192,6 +192,10 @@
             <value>/WEB-INF/jsp/adminCabinet.jsp</value>
         </entry>
         <entry>
+            <key>ShowPersonalCabinetAction</key>
+            <value>/cabinet</value>
+        </entry>
+        <entry>
             <key>showUnapprovedLoans</key>
             <value>/WEB-INF/jsp/unapprovedLoans.jsp</value>
         </entry>

@@ -28,9 +28,9 @@ public class LoginAction extends Action {
      * If user with given combination of e-mail and password exist gets it
      * from DB and sets it as session attribute
      * {@inheritDoc}
-     * @return - a path to the page where user came from for login or path
-     * to login page for re-entering user login repository if user is not found in DB
-     * or path to postponed request
+     * @return - a path to {@code ShowPersonalCabinetAction} or path
+     * to login page for re-entering user login data if user is
+     * not found in DB or path to postponed request
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
@@ -52,12 +52,12 @@ public class LoginAction extends Action {
             if (postponedPath != null) {
                 redirectPath = resources.createRedirectPath(postponedPath);
             } else {
-                redirectPath = resources.getForward("ShowTitlePage");
+                redirectPath = resources.getForward("ShowPersonalCabinetAction");
             }
 
         } else {
             //User is not found. Adds errors to the request and forward to
-            //user for re-entering repository
+            //user for re-entering data
             setRequestErrorAttributes(request, form);
             redirectPath = resources.getForward("ShowLoginPage");
         }
@@ -78,7 +78,7 @@ public class LoginAction extends Action {
     /**
      * Gives an {@code Optional} with {@code User} if user with given
      * combination of e-mail and password exist
-     * @param form - form with users e-mail & password repository
+     * @param form - form with users e-mail & password data
      * @return - the target {@code Optional} with {@code User} or
      * an empty {@code Optional}
      */

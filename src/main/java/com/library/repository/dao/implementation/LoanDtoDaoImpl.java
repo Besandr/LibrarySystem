@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains methods for creating LoanDto by getting their repository
+ * Contains methods for creating LoanDto by getting their data
  * from select query to DB
  */
 public class LoanDtoDaoImpl implements LoanDtoDao {
@@ -168,9 +168,9 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
     /**
      * Creates a {@code List} and fills it with LoanDto objects received
      * from given {@code ResultSet}
-     * @param rs - set with repository which is need to be returned
-     * @return - a {@code List} with the repository from given {@code ResultSet}.
-     * {@code List} can be empty if the given set has no repository
+     * @param rs - set with data which is need to be returned
+     * @return - a {@code List} with the data from given {@code ResultSet}.
+     * {@code List} can be empty if the given set has no data
      */
     protected List<LoanDto> createLoanDtoListFromResultSet(ResultSet rs) throws SQLException {
 

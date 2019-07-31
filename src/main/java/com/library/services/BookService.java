@@ -341,7 +341,7 @@ public class BookService extends Service{
 
     /**
      * Gets an author(with id) from the storage by its first and last names
-     * @param dao - dao for fetching the author repository from the storage
+     * @param dao - dao for fetching the author data from the storage
      * @param firstName - the authors first name
      * @param lastName - the authors second name
      * @return - the target author
@@ -384,7 +384,7 @@ public class BookService extends Service{
 
     /**
      * Gets the keyword(with id) object from the storage by its word
-     * @param dao - dao for fetching the keywords repository from the storage
+     * @param dao - dao for fetching the keywords data from the storage
      * @param word - the keyword's word
      * @return - the target keyword
      */

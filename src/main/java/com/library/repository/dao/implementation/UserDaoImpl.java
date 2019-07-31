@@ -231,7 +231,7 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * Creates an user(without password field) from given {@code ResultSet}
-     * @param rs - {@code ResultSet} with users repository
+     * @param rs - {@code ResultSet} with users data
      * @return - user whose email & password was passed into
      * @throws SQLException if the columnLabels is not valid;
      * if a database access error occurs or result set is closed

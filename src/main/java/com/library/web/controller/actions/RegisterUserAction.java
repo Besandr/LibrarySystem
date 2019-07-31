@@ -28,8 +28,9 @@ public class RegisterUserAction extends Action {
      * @param response the response to user
      * @param form - form need to be processed by this action
      * @param resources - servlet's resources
-     * @return a path to the page where user came from for registering or path
-     * to registering page for re-entering user repository if user is already exist in DB
+     * @return a path to {@code ShowPersonalCabinetAction} or path
+     * to registering page for re-entering user data if user
+     * is already exist in DB
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response,
@@ -65,7 +66,7 @@ public class RegisterUserAction extends Action {
         if (postponedPath != null) {
             return resources.createRedirectPath(postponedPath);
         } else {
-            return resources.getForward("ShowTitlePage");
+            return resources.getForward("ShowPersonalCabinetAction");
         }
     }
 

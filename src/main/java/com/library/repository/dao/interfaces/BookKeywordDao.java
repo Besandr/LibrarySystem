@@ -11,7 +11,7 @@ import java.util.Set;
 public interface BookKeywordDao {
 
     /**
-     * Inserts repository for joining keyword and book tables.
+     * Inserts data for joining keyword and book tables.
      * Throws {@code DaoException} if inserting fails
      * @param book - book for joining
      * @param keywords - set with keywords for joining

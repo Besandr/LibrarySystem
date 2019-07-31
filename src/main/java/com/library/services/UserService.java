@@ -87,8 +87,8 @@ public class UserService extends Service{
     }
 
     /**
-     * Replaces old user's personal repository to the repository from given user
-     * @param user - object with a new user's repository
+     * Replaces old user's personal data to the data from given user
+     * @param user - object with a new user's data
      * @return - boolean result of method executing
      */
     public boolean updateUsersProfile(User user) {

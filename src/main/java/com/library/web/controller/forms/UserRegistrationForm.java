@@ -81,7 +81,7 @@ public class UserRegistrationForm extends ActionForm {
     }
 
     /**
-     * Erases passwords repository from form if some
+     * Erases passwords data from form if some
      * errors with passwords occurred
      */
     private void eraseWrongPasswords() {

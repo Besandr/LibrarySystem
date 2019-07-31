@@ -45,7 +45,7 @@ class ActionServletConfigurator {
     }
 
     /**
-     * Loads configuration repository from xml config file and converts.
+     * Loads configuration data from xml config file and converts.
      * it into {@code ActionServletConfig} object and initialize
      * variable {@code actionServletConfig} by it.
      * {@code RuntimeException} may be thrown if during loading and
@@ -65,10 +65,10 @@ class ActionServletConfigurator {
     }
 
     /**
-     * Takes the configuration repository from {@code actionServletConfig} and
+     * Takes the configuration data from {@code actionServletConfig} and
      * uses it for setting up {@code ActionFactory} and {@code FormFactory} by
      * adding to them {@code Action} objects and {@code ActionForm} class names.
-     * @param actionServletConfig - object which contains servlet configuration repository
+     * @param actionServletConfig - object which contains servlet configuration data
      * @param actionFactory - the {@code ActionFactory} instance
      * @param formFactory - the {@code FormFactory} instance
      */
@@ -92,14 +92,14 @@ class ActionServletConfigurator {
     }
 
     /**
-     * Takes the configuration repository from {@code actionConfig} and
+     * Takes the configuration data from {@code actionConfig} and
      * uses it for adding {@code ActionForm} class info to {@code FormFactory}
      * {@code ServletConfigException} may be thrown if configuration objects
      * contains errors
      * @param actionConfig - the config object which contains information
      *                     needed for adding {@code ActionForm} to {@code FormFactory}
      * {@code ServletConfigException} can be thrown if configuration contains errors
-     * @param actionServletConfig - object which contains servlet configuration repository
+     * @param actionServletConfig - object which contains servlet configuration data
      * @param formFactory - the {@code FormFactory} instance
      */
     void addFormToFormFactory(ActionConfig actionConfig, ActionServletConfig actionServletConfig, FormFactory formFactory){

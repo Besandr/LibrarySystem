@@ -11,7 +11,7 @@ import java.util.Set;
 public interface AuthorBookDao {
 
     /**
-     * Inserts repository for joining author and book tables.
+     * Inserts data for joining author and book tables.
      * Throws {@code DaoException} if inserting fails
      * @param book - book for joining
      * @param authors - set with authors for joining
