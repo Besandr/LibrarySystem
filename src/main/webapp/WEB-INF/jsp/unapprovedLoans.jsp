@@ -61,7 +61,7 @@
                         </ul>
                     </div>
                 </td>
-                <td>${loanDTO.user.lastName} ${loanDTO.user.firstName}</td>
+                <td><a href="${contextPath}/admin/userProfile?userId=${loanDTO.user.id}">${loanDTO.user.lastName} ${loanDTO.user.firstName}</a></td>
                 <td>${loanDTO.user.karma}</td>
                 <td>${loanDTO.loan.applyDate}</td>
                 <td>${loanDTO.bookQuantity}</td>

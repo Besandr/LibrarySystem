@@ -6,27 +6,23 @@ import lombok.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Contains html-form data for showing book
- * borrowers
+ * Contains html-form data for showing user profile
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ActiveBookLoansForm extends ActionForm {
+public class UserProfileForm extends ActionForm {
 
-    /**
-     * ID of book for showing its active loans
-     */
-    private long bookId;
+    private long userId;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void fill(HttpServletRequest request) {
-        bookId = getIdPropertyFromRequest(request, "bookId");
+        userId = getIdPropertyFromRequest(request, "userId");
     }
 
     /**
@@ -34,6 +30,8 @@ public class ActiveBookLoansForm extends ActionForm {
      */
     @Override
     public ActionErrors validate() {
-        return null;
+        return new ActionErrors();
     }
+
+
 }

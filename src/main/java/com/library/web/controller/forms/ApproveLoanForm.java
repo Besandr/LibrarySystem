@@ -25,12 +25,7 @@ public class ApproveLoanForm extends ActionForm{
      */
     @Override
     public void fill(HttpServletRequest request) {
-        String loanIdString = getPropertyFromRequest(request, "loanId");
-        try {
-            loanId = Long.parseLong(loanIdString);
-        } catch (NumberFormatException e) {
-            loanId = 0;
-        }
+        loanId = getIdPropertyFromRequest(request, "loanId");
     }
 
     /**

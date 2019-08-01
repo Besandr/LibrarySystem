@@ -49,7 +49,7 @@
                         </ul>
                     </div>
                 </td>
-                <td>${loanDTO.user.lastName} ${loanDTO.user.firstName}</td>
+                <td><a href="${contextPath}/admin/userProfile?userId=${loanDTO.user.id}">${loanDTO.user.lastName} ${loanDTO.user.firstName}</a></td>
                 <td>${loanDTO.loan.loanDate}</td>
                 <td>${loanDTO.loan.expiredDate}</td>
             </tr>

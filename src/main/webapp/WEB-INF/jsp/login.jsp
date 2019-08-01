@@ -14,8 +14,6 @@
 <head>
     <c:import url="header.jsp"/>
 
-
-
     <title><fmt:message key="login.title"/></title>
 </head>
 <body>

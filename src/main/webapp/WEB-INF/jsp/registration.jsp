@@ -27,7 +27,7 @@
     <form action="${contextPath}/register.do" method="post">
 
         <label>
-            <h3><fmt:message key="registration.firstName"/></h3>
+            <h3><fmt:message key="firstName"/></h3>
             <input name="firstName" type="text" value="${form.firstName}" required>
             <c:if test="${errors.errorsMap['firstName'] != null}">
                 <fmt:message key="${errors.errorsMap['firstName']}"/>
@@ -35,7 +35,7 @@
         </label>
 
         <label>
-            <h3><fmt:message key="registration.lastName"/></h3>
+            <h3><fmt:message key="lastName"/></h3>
             <input name="lastName" type="text" value="${form.lastName}" required>
             <c:if test="${errors.errorsMap['lastName'] != null}">
                 <fmt:message key="${errors.errorsMap['lastName']}"/>

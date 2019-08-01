@@ -34,4 +34,20 @@ public abstract class ActionForm {
         String parameter = request.getParameter(propertyName);
         return parameter == null ? "" : parameter;
     }
+
+    /**
+     * Gives an converted to {@coed Long} ID from request
+     * by id's parameter name
+     * @param request with id property
+     * @param idParameterName - name of request parameter with id
+     * @return converted to {@coed Long} parameter with given name or
+     * {@code 0} if there is no such parameter
+     */
+    long getIdPropertyFromRequest(HttpServletRequest request, String idParameterName) {
+        try {
+            return Long.parseLong(request.getParameter(idParameterName));
+        } catch (NumberFormatException | NullPointerException e) {
+            return 0;
+        }
+    }
 }

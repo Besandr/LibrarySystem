@@ -33,6 +33,10 @@
             <name>activeBookLoansForm</name>
             <type>com.library.web.controller.forms.ActiveBookLoansForm</type>
         </form>
+        <form>
+            <name>UserProfileForm</name>
+            <type>com.library.web.controller.forms.UserProfileForm</type>
+        </form>
     </forms>
 
     <!--
@@ -181,6 +185,18 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/admin/userProfile</path>
+            <type>com.library.web.controller.actions.ShowUserProfileAction</type>
+            <form-name>UserProfileForm</form-name>
+            <validate>false</validate>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.UserService</class>
+                    <name>userService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/changeLanguage</path>
             <type>com.library.web.controller.actions.ChangeLanguageAction</type>
         </action>
@@ -238,8 +254,16 @@
             <value>/WEB-INF/jsp/activeLoans.jsp</value>
         </entry>
         <entry>
+            <key>showUserProfilePage</key>
+            <value>/WEB-INF/jsp/userProfile.jsp</value>
+        </entry>
+        <entry>
             <key>ShowAccessDeniedPage</key>
             <value>/WEB-INF/jsp/accessDenied.jsp</value>
+        </entry>
+        <entry>
+            <key>showErrorPage</key>
+            <value>/WEB-INF/jsp/error.jsp</value>
         </entry>
         <entry>
             <key>successPage</key>

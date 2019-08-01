@@ -68,11 +68,12 @@ public class UserService extends Service{
     }
 
     /**
-     * Gets an {@code Optional} of user with given combination of email & password
+     * Gives an {@code Optional} of user with given combination of email & password
      * @param email - an user's email
      * @param password - a user's password
-     * @return - an {@code Optional} of target user or an empty {@code Optional}
+     * @return an {@code Optional} of target user or an empty {@code Optional}
      *          if there is no user with given combination of email & password
+     *          of if there are exceptions during user getting process
      */
     public Optional<User> getUserByLoginInfo(String email, String password) {
         //The passwords stored in their hashed version so we need
@@ -82,6 +83,20 @@ public class UserService extends Service{
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
         Object executingResult = daoManager.executeAndClose(manager -> getUserByLoginInfoCommand(manager, email, hashedPassword));
+
+        return checkAndCastObjectToOptional(executingResult);
+    }
+
+    /**
+     * Gives an {@code Optional} of user with given id
+     * @param userId - ID of target user
+     * @return an {@code Optional} of target user or an empty {@code Optional}
+     * if there are exceptions during user getting process
+     */
+    public Optional<User> getUserById(long userId) {
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getUserDao().get(userId));
 
         return checkAndCastObjectToOptional(executingResult);
     }
@@ -112,14 +127,14 @@ public class UserService extends Service{
         }
     }
 
-    Optional<User> getUserByLoginInfoCommand(DaoManager manager, String email, String password) throws SQLException {
+    private Optional<User> getUserByLoginInfoCommand(DaoManager manager, String email, String password) throws SQLException {
 
         UserDao dao = (UserDao) manager.getUserDao();
 
         return dao.getUserByEmailAndPassword(email, password);
     }
 
-    boolean updateUsersProfileCommand(DaoManager manager, User user) throws SQLException {
+    private boolean updateUsersProfileCommand(DaoManager manager, User user) throws SQLException {
 
         UserDao userDao = (UserDao) manager.getUserDao();
 

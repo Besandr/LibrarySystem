@@ -43,7 +43,7 @@
         <c:forEach var="loanDTO" items="${bookLoans}">
             <tr>
                 <td>${loanDTO.loan.id}</td>
-                <td>${loanDTO.user.lastName} ${loanDTO.user.firstName}</td>
+                <td><a href="${contextPath}/admin/userProfile?userId=${loanDTO.user.id}">${loanDTO.user.lastName} ${loanDTO.user.firstName}</a></td>
                 <td>${loanDTO.loan.loanDate}</td>
             </tr>
         </c:forEach>
