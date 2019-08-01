@@ -12,55 +12,57 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Action for showing unapproved loans
+ * Action for showing all active loans
  */
-public class ShowUnapprovedLoansAction extends Action {
+public class ShowActiveLoansAction extends Action {
 
     private LoanService loanService;
 
     /**
-     * Gets paginated part of unapproved loans and saves this
-     * info as request parameter
+     * Gets paginated part of all active loans as {@code List}
+     * and saves it as request parameter
      * @param request the request need to be processed
      * @param response the response to user
      * @param form - form need to be processed by this action
      * @param resources - servlet's resources
-     * @return path to page with unapproved loans table
+     * @return a path to the showing active loans page
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
         PaginationHelper paginationHelper = new PaginationHelper();
 
-        List<LoanDto> loans = getUnapprovedLoans(request, loanService, paginationHelper);
-        request.setAttribute("loans", loans);
+        List<LoanDto> activeLoans = getActiveLoans(request, loanService, paginationHelper);
+
+        request.setAttribute("activeLoans", activeLoans);
 
         addPaginationToRequest(request, paginationHelper);
 
-        return resources.getForward("showUnapprovedLoans");
+        return resources.getForward("showActiveLoansPage");
     }
 
     /**
-     * Gives a {@code List} with paginated part of all unapproved loans
+     * Gives a {@code List} with paginated part of all active loans
      */
-    private List<LoanDto> getUnapprovedLoans(HttpServletRequest request, LoanService loanService, PaginationHelper paginationHelper) {
+    private List<LoanDto> getActiveLoans(HttpServletRequest request, LoanService loanService, PaginationHelper paginationHelper) {
 
         int recordsPerPage = paginationHelper.getRecordsPerPage();
         int currentPageNumber = paginationHelper.getCurrentPageNumber(request);
         int previousRecordNumber = (currentPageNumber-1)*recordsPerPage;
 
         return loanService
-                .getUnapprovedLoans(recordsPerPage, previousRecordNumber);
+                .getActiveLoans(recordsPerPage, previousRecordNumber);
     }
 
     /**
      * Adds pagination to request
      */
     private void addPaginationToRequest(HttpServletRequest request, PaginationHelper paginationHelper) {
-        long recordsQuantity = loanService.getUnapprovedLoansQuantity();
+        long recordsQuantity = loanService.getActiveLoansQuantity();
         paginationHelper.addPaginationToRequest(request, recordsQuantity);
     }
 
     public void setLoanService(Service loanService) {
         this.loanService = (LoanService) loanService;
     }
+
 }

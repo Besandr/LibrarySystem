@@ -38,10 +38,13 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
     /**
      * {@inheritDoc}
      */
-    public List<LoanDto> getUnapprovedLoans(int offset, int limit) {
-        return createLoanDtoListFromQuery(DBQueries.GET_UNAPPROVED_LOANS_QUERY, offset, limit);
+    public List<LoanDto> getUnapprovedLoans(int limit, int offset) {
+        return createLoanDtoListFromQuery(DBQueries.GET_UNAPPROVED_LOANS_QUERY, limit, offset);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getUnapprovedLoansQuantity() {
         try{
@@ -57,8 +60,22 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
      * {@inheritDoc}
      */
     @Override
-    public List<LoanDto> getAllActiveLoans() {
-        return createLoanDtoListFromQuery(DBQueries.GET_ACTIVE_LOANS_QUERY, 0, Integer.MAX_VALUE);
+    public List<LoanDto> getActiveLoans(int limit, int offset) {
+        return createLoanDtoListFromQuery(DBQueries.GET_ACTIVE_LOANS_QUERY, limit, offset);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getActiveLoansQuantity() {
+        try{
+            return DBUtils.getResultOfCountingQuery(connection, DBQueries.GET_ACTIVE_LOANS_QUANTITY);
+        } catch (SQLException e) {
+            String errorText = "Can't get active loans quantity";
+            log.error(errorText);
+            throw new DaoException(errorText, e);
+        }
     }
 
     /**
@@ -121,11 +138,10 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
      * {@inheritDoc}
      */
     @Override
-    public List<LoanDto> getActiveLoansByBook(Book book) {
-
+    public List<LoanDto> getActiveLoansByBook(long bookId) {
         try{
             PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ACTIVE_LOANS_BY_BOOK_QUERY);
-            statement.setLong(1, book.getId());
+            statement.setLong(1, bookId);
 
             ResultSet rs = statement.executeQuery();
 
@@ -142,13 +158,12 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
      * Creates a {@code List} and fills it with LoanDto objects received from
      * executing a given query.
      * @param query - query which result is need to be returned
-     * @param offset of the first loan to return
      * @param limit the number of loans returned
+     * @param offset of the first loan to return
      * @return - a {@code List} with results of executing the given query.
      * {@code List} can be empty if query has no results
      */
-    protected List<LoanDto> createLoanDtoListFromQuery(String query, int offset, int limit) {
-
+    protected List<LoanDto> createLoanDtoListFromQuery(String query, int limit, int offset) {
         try {
             PreparedStatement selectStatement = connection.prepareStatement(query);
             selectStatement.setInt(1, limit);

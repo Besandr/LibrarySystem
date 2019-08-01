@@ -108,7 +108,7 @@ public class LocationService extends Service {
     private boolean removeBookFromStorageCommand(DaoManager manager, Book book) throws SQLException {
 
         LoanDtoDao loanDtoDao = manager.getLoanDtoDao();
-        if (!loanDtoDao.getActiveLoansByBook(book).isEmpty()) {
+        if (!loanDtoDao.getActiveLoansByBook(book.getId()).isEmpty()) {
             return EXECUTING_FAILED;
         }
 

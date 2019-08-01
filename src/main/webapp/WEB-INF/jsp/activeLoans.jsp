@@ -14,24 +14,14 @@
 <head>
     <c:import url="header.jsp"/>
 
-    <title><fmt:message key="adminControl.unapprovedLoans"/> </title>
+    <title><fmt:message key="adminControl.activeLoans"/> </title>
 </head>
 <body>
 <div>
     <c:import url="adminControl.jsp"/>
 </div>
 
-<%--Prints loan approving information if exists--%>
-<c:if test="${not empty approvingResult}">
-    <c:choose>
-        <c:when test="${approvingResult == true}">
-            <fmt:message key="loans.approvingSuccessful"/> ${loanId}
-        </c:when>
-        <c:otherwise>
-            <fmt:message key="loans.approvingFailed"/> ${loanId}
-        </c:otherwise>
-    </c:choose>
-</c:if>
+<div><fmt:message key="adminControl.activeLoans"/>:</div>
 
 <div>
     <table>
@@ -40,16 +30,14 @@
             <th><fmt:message key="loans.bookTitle"/></th>
             <th><fmt:message key="loans.bookAuthors"/></th>
             <th><fmt:message key="loans.userName"/></th>
-            <th><fmt:message key="loans.userKarma"/></th>
-            <th><fmt:message key="loans.applicationDate"/></th>
-            <th><fmt:message key="loans.availableBooks"/></th>
-            <th><fmt:message key="loans.approvement"/></th>
+            <th><fmt:message key="loans.loanDate"/></th>
+            <th><fmt:message key="loans.expiredDate"/></th>
         </tr>
 
-        <c:forEach var="loanDTO" items="${loans}">
+        <c:forEach var="loanDTO" items="${activeLoans}">
             <tr>
                 <td>${loanDTO.loan.id}</td>
-                <td>${loanDTO.book.title}</td>
+                <td><a href="${contextPath}/admin/activeBookLoans?bookId=${loanDTO.book.id}">${loanDTO.book.title}</a></td>
                 <td>
                     <div>
                         <ul style="list-style-type:none;">
@@ -62,15 +50,8 @@
                     </div>
                 </td>
                 <td>${loanDTO.user.lastName} ${loanDTO.user.firstName}</td>
-                <td>${loanDTO.user.karma}</td>
-                <td>${loanDTO.loan.applyDate}</td>
-                <td>${loanDTO.bookQuantity}</td>
-                <td>
-                    <form action="${contextPath}/admin/approve.do">
-                        <input type="text" name="loanId" value="${loanDTO.loan.id}" hidden>
-                        <button><fmt:message key="loans.approve"/> </button>
-                    </form>
-                </td>
+                <td>${loanDTO.loan.loanDate}</td>
+                <td>${loanDTO.loan.expiredDate}</td>
             </tr>
         </c:forEach>
     </table>

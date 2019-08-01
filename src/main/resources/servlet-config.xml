@@ -29,6 +29,10 @@
             <name>approveLoanForm</name>
             <type>com.library.web.controller.forms.ApproveLoanForm</type>
         </form>
+        <form>
+            <name>activeBookLoansForm</name>
+            <type>com.library.web.controller.forms.ActiveBookLoansForm</type>
+        </form>
     </forms>
 
     <!--
@@ -155,6 +159,28 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/admin/activeBookLoans</path>
+            <type>com.library.web.controller.actions.ShowActiveBookLoansAction</type>
+            <form-name>activeBookLoansForm</form-name>
+            <validate>false</validate>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
+            <path>/admin/activeLoans</path>
+            <type>com.library.web.controller.actions.ShowActiveLoansAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/changeLanguage</path>
             <type>com.library.web.controller.actions.ChangeLanguageAction</type>
         </action>
@@ -202,6 +228,14 @@
         <entry>
             <key>ShowUnapprovedLoansAction</key>
             <value>/admin/unapprovedLoans</value>
+        </entry>
+        <entry>
+            <key>showActiveBookLoansPage</key>
+            <value>/WEB-INF/jsp/activeBookLoans.jsp</value>
+        </entry>
+        <entry>
+            <key>showActiveLoansPage</key>
+            <value>/WEB-INF/jsp/activeLoans.jsp</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

@@ -13,3 +13,6 @@
 <a href="${contextPath}/admin/unapprovedLoans">
     <fmt:message key="adminControl.unapprovedLoans"/>
 </a>
+<a href="${contextPath}/admin/activeLoans">
+    <fmt:message key="adminControl.activeLoans"/>
+</a>
