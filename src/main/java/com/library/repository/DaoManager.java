@@ -86,7 +86,9 @@ public class DaoManager {
      */
     private void closeConnection() {
         try {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         } catch (SQLException e) {
             log.error("Can't close connection. Cause: " + e.getMessage(), e);
         }
