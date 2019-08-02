@@ -33,7 +33,7 @@ public class ServletResources {
     @Getter
     private final Map<String, List<Role>> securityConstraints;
 
-    ServletResources(ActionFactory actionFactory, FormFactory formFactory, Map<String, String> forwards, Map<String, List<Role>> securityConstraints) {
+    public ServletResources(ActionFactory actionFactory, FormFactory formFactory, Map<String, String> forwards, Map<String, List<Role>> securityConstraints) {
         this.actionFactory = actionFactory;
         this.formFactory = formFactory;
         this.forwards = forwards;

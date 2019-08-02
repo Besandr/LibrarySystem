@@ -1,4 +1,4 @@
-package com.library.web.controller;
+package com.library.web.controller.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,11 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter
 @Setter
-class ServiceDependencyConfig {
+public class ServiceDependencyConfig {
 
     @XmlElement(name = "class")
-    String serviceClass;
+    private String serviceClass;
 
     @XmlElement(name = "name")
-    String serviceVarName;
+    private String serviceVarName;
 }

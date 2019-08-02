@@ -1,6 +1,9 @@
-package com.library.web.controller;
+package com.library.web.controller.config;
 
 import com.library.repository.entity.Role;
+import com.library.web.controller.ActionFactory;
+import com.library.web.controller.FormFactory;
+import com.library.web.controller.ServletResources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
  * - create facade class {@code ServletResources} and
  * give it to {@code ActionServlet}
  */
-class ActionServletConfigurator {
+public class ActionServletConfigurator {
 
     private static final Logger log = LogManager.getLogger(ActionServletConfigurator.class);
 
@@ -28,7 +31,7 @@ class ActionServletConfigurator {
      * Creates {@code ServletResources} from xml config file.
      * @return created {@code ServletResources}
      */
-    ServletResources createServletResources(){
+    public ServletResources createServletResources(){
         ActionServletConfig actionServletConfig = loadConfigFromFile();
 
         setUpFactories(actionServletConfig,

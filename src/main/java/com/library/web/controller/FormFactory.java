@@ -50,7 +50,7 @@ public class FormFactory {
      *                   is bound
      * @param formClassName - the full qualified name of {@code ActionForm} class
      */
-    void addFormClass(String actionPath, String formClassName) {
+    public void addFormClass(String actionPath, String formClassName) {
         formClasses.put(actionPath, formClassName);
     }
 

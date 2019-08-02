@@ -3,6 +3,8 @@ package com.library.web.controller;
 import com.library.services.Service;
 import com.library.services.ServiceFactory;
 import com.library.web.controller.actions.Action;
+import com.library.web.controller.config.ServiceDependencyConfig;
+import com.library.web.controller.config.ServletConfigException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +49,7 @@ public class ActionFactory {
      * @param serviceDependencyList - list with service dependencies need to be injected
      *                              in a new action
      */
-    void addAction(String actionPath, String actionClassName, boolean needValidate, String inputPath, List<ServiceDependencyConfig> serviceDependencyList) {
+    public void addAction(String actionPath, String actionClassName, boolean needValidate, String inputPath, List<ServiceDependencyConfig> serviceDependencyList) {
         Action action = createAction(actionClassName, needValidate, inputPath, serviceDependencyList);
         actions.put(actionPath, action);
     }
@@ -105,14 +107,14 @@ public class ActionFactory {
     private void createActionDependencies(Action action, Class<?> actionClass, List<ServiceDependencyConfig> serviceDependencyList, ServiceFactory serviceFactory) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         for (ServiceDependencyConfig dependency: serviceDependencyList){
             String setterName = "set"
-                    + dependency.serviceVarName.substring(0, 1).toUpperCase()
-                    + dependency.serviceVarName.substring(1);
+                    + dependency.getServiceVarName().substring(0, 1).toUpperCase()
+                    + dependency.getServiceVarName().substring(1);
             Method setter = actionClass.getDeclaredMethod(setterName, Service.class);
-            setter.invoke(action, serviceFactory.getService(dependency.serviceClass));
+            setter.invoke(action, serviceFactory.getService(dependency.getServiceClass()));
         }
     }
 
-    static ActionFactory getInstance() {
+    public static ActionFactory getInstance() {
         return ourInstance;
     }
 

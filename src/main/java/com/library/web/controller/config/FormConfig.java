@@ -1,4 +1,4 @@
-package com.library.web.controller;
+package com.library.web.controller.config;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

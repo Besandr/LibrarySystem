@@ -2,6 +2,7 @@ package com.library.web.controller;
 
 import com.library.web.controller.actions.Action;
 import com.library.web.controller.actions.ChangeLanguageAction;
+import com.library.web.controller.config.ServletConfigException;
 import org.junit.Test;
 
 import java.util.Collections;

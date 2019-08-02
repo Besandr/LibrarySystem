@@ -1,4 +1,4 @@
-package com.library.web.controller;
+package com.library.web.controller.config;
 
 /**
  * {@code RuntimeException} which may be thrown during
