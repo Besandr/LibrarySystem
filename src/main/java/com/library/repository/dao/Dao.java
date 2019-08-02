@@ -1,4 +1,4 @@
-package com.library.repository.dao.interfaces;
+package com.library.repository.dao;
 
 import java.util.List;
 import java.util.Optional;

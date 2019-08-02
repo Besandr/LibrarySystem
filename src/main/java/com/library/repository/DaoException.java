@@ -1,5 +1,9 @@
 package com.library.repository;
 
+/**
+ * {@code RuntimeException} for exceptional situations
+ * during dao methods working
+ */
 public class DaoException extends RuntimeException {
 
     public DaoException(String message) {

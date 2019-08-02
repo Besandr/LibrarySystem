@@ -1,7 +1,7 @@
-package com.library.repository.dao.implementation;
+package com.library.repository.dao.impl;
 
 import com.library.repository.DBUtils;
-import com.library.repository.dao.interfaces.UserDao;
+import com.library.repository.dao.UserDao;
 import com.library.repository.entity.Role;
 import com.library.repository.entity.User;
 import com.library.repository.DaoException;

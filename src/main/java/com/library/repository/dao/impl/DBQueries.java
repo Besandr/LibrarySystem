@@ -1,4 +1,4 @@
-package com.library.repository.dao.implementation;
+package com.library.repository.dao.impl;
 
 /**
  * This class contains queries to a MySql Server

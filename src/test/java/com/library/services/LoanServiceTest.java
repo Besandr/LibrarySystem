@@ -2,7 +2,7 @@ package com.library.services;
 
 import com.library.repository.DaoManager;
 import com.library.repository.DaoManagerFactory;
-import com.library.repository.dao.interfaces.LoanDao;
+import com.library.repository.dao.LoanDao;
 import com.library.repository.entity.Loan;
 import org.junit.Before;
 import org.junit.runner.RunWith;

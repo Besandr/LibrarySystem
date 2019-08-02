@@ -1,4 +1,4 @@
-package com.library.repository.dao.interfaces;
+package com.library.repository.dao;
 
 import com.library.repository.entity.Book;
 import com.library.repository.entity.Keyword;

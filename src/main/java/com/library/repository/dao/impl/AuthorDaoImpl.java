@@ -1,7 +1,7 @@
-package com.library.repository.dao.implementation;
+package com.library.repository.dao.impl;
 
 import com.library.repository.DBUtils;
-import com.library.repository.dao.interfaces.AuthorDao;
+import com.library.repository.dao.AuthorDao;
 import com.library.repository.entity.Author;
 import com.library.repository.DaoException;
 import org.apache.logging.log4j.LogManager;

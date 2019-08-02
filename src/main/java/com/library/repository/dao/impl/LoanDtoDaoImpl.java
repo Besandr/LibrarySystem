@@ -1,9 +1,9 @@
-package com.library.repository.dao.implementation;
+package com.library.repository.dao.impl;
 
 import com.library.repository.DBUtils;
 import com.library.repository.DaoManager;
-import com.library.repository.dao.interfaces.LoanDao;
-import com.library.repository.dao.interfaces.LoanDtoDao;
+import com.library.repository.dao.LoanDao;
+import com.library.repository.dao.LoanDtoDao;
 import com.library.repository.dto.LoanDto;
 import com.library.repository.entity.Book;
 import com.library.repository.entity.Loan;

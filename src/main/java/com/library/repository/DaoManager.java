@@ -1,10 +1,10 @@
 package com.library.repository;
 
-import com.library.repository.dao.implementation.*;
-import com.library.repository.dao.interfaces.AuthorBookDao;
-import com.library.repository.dao.interfaces.BookKeywordDao;
-import com.library.repository.dao.interfaces.Dao;
-import com.library.repository.dao.interfaces.LoanDtoDao;
+import com.library.repository.dao.impl.*;
+import com.library.repository.dao.AuthorBookDao;
+import com.library.repository.dao.BookKeywordDao;
+import com.library.repository.dao.Dao;
+import com.library.repository.dao.LoanDtoDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

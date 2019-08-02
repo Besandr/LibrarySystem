@@ -2,10 +2,10 @@ package com.library.services;
 
 import com.library.repository.DaoManager;
 import com.library.repository.DaoManagerFactory;
-import com.library.repository.dao.interfaces.AuthorDao;
-import com.library.repository.dao.interfaces.LoanDao;
-import com.library.repository.dao.interfaces.LocationDao;
-import com.library.repository.dao.interfaces.UserDao;
+import com.library.repository.dao.AuthorDao;
+import com.library.repository.dao.LoanDao;
+import com.library.repository.dao.LocationDao;
+import com.library.repository.dao.UserDao;
 import com.library.repository.dto.LoanDto;
 import com.library.repository.entity.Loan;
 import com.library.repository.entity.Location;
