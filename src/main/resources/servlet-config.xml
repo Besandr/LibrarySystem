@@ -34,6 +34,10 @@
             <type>com.library.web.controller.forms.ActiveBookLoansForm</type>
         </form>
         <form>
+            <name>BookCreationForm</name>
+            <type>com.library.web.controller.forms.BookCreationForm</type>
+        </form>
+        <form>
             <name>UserProfileForm</name>
             <type>com.library.web.controller.forms.UserProfileForm</type>
         </form>
@@ -185,6 +189,29 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/admin/createBook</path>
+            <type>com.library.web.controller.actions.ShowBookCreationPageAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
+            <path>/admin/createBook.do</path>
+            <type>com.library.web.controller.actions.CreateBookAction</type>
+            <form-name>BookCreationForm</form-name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/bookCreation.jsp</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/admin/userProfile</path>
             <type>com.library.web.controller.actions.ShowUserProfileAction</type>
             <form-name>UserProfileForm</form-name>
@@ -256,6 +283,10 @@
         <entry>
             <key>showUserProfilePage</key>
             <value>/WEB-INF/jsp/userProfile.jsp</value>
+        </entry>
+        <entry>
+            <key>showBookCreationPage</key>
+            <value>/WEB-INF/jsp/bookCreation.jsp</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

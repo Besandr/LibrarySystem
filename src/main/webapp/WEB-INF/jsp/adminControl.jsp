@@ -16,3 +16,6 @@
 <a href="${contextPath}/admin/activeLoans">
     <fmt:message key="adminControl.activeLoans"/>
 </a>
+<a href="${contextPath}/admin/createBook">
+    <fmt:message key="adminControl.createBook"/>
+</a>

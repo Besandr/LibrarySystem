@@ -4,6 +4,10 @@ import com.library.web.controller.ActionErrors;
 import lombok.NoArgsConstructor;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Base class for html form
@@ -32,7 +36,24 @@ public abstract class ActionForm {
      */
     String getPropertyFromRequest(HttpServletRequest request, String propertyName) {
         String parameter = request.getParameter(propertyName);
-        return parameter == null ? "" : parameter;
+        return parameter == null ? "" : parameter.trim();
+    }
+
+    /**
+     * Gives a {@code List} of properties for given
+     * property name from the given request
+     * @param request - request with target parameter
+     * @param propertyName - target property's name
+     * @return {@code List} with string values of target property or an
+     * empty {@code List} if property wasn't found
+     */
+    List<String> getPropertyListFromRequest(HttpServletRequest request, String propertyName) {
+        String[] parameters = request.getParameterValues(propertyName);
+        if (parameters != null) {
+            return Arrays.stream(parameters).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     /**
@@ -44,10 +65,11 @@ public abstract class ActionForm {
      * {@code 0} if there is no such parameter
      */
     long getIdPropertyFromRequest(HttpServletRequest request, String idParameterName) {
-        try {
-            return Long.parseLong(request.getParameter(idParameterName));
-        } catch (NumberFormatException | NullPointerException e) {
-            return 0;
+        String idString = request.getParameter(idParameterName);
+        if (idString != null && !idString.isEmpty()) {
+            return Long.parseLong(idString);
+        } else {
+            return 0L;
         }
     }
 }

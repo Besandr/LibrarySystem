@@ -22,16 +22,39 @@ public class BookService extends Service{
 
     /**
      * Adds a new book to the library's book catalogue
-     * @param bookDto - DTO object contains the new book
-     * @return - the boolean type result of executing this method
+     * @param title of a new book
+     * @param year of a new book
+     * @param description of a new book
+     * @param oldAuthorsId - IDs of existent in the library catalogue authors
+     * @param oldKeywordsId - IDs of existent in the library catalogue keywords
+     * @param newAuthorFirstNames - list with first names of new authors
+     * @param newAuthorLastNames - list with last names of new authors
+     * @param newKeywords  - list with new keywords
+     * @return ID of created book or {@code 0} if book wasn't created
      */
-    public boolean addBookToCatalogue(BookDto bookDto) {
+    public long addBookToCatalogue(String title,
+                                      int year,
+                                      String description,
+                                      List<Long> oldAuthorsId,
+                                      List<Long> oldKeywordsId,
+                                      List<String> newAuthorFirstNames,
+                                      List<String> newAuthorLastNames,
+                                      List<String> newKeywords) {
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, bookDto));
+        Book book = Book.builder()
+                .title(title)
+                .year(year)
+                .description(description)
+                .build();
 
-        return checkAndCastExecutingResult(executingResult);
+        Set<Author> authors = createAuthorsSet(oldAuthorsId, newAuthorFirstNames, newAuthorLastNames);
+        Set<Keyword> keywords = createKeywordsSet(oldKeywordsId, newKeywords);
+
+        Object executingResult = daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book, authors, keywords));
+
+        return checkAndCastObjectToLong(executingResult);
     }
 
     /**
@@ -137,20 +160,27 @@ public class BookService extends Service{
     }
 
     //Commands which is needed to be executed in corresponding public service methods
-    synchronized boolean addBookToCatalogueCommand(DaoManager manager, BookDto bookDto) throws SQLException {
+    synchronized long addBookToCatalogueCommand(DaoManager manager, Book book, Set<Author> authors, Set<Keyword> keywords) throws SQLException {
         //trying to save the new book to the library's catalogue
-        boolean isSavingBookSuccessful = saveBook(manager, bookDto.getBook());
-        if (!isSavingBookSuccessful) {
-            return EXECUTING_FAILED;
-        }
-        //saving authors and keywords of the new book
-        saveAuthors(manager, bookDto.getAuthors());
-        saveKeywords(manager, bookDto.getKeywords());
-        //Filling junction tables author_book & book_keyword
-        manager.getAuthorBookDao().saveAuthorBookJunction(bookDto.getBook(), bookDto.getAuthors());
-        manager.getBookKeywordDao().saveBookKeywordsJunction(bookDto.getBook(), bookDto.getKeywords());
+        long bookId = manager.getBookDao().save(book);
 
-        return EXECUTING_SUCCESSFUL;
+        if (bookId < 0) {
+            //There is such a book in the DB
+            return bookId;
+        } else {
+            book.setId(bookId);
+        }
+
+        //saving authors and keywords of the new book
+        saveAuthors(manager, authors);
+        saveKeywords(manager, keywords);
+        //Filling junction tables author_book & book_keyword
+        manager.getAuthorBookDao().saveAuthorBookJunction(book, authors);
+        if (!keywords.isEmpty()) {
+            manager.getBookKeywordDao().saveBookKeywordsJunction(book, keywords);
+        }
+
+        return bookId;
     }
 
     synchronized boolean removeBookFromCatalogueCommand(DaoManager manager, BookDto bookDto) throws SQLException {
@@ -247,6 +277,56 @@ public class BookService extends Service{
         manager.getBookKeywordDao().saveBookKeywordsJunction(bookDto.getBook(), newKeywords);
 
         return EXECUTING_SUCCESSFUL;
+    }
+
+    /**
+     * Converts and combines two given {@code List} to the
+     * {@code Set} with {@code Author}
+     * @param oldKeywordsId - IDs of existent in the library catalogue keywords
+     * @param newKeywords  - list with new keywords
+     * @return a converted and combined {@code Set} from two given {@code List}
+     */
+    private Set<Keyword> createKeywordsSet(List<Long> oldKeywordsId, List<String> newKeywords) {
+        Set<Keyword> keywords = new HashSet<>();
+        for (Long id : oldKeywordsId) {
+            keywords.add(Keyword
+                    .builder()
+                    .id(id)
+                    .build());
+        }
+        for (String word : newKeywords) {
+            keywords.add(Keyword
+                    .builder()
+                    .word(word)
+                    .build());
+        }
+        return keywords;
+    }
+
+    /**
+     * Converts and combines three given {@code List} to the
+     * {@code Set} with {@code Author}
+     * @param oldAuthorsId - IDs of existent in the library catalogue authors
+     * @param newAuthorFirstNames - list with first names of new authors
+     * @param newAuthorLastNames - list with last names of new authors
+     * @return a converted and combined {@code Set} from three given {@code List}
+     */
+    private Set<Author> createAuthorsSet(List<Long> oldAuthorsId, List<String> newAuthorFirstNames, List<String> newAuthorLastNames) {
+        Set<Author> authors = new HashSet<>();
+        for (Long id : oldAuthorsId) {
+            authors.add(Author
+                    .builder()
+                    .id(id)
+                    .build());
+        }
+        for (int i = 0; i < newAuthorLastNames.size(); i++) {
+            authors.add(Author
+                    .builder()
+                    .firstName(newAuthorFirstNames.get(i))
+                    .lastName(newAuthorLastNames.get(i))
+                    .build());
+        }
+        return authors;
     }
 
     /**
@@ -390,25 +470,6 @@ public class BookService extends Service{
      */
     Optional<Keyword> getKeywordByWord(KeywordDao dao, String word) {
         return dao.getByWord(word);
-    }
-
-    /**
-     * Tries to save the given book in the storage
-     * @param manager - {@code DaoManager} for accessing needed {@code Dao}
-     * @param book - book needed to be saved
-     * @return - the boolean representation of saving operation result
-     * @throws SQLException - if the manager can't give a Dao needed
-     */
-    boolean saveBook(DaoManager manager, Book book) throws SQLException {
-
-        long bookId = manager.getBookDao().save(book);
-        if (bookId < 0) {
-            //There is such a book in the DB
-            return EXECUTING_FAILED;
-        } else {
-            book.setId(bookId);
-            return EXECUTING_SUCCESSFUL;
-        }
     }
 
     /**
