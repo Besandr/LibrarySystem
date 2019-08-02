@@ -63,19 +63,21 @@ public class BookDaoImpl implements BookDao {
     @Override
     public List<Book> getAll() {
         final long EMPTY_ID = -1L;
-        return getAllBookParameterized(EMPTY_ID, EMPTY_ID, "");
+        return getAllBookParameterized(EMPTY_ID, EMPTY_ID, "", Integer.MAX_VALUE, 0);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Book> getAllBookParameterized(long authorId, long keywordId, String partOfTitle) {
+    public List<Book> getAllBookParameterized(long authorId, long keywordId,
+                                              String partOfTitle, int limit, int offset) {
 
         List<Book> books = new ArrayList<>();
 
         try{
-            PreparedStatement statement = getPreparedStatement(authorId, keywordId, partOfTitle);
+            PreparedStatement statement = getPreparedAllBookStatement(authorId, keywordId, partOfTitle,
+                    limit, offset, false);
 
             ResultSet rs = statement.executeQuery();
 
@@ -100,18 +102,37 @@ public class BookDaoImpl implements BookDao {
      * @param authorId - the author's ID
      * @param keywordId - the keyword's ID
      * @param partOfTitle - part of book's title or whole title
+     * @param limit the number of loans returned
+     * @param offset the number of loans returned
+     * @param rowsCounting defines type of result {@code Statement}.
+     *                     If {@code rowsCounting} is {true} statement
+     *                     will return count of all target books.
+     *                     It will return only limited count of books otherwise.
      * @return - statement for getting books information from DB
      */
-    private PreparedStatement getPreparedStatement(long authorId, long keywordId, String partOfTitle) throws SQLException {
+    private PreparedStatement getPreparedAllBookStatement(long authorId, long keywordId, String partOfTitle,
+                                                          int limit, int offset, boolean rowsCounting) throws SQLException {
 
-        StringBuilder queryBuilder = new StringBuilder(DBQueries.ALL_BOOKS_QUERY_HEAD_PART);
+        StringBuilder queryBuilder = new StringBuilder();
+
+        if (rowsCounting) {
+            queryBuilder.append(DBQueries.ALL_BOOKS_COUNT_QUERY_HEAD_PART);
+        } else {
+            queryBuilder.append(DBQueries.ALL_BOOKS_QUERY_HEAD_PART);
+        }
+
         if (authorId > 0) {
             queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_QUERY_AUTHOR_PART);
         }
         if (keywordId > 0) {
             queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_QUERY_KEYWORD_PART);
         }
-        queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_QUERY_TAIL_PART);
+
+        if (rowsCounting) {
+            queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_COUNT_QUERY_TAIL_PART);
+        } else {
+            queryBuilder.append(" ").append(DBQueries.ALL_BOOKS_QUERY_TAIL_PART);
+        }
 
         PreparedStatement statement = connection.prepareStatement(queryBuilder.toString());
 
@@ -122,9 +143,38 @@ public class BookDaoImpl implements BookDao {
         if (keywordId > 0) {
             statement.setLong(parameterIndex++, keywordId);
         }
-        statement.setString(parameterIndex, "%" + partOfTitle + "%");
+        statement.setString(parameterIndex++, "%" + partOfTitle + "%");
+
+        if (!rowsCounting) {
+            statement.setInt(parameterIndex++, limit);
+            statement.setInt(parameterIndex, offset);
+        }
+
 
         return statement;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getBooSearchResultCount(long authorId, long keywordId, String partOfTitle){
+        try{
+            PreparedStatement statement = getPreparedAllBookStatement(authorId, keywordId, partOfTitle,
+                    Integer.MAX_VALUE, 0, true);
+
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            } else {
+                return 0;
+            }
+
+        } catch (SQLException e) {
+            String errorText = "Can't get books count in search result. Cause: " + e.getMessage();
+            log.error(errorText, e);
+            throw new DaoException(errorText, e);
+        }
     }
 
     /**

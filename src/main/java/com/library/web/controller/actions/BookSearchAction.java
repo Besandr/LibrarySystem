@@ -3,6 +3,7 @@ package com.library.web.controller.actions;
 import com.library.services.BookService;
 import com.library.repository.dto.BookDto;
 import com.library.services.Service;
+import com.library.web.controller.PaginationHelper;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 import com.library.web.controller.forms.BookSearchForm;
@@ -19,7 +20,7 @@ public class BookSearchAction extends Action {
     private BookService bookService;
 
     /**
-     * Finds all book which fits to user's book search
+     * Finds paginated part of books which fits to user's book search
      * parameters and sets {@code List} with searching
      * results as session attribute
      * @param request the request need to be processed
@@ -31,30 +32,54 @@ public class BookSearchAction extends Action {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
-        addBooksToSession(request, getBooksList(form));
+
+        long authorId = getIdFromString(((BookSearchForm)form).getAuthorId());
+        long keywordId = getIdFromString(((BookSearchForm)form).getKeywordId());
+        String bookTitle = ((BookSearchForm)form).getBookTitle();
+
+        List<BookDto> bookDtoList = getBooksList(request, authorId, keywordId, bookTitle, bookService, paginationHelper);
+
+        setRequestAttributes(request, authorId, keywordId, bookTitle, bookDtoList);
+        addPaginationToRequest(request, bookService, authorId, keywordId, bookTitle, paginationHelper);
+
         return resources.getForward("ShowBookSearchPage");
     }
 
     /**
-     * Takes user's book searching parameters and asks to
-     * {@code BookService} to seek for books.
-     * @param form - form with book searching parameters
-     * @return list with searching results
+     * Saves in request book searching parameters and searching result
+     * @param request for storing parameters
+     * @param authorId - author's ID of target books
+     * @param keywordId - keyword's ID of target books
+     * @param bookTitle - part of title or whole title of target books
+     * @param bookDtoList - list with target books
      */
-    private List<BookDto> getBooksList(ActionForm form) {
-
-        long author = getIdFromString(((BookSearchForm)form).getAuthorId());
-        long keyword = getIdFromString(((BookSearchForm)form).getKeywordId());
-        String bookTitle = ((BookSearchForm)form).getBookTitle();
-
-        return bookService.findBooks(author, keyword, bookTitle);
+    private void setRequestAttributes(HttpServletRequest request, long authorId, long keywordId,
+                                      String bookTitle, List<BookDto> bookDtoList) {
+        request.setAttribute("authorId", authorId);
+        request.setAttribute("keywordId", keywordId);
+        request.setAttribute("bookTitle", bookTitle);
+        request.setAttribute("books", bookDtoList);
     }
 
     /**
-     * Adds list with books to user's session
+     * Takes user's book searching parameters and asks to
+     * {@code BookService} to search for books.
+     * @param request holds pagination data
+     * @param authorId - ID of target book's author
+     * @param keywordId - ID of target book's keyword
+     * @param bookTitle - title or it part of target book
+     * @param bookService for getting books
+     * @param paginationHelper for helping in pagination
+     * @return list with searching results
      */
-    private void addBooksToSession(HttpServletRequest request, List<BookDto> booksList) {
-        request.getSession().setAttribute("books", booksList);
+    private List<BookDto> getBooksList(HttpServletRequest request, long authorId, long keywordId,
+                                       String bookTitle, BookService bookService, PaginationHelper paginationHelper) {
+
+        int recordsPerPage = paginationHelper.getRecordsPerPage();
+        int currentPageNumber = paginationHelper.getCurrentPageNumber(request);
+        int previousRecordNumber = (currentPageNumber-1)*recordsPerPage;
+
+        return bookService.findBooks(authorId, keywordId, bookTitle, recordsPerPage, previousRecordNumber);
     }
 
     /**
@@ -69,6 +94,14 @@ public class BookSearchAction extends Action {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    /**
+     * Adds pagination to request
+     */
+    private void addPaginationToRequest(HttpServletRequest request, BookService bookService, long authorId, long keywordId, String bookTitle, PaginationHelper paginationHelper) {
+        long recordsQuantity = bookService.getBooSearchResultCount(authorId, keywordId, bookTitle);
+        paginationHelper.addPaginationToRequest(request, recordsQuantity);
     }
 
     public void setBookService(Service bookService) {

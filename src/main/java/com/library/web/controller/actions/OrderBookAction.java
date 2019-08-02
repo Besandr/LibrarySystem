@@ -38,8 +38,6 @@ public class OrderBookAction extends Action {
             request.setAttribute("orderResult", "bookSearch.result.failedOrder");
         }
 
-        removeBookSearchAttributes(request.getSession());
-
         return resources.getForward("ShowBookSearchPage");
     }
 
@@ -50,20 +48,11 @@ public class OrderBookAction extends Action {
      * @return boolean result of making application
      */
     private boolean makeApplyForBook(HttpServletRequest request, ActionForm form) {
-        long bookId = Long.parseLong(((OrderBookForm) form).getBookId());
+
+        long bookId = ((OrderBookForm) form).getBookId();
         long userId = ((User) request.getSession().getAttribute("loggedInUser")).getId();
 
         return loanService.saveApplyForBook(bookId, userId);
-    }
-
-    /**
-     * Removes attributes needed for book ordering
-     * stored in session
-     * @param session - current user's session with stored
-     *                book searching results
-     */
-    private void removeBookSearchAttributes(HttpSession session) {
-        session.removeAttribute("books");
     }
 
     public void setLoanService(Service loanService) {

@@ -19,10 +19,12 @@ class DBQueries {
     static final String SAVE_BOOK_QUERY = "INSERT INTO library_system.book (title, year, description) VALUES (?, ?, ?);";
     static final String DELETE_BOOK_QUERY = "DELETE FROM library_system.book WHERE book_id = ?;";
     static final String UPDATE_BOOK_QUERY = "UPDATE library_system.book SET title = ?, year = ?, description = ? WHERE book_id = ?;";
+    static final String ALL_BOOKS_COUNT_QUERY_HEAD_PART = "SELECT COUNT(*) FROM library_system.book AS b";
     static final String ALL_BOOKS_QUERY_HEAD_PART = "SELECT * FROM library_system.book AS b";
     static final String ALL_BOOKS_QUERY_AUTHOR_PART = "INNER JOIN library_system.author_book AS ab ON ab.author_id = ? AND ab.book_id = b.book_id";
     static final String ALL_BOOKS_QUERY_KEYWORD_PART = "INNER JOIN library_system.book_keyword AS bk ON bk.keyword_id = ? AND bk.book_id = b.book_id";
-    static final String ALL_BOOKS_QUERY_TAIL_PART = "WHERE title LIKE ? ORDER BY b.year DESC;";
+    static final String ALL_BOOKS_QUERY_TAIL_PART = "WHERE title LIKE ? ORDER BY b.title DESC LIMIT ? OFFSET ?;";
+    static final String ALL_BOOKS_COUNT_QUERY_TAIL_PART = "WHERE title LIKE ? ORDER BY b.title DESC;";
     static final String GET_BOOK_QUERY = "SELECT * FROM library_system.book WHERE book_id = ?;";
 
     static final String INSERT_BOOK_KEYWORD_QUERY = "INSERT INTO library_system.book_keyword VALUES (?, ?);";

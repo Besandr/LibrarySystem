@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 @Builder
 public class OrderBookForm extends ActionForm {
 
-    private String bookId;
+    private long bookId;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void fill(HttpServletRequest request) {
-        bookId = getPropertyFromRequest(request, "bookId");
+        bookId = getIdPropertyFromRequest(request, "bookId");
     }
 
     /**

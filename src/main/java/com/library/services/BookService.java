@@ -148,15 +148,26 @@ public class BookService extends Service{
      * @param authorId - author's ID of target books
      * @param keywordId - keyword's ID of target books
      * @param partOfTitle - part of title or whole title of target books
+     * @param recordsQuantity
+     * @param previousRecordNumber
      * @return a list with {@code BookDto} contains the target books
      */
-    public List<BookDto> findBooks(long authorId, long keywordId, String partOfTitle) {
+    public List<BookDto> findBooks(long authorId, long keywordId, String partOfTitle, int recordsQuantity, int previousRecordNumber) {
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> findBooksCommand(manager, authorId, keywordId, partOfTitle));
+        Object executingResult = daoManager.executeAndClose(manager -> findBooksCommand(manager, authorId, keywordId, partOfTitle, recordsQuantity, previousRecordNumber));
 
         return checkAndCastObjectToList(executingResult);
+    }
+
+    public long getBooSearchResultCount(long authorId, long keywordId, String partOfTitle){
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager ->
+                ((BookDao) manager.getBookDao()).getBooSearchResultCount(authorId, keywordId, partOfTitle));
+
+        return checkAndCastObjectToLong(executingResult);
     }
 
     //Commands which is needed to be executed in corresponding public service methods
@@ -204,10 +215,11 @@ public class BookService extends Service{
         return manager.getAuthorDao().getAll();
     }
 
-    List<BookDto> findBooksCommand(DaoManager manager, long authorId, long keywordId, String partOfTitle) throws SQLException {
+    List<BookDto> findBooksCommand(DaoManager manager, long authorId, long keywordId,
+                                   String partOfTitle, int recordsQuantity, int previousRecordNumber) throws SQLException {
 
         BookDao bookDao = (BookDao) manager.getBookDao();
-        List<Book> bookList = bookDao.getAllBookParameterized(authorId, keywordId, partOfTitle);
+        List<Book> bookList = bookDao.getAllBookParameterized(authorId, keywordId, partOfTitle, recordsQuantity, previousRecordNumber);
 
         List<BookDto> bookDtos = new ArrayList<>();
         for (Book book : bookList) {
