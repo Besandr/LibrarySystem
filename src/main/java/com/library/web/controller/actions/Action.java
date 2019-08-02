@@ -1,5 +1,6 @@
 package com.library.web.controller.actions;
 
+import com.library.web.controller.PaginationHelper;
 import com.library.web.controller.ServletResources;
 import com.library.web.controller.forms.ActionForm;
 import lombok.Getter;
@@ -24,6 +25,15 @@ public abstract class Action {
      * Tells does this action requires a form with pre-validation
      */
     boolean needValidate;
+
+    /**
+     * Object for providing pagination feature
+     */
+    PaginationHelper paginationHelper;
+
+    Action(){
+        paginationHelper = new PaginationHelper();
+    }
 
     /**
      * Abstract method represents action itself

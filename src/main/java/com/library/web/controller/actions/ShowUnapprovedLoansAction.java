@@ -29,7 +29,6 @@ public class ShowUnapprovedLoansAction extends Action {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
-        PaginationHelper paginationHelper = new PaginationHelper();
 
         List<LoanDto> loans = getUnapprovedLoans(request, loanService, paginationHelper);
         request.setAttribute("loans", loans);

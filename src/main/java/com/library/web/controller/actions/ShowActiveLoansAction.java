@@ -29,7 +29,6 @@ public class ShowActiveLoansAction extends Action {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
-        PaginationHelper paginationHelper = new PaginationHelper();
 
         List<LoanDto> activeLoans = getActiveLoans(request, loanService, paginationHelper);
 
