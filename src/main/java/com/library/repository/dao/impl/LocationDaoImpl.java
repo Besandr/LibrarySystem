@@ -43,7 +43,7 @@ public class LocationDaoImpl implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get location by id: %s. Cause: %s", locationId, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -74,7 +74,7 @@ public class LocationDaoImpl implements LocationDao {
                 return -1;
             } else {
                 String errorText = String.format("Can't save locastion: %s. Cause: %s", location, e.getMessage());
-                log.error(errorText);
+                log.error(errorText, e);
                 throw new DaoException(errorText, e);
             }
         }
@@ -102,7 +102,7 @@ public class LocationDaoImpl implements LocationDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update book_id in Location table. " +
                     "Location_id: %s. Cause: %s", locationId, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -118,7 +118,7 @@ public class LocationDaoImpl implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't delete book from all locations. Book: %s. Cause: %s", book, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -137,7 +137,7 @@ public class LocationDaoImpl implements LocationDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update is_occupied in Location table. " +
                     "Location_id: %s. Cause: %s", locationId, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -154,7 +154,7 @@ public class LocationDaoImpl implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't delete location: %s. Cause: %s", location, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -176,7 +176,7 @@ public class LocationDaoImpl implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get book quantity for book: %s. Cause: %s", book_id, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -209,7 +209,7 @@ public class LocationDaoImpl implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get locations list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -234,7 +234,7 @@ public class LocationDaoImpl implements LocationDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get book location for book: %s. Cause: %s", book_id, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 

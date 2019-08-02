@@ -157,7 +157,7 @@ public class UserService extends Service{
         try {
             md = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {
-            log.error("Password hasher can't find hash algorithm");
+            log.error("Password hasher can't find hash algorithm", e);
         }
         md.update(salt.getBytes());
 

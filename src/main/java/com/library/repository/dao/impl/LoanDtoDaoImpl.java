@@ -51,7 +51,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
             return DBUtils.getResultOfCountingQuery(connection, DBQueries.GET_UNAPPROVED_LOANS_QUANTITY);
         } catch (SQLException e) {
             String errorText = "Can't get unapproved loans quantity";
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -73,7 +73,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
             return DBUtils.getResultOfCountingQuery(connection, DBQueries.GET_ACTIVE_LOANS_QUANTITY);
         } catch (SQLException e) {
             String errorText = "Can't get active loans quantity";
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -92,7 +92,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get unapproved loans by user. User: %s. Cause: %s.", user, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -111,7 +111,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get active loans for given user. User: %s. Cause: %s", user, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -129,7 +129,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get all loans by user. User: %s. Cause: %s.", user, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -149,7 +149,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get loanDtos list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -175,7 +175,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get loanDtos list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }

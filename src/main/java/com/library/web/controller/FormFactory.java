@@ -38,7 +38,7 @@ public class FormFactory {
                 return (ActionForm) actionClass.newInstance();
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                log.error(String.format("Can't create action class by name: %s. Cause: %s", actionClassName, e.getMessage()));
+                log.error(String.format("Can't create action class by name: %s. Cause: %s", actionClassName, e.getMessage()), e);
             }
         }
         return null;

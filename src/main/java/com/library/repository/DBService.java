@@ -50,7 +50,7 @@ public class DBService {
             }
 
         } catch (IOException e) {
-            log.error("Can't read DBConnectionConfig.properties file. Configure BasicDataSource with default values");
+            log.error("Can't read DBConnectionConfig.properties file. Configure BasicDataSource with default values", e);
         }
 
         ds = new BasicDataSource();

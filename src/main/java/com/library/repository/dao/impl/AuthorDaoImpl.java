@@ -48,7 +48,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get author by id: %s. Cause: %s", id, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -79,7 +79,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get author by name: %s %s. Cause: %s", firstName, lastName, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -108,7 +108,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get authors list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -138,7 +138,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get authors list by Book from DB. Book: %s. Cause: %s", bookId, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -167,7 +167,7 @@ public class AuthorDaoImpl implements AuthorDao {
                 return -1;
             } else {
                 String errorText = String.format("Can't save author: %s. Cause: %s", author, e.getMessage());
-                log.error(errorText);
+                log.error(errorText, e);
                 throw new DaoException(errorText, e);
             }
         }
@@ -190,7 +190,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update author: %s. Cause: %s", author, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -210,7 +210,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't delete author: %s. Cause: %s", author, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }

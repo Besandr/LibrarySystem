@@ -49,7 +49,7 @@ public class LoanDaoImpl implements LoanDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get loan by id: %s. Cause: %s", loanId, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -87,7 +87,7 @@ public class LoanDaoImpl implements LoanDao {
                 return -1;
             } else {
                 String errorText = String.format("Can't save loan: %s. Cause: %s", loan, e.getMessage());
-                log.error(errorText);
+                log.error(errorText, e);
                 throw new DaoException(errorText, e);
             }
         }
@@ -117,7 +117,7 @@ public class LoanDaoImpl implements LoanDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update loan and expired dates. id: %s." +
                     " loanDate: %s. expiredDate: %s. Cause: %s", loanId, loanDate, expiredDate, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -138,7 +138,7 @@ public class LoanDaoImpl implements LoanDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't update return date. id: %s." +
                     " Return date: %s. Cause: %s", loanId, returnDate, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -158,7 +158,7 @@ public class LoanDaoImpl implements LoanDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't delete loan: %s. Cause: %s", loan, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -186,7 +186,7 @@ public class LoanDaoImpl implements LoanDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get loans list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 

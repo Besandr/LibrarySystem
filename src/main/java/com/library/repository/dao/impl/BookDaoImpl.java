@@ -50,7 +50,7 @@ public class BookDaoImpl implements BookDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get book by id: %s. Cause: %s", bookId, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -87,7 +87,7 @@ public class BookDaoImpl implements BookDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get books list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -142,7 +142,7 @@ public class BookDaoImpl implements BookDao {
                 return -1;
             } else {
                 String errorText = String.format("Can't save book: %s. Cause: %s", book, e.getMessage());
-                log.error(errorText);
+                log.error(errorText, e);
                 throw new DaoException(errorText, e);
             }
         }
@@ -166,7 +166,7 @@ public class BookDaoImpl implements BookDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update book: %s. Cause: %s", book, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -186,7 +186,7 @@ public class BookDaoImpl implements BookDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't delete book: %s. Cause: %s", book, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }

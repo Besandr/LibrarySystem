@@ -44,7 +44,7 @@ public class AuthorBookDaoImpl implements AuthorBookDao {
             statement.execute();
         } catch (SQLException e) {
             String errorText = String.format("Can't add rows to author_book table. Book: %s. Cause: %s", book, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -64,7 +64,7 @@ public class AuthorBookDaoImpl implements AuthorBookDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't delete row from author_book. Author: %s." +
                     "Book: %s. Cause: %s", author, book, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -88,7 +88,7 @@ public class AuthorBookDaoImpl implements AuthorBookDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't count books of author. Author: %s. Cause: %s", author, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }

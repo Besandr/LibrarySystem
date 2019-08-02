@@ -48,7 +48,7 @@ public class KeywordDaoImpl implements KeywordDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get keyword by id: %s. Cause: %s", id, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -78,7 +78,7 @@ public class KeywordDaoImpl implements KeywordDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get keyword by word: %s. Cause: %s", word, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -107,7 +107,7 @@ public class KeywordDaoImpl implements KeywordDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get keywords list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -136,7 +136,7 @@ public class KeywordDaoImpl implements KeywordDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get keywords list by Book from DB. Book: %s. Cause: %s", bookId, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -163,7 +163,7 @@ public class KeywordDaoImpl implements KeywordDao {
                 return -1;
             } else {
                 String errorText = String.format("Can't save keyword: %s. Cause: %s", keyword, e.getMessage());
-                log.error(errorText);
+                log.error(errorText, e);
                 throw new DaoException(errorText, e);
             }
         }
@@ -185,7 +185,7 @@ public class KeywordDaoImpl implements KeywordDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update keyword: %s. Cause: %s", keyword, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -205,7 +205,7 @@ public class KeywordDaoImpl implements KeywordDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't delete keyword: %s. Cause: %s", keyword, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }

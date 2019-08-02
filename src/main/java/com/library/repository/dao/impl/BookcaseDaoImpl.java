@@ -42,7 +42,7 @@ public class BookcaseDaoImpl implements BookcaseDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't get bookcase by id: %s. Cause: %s", id, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
 
@@ -68,7 +68,7 @@ public class BookcaseDaoImpl implements BookcaseDao {
 
         } catch (SQLException e) {
             String errorText = "Can't get bookcases list from DB. Cause: " + e.getMessage();
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
         return bookcases;
@@ -92,7 +92,7 @@ public class BookcaseDaoImpl implements BookcaseDao {
                 return -1;
             } else {
                 String errorText = String.format("Can't save bookcase: %s. Cause: %s", bookcase, e.getMessage());
-                log.error(errorText);
+                log.error(errorText, e);
                 throw new DaoException(errorText, e);
             }
         }
@@ -112,7 +112,7 @@ public class BookcaseDaoImpl implements BookcaseDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't update bookcase: %s. Cause: %s", bookcase, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -129,7 +129,7 @@ public class BookcaseDaoImpl implements BookcaseDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't delete bookcase: %s. Cause: %s", bookcase, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }

@@ -44,7 +44,7 @@ public class BookKeywordDaoImpl implements BookKeywordDao {
             statement.execute();
         } catch (SQLException e) {
             String errorText = String.format("Can't add rows to book_keyword table. Book: %s. Cause: %s", book, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -68,7 +68,7 @@ public class BookKeywordDaoImpl implements BookKeywordDao {
 
         } catch (SQLException e) {
             String errorText = String.format("Can't count books with keyword. Keyword: %s. Cause: %s", keyword, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }
@@ -89,7 +89,7 @@ public class BookKeywordDaoImpl implements BookKeywordDao {
         } catch (SQLException e) {
             String errorText = String.format("Can't delete row from book_keyword. Keyword: %s." +
                     "Book: %s. Cause: %s", keyword, book, e.getMessage());
-            log.error(errorText);
+            log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
     }

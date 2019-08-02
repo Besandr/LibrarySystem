@@ -49,7 +49,7 @@ public class DaoManager {
             return result;
 
         } catch (SQLException e) {
-            log.error("SQLException occurred. Cause: " + e.getMessage());
+            log.error("SQLException occurred. Cause: " + e.getMessage(), e);
             return null;
         } finally {
             closeConnection();
@@ -71,7 +71,7 @@ public class DaoManager {
             return command.execute(this);
 
         } catch (SQLException e) {
-            log.error("SQLException occurred. Cause: " + e.getMessage());
+            log.error("SQLException occurred. Cause: " + e.getMessage(), e);
             return null;
         } catch (DaoException e) {
             //Command executing is failed so there is nothing to return
@@ -88,7 +88,7 @@ public class DaoManager {
         try {
             connection.close();
         } catch (SQLException e) {
-            log.error("Can't close connection. Cause: " + e.getMessage());
+            log.error("Can't close connection. Cause: " + e.getMessage(), e);
         }
     }
 
