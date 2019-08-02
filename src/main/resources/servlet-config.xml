@@ -203,7 +203,7 @@
             <type>com.library.web.controller.actions.CreateBookAction</type>
             <form-name>BookCreationForm</form-name>
             <validate>true</validate>
-            <input>/WEB-INF/jsp/bookCreation.jsp</input>
+            <input>/admin/createBook</input>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.BookService</class>

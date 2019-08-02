@@ -38,6 +38,7 @@
             <th><fmt:message key="loans.loanNumber"/></th>
             <th><fmt:message key="loans.userName"/></th>
             <th><fmt:message key="loans.loanDate"/></th>
+            <th><fmt:message key="loans.expiredDate"/></th>
         </tr>
 
         <c:forEach var="loanDTO" items="${bookLoans}">
@@ -45,6 +46,7 @@
                 <td>${loanDTO.loan.id}</td>
                 <td><a href="${contextPath}/admin/userProfile?userId=${loanDTO.user.id}">${loanDTO.user.lastName} ${loanDTO.user.firstName}</a></td>
                 <td>${loanDTO.loan.loanDate}</td>
+                <td>${loanDTO.loan.expiredDate}</td>
             </tr>
         </c:forEach>
     </table>

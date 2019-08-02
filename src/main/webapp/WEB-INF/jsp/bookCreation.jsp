@@ -14,7 +14,7 @@
 <head>
     <c:import url="adminCabinet.jsp"/>
 
-    <title><fmt:message key="bookManagement.title"/></title>
+    <title><fmt:message key="bookManagement.creationTitle"/></title>
 </head>
 <body>
 
