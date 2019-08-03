@@ -6,20 +6,16 @@ import lombok.*;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Contains html-form data for showing book
- * borrowers
+ * Class contains data for book management action
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ActiveBookLoansForm extends ActionForm {
+public class BookManagementForm extends ActionForm {
 
-    /**
-     * ID of book for showing its active loans
-     */
-    private long bookId;
+    long bookId;
 
     /**
      * {@inheritDoc}
@@ -34,6 +30,8 @@ public class ActiveBookLoansForm extends ActionForm {
      */
     @Override
     public ActionErrors validate() {
-        return null;
+        return new ActionErrors();
     }
+
+
 }

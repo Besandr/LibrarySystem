@@ -100,7 +100,7 @@ public class BookSearchAction extends Action {
      * Adds pagination to request
      */
     private void addPaginationToRequest(HttpServletRequest request, BookService bookService, long authorId, long keywordId, String bookTitle, PaginationHelper paginationHelper) {
-        long recordsQuantity = bookService.getBooSearchResultCount(authorId, keywordId, bookTitle);
+        long recordsQuantity = bookService.getBookSearchResultCount(authorId, keywordId, bookTitle);
         paginationHelper.addPaginationToRequest(request, recordsQuantity);
     }
 

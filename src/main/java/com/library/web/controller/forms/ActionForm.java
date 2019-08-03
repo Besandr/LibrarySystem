@@ -58,18 +58,27 @@ public abstract class ActionForm {
 
     /**
      * Gives an converted to {@coed Long} ID from request
-     * by id's parameter name
+     * by id's parameter name. It seeks property firstly in request's
+     * parameters and then in request's attributes
      * @param request with id property
      * @param idParameterName - name of request parameter with id
      * @return converted to {@coed Long} parameter with given name or
-     * {@code 0} if there is no such parameter
+     * {@code 0} if there is no such parameter or attribute
      */
     long getIdPropertyFromRequest(HttpServletRequest request, String idParameterName) {
         String idString = request.getParameter(idParameterName);
         if (idString != null && !idString.isEmpty()) {
+
             return Long.parseLong(idString);
+
         } else {
-            return 0L;
+
+            Object idObj = request.getAttribute(idParameterName);
+            if (idObj instanceof Long) {
+                return (long) idObj;
+            } else {
+                return 0L;
+            }
         }
     }
 }

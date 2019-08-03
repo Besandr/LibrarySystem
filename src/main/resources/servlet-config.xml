@@ -30,12 +30,16 @@
             <type>com.library.web.controller.forms.ApproveLoanForm</type>
         </form>
         <form>
-            <name>activeBookLoansForm</name>
-            <type>com.library.web.controller.forms.ActiveBookLoansForm</type>
+            <name>BookIdForm</name>
+            <type>com.library.web.controller.forms.BookIdForm</type>
         </form>
         <form>
             <name>BookCreationForm</name>
             <type>com.library.web.controller.forms.BookCreationForm</type>
+        </form>
+        <form>
+            <name>BookManagementForm</name>
+            <type>com.library.web.controller.forms.BookManagementForm</type>
         </form>
         <form>
             <name>UserProfileForm</name>
@@ -145,6 +149,10 @@
             <type>com.library.web.controller.actions.ShowPersonalCabinetAction</type>
         </action>
         <action>
+            <path>/admin/loansManagement</path>
+            <type>com.library.web.controller.actions.ShowLoansManagementPage</type>
+        </action>
+        <action>
             <path>/admin/unapprovedLoans</path>
             <type>com.library.web.controller.actions.ShowUnapprovedLoansAction</type>
             <service-dependencies>
@@ -169,7 +177,7 @@
         <action>
             <path>/admin/activeBookLoans</path>
             <type>com.library.web.controller.actions.ShowActiveBookLoansAction</type>
-            <form-name>activeBookLoansForm</form-name>
+            <form-name>BookIdForm</form-name>
             <validate>false</validate>
             <service-dependencies>
                 <dependency>
@@ -204,6 +212,19 @@
             <form-name>BookCreationForm</form-name>
             <validate>true</validate>
             <input>/admin/createBook</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
+            <path>/admin/bookManagement</path>
+            <type>com.library.web.controller.actions.ShowBookManagementAction</type>
+            <form-name>BookIdForm</form-name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/bookManagement.jsp</input>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.BookService</class>
@@ -265,6 +286,10 @@
             <value>/cabinet</value>
         </entry>
         <entry>
+            <key>ShowLoansManagementPage</key>
+            <value>/WEB-INF/jsp/loansManagement.jsp</value>
+        </entry>
+        <entry>
             <key>showUnapprovedLoans</key>
             <value>/WEB-INF/jsp/unapprovedLoans.jsp</value>
         </entry>
@@ -287,6 +312,10 @@
         <entry>
             <key>showBookCreationPage</key>
             <value>/WEB-INF/jsp/bookCreation.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowBookManagementPage</key>
+            <value>/WEB-INF/jsp/bookManagement.jsp</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

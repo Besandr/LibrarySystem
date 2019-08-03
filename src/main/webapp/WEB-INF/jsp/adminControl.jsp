@@ -10,12 +10,9 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<a href="${contextPath}/admin/unapprovedLoans">
-    <fmt:message key="adminControl.unapprovedLoans"/>
+<a href="${contextPath}/admin/loansManagement">
+    <fmt:message key="adminControl.loansManagement"/>
 </a>
-<a href="${contextPath}/admin/activeLoans">
-    <fmt:message key="adminControl.activeLoans"/>
-</a>
-<a href="${contextPath}/admin/createBook">
-    <fmt:message key="adminControl.createBook"/>
+<a href="${contextPath}/admin/bookManagement">
+    <fmt:message key="adminControl.bookManagement"/>
 </a>

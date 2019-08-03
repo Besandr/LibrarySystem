@@ -17,6 +17,7 @@
     <title><fmt:message key="bookSearch.title"/></title>
 </head>
 <body>
+
 <div>
     <h2><fmt:message key="bookSearch.title"/></h2>
 </div>
@@ -61,7 +62,7 @@
         <table>
 
             <tr>
-                <th><fmt:message key="bookSearch.result.choice"/></th>
+                <th><fmt:message key="bookSearch.result.action"/></th>
                 <th><fmt:message key="bookSearch.result.author"/></th>
                 <th><fmt:message key="bookSearch.result.title"/></th>
                 <th><fmt:message key="bookSearch.result.year"/></th>
@@ -71,10 +72,22 @@
             <c:forEach var="bookDTO" items="${books}">
                 <tr>
                     <td>
-                        <form action="${contextPath}/user/orderBook.do" method="post">
-                            <input type="text" name="bookId" value="${bookDTO.book.id}" hidden>
-                            <button><fmt:message key="bookSearch.result.order"/></button>
-                        </form>
+                        <c:choose>
+                            <c:when test="${not empty loggedInUser && loggedInUser.role == 'ADMINISTRATOR'}">
+<%--                                Store bookDto for management if user in Admin's role--%>
+                                <form action="${contextPath}/admin/bookManagement" method="post">
+                                    <input type="text" name="bookId" value="${bookDTO.book.id}" hidden>
+                                    <button><fmt:message key="bookSearch.result.choose"/></button>
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+<%--                                Order book feature for ordinary user--%>
+                                <form action="${contextPath}/user/orderBook.do" method="post">
+                                <input type="text" name="bookId" value="${bookDTO.book.id}" hidden>
+                                <button><fmt:message key="bookSearch.result.order"/></button>
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
                     </td>
 
                     <td>

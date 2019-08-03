@@ -52,9 +52,9 @@ public class BookService extends Service{
         Set<Author> authors = createAuthorsSet(oldAuthorsId, newAuthorFirstNames, newAuthorLastNames);
         Set<Keyword> keywords = createKeywordsSet(oldKeywordsId, newKeywords);
 
-        Object executingResult = daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book, authors, keywords));
+        Object executionResult = daoManager.executeTransaction(manager -> addBookToCatalogueCommand(manager, book, authors, keywords));
 
-        return checkAndCastObjectToLong(executingResult);
+        return checkAndCastObjectToLong(executionResult);
     }
 
     /**
@@ -66,9 +66,9 @@ public class BookService extends Service{
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeTransaction(manager -> removeBookFromCatalogueCommand(manager, bookDto));
+        Object executionResult = daoManager.executeTransaction(manager -> removeBookFromCatalogueCommand(manager, bookDto));
 
-        return checkAndCastExecutingResult(executingResult);
+        return checkAndCastExecutingResult(executionResult);
     }
 
     /**
@@ -81,9 +81,9 @@ public class BookService extends Service{
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> updateBookPropertiesCommand(manager, bookDto));
+        Object executionResult = daoManager.executeAndClose(manager -> updateBookPropertiesCommand(manager, bookDto));
 
-        return checkAndCastExecutingResult(executingResult);
+        return checkAndCastExecutingResult(executionResult);
     }
 
     /**
@@ -96,9 +96,9 @@ public class BookService extends Service{
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeTransaction(manager -> updateBookAuthorsSetCommand(manager, bookDto));
+        Object executionResult = daoManager.executeTransaction(manager -> updateBookAuthorsSetCommand(manager, bookDto));
 
-        return checkAndCastExecutingResult(executingResult);
+        return checkAndCastExecutingResult(executionResult);
     }
 
     /**
@@ -111,9 +111,9 @@ public class BookService extends Service{
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeTransaction(manager -> updateBookKeywordsSetCommand(manager, bookDto));
+        Object executionResult = daoManager.executeTransaction(manager -> updateBookKeywordsSetCommand(manager, bookDto));
 
-        return checkAndCastExecutingResult(executingResult);
+        return checkAndCastExecutingResult(executionResult);
     }
 
     /**
@@ -123,9 +123,9 @@ public class BookService extends Service{
     public List<Keyword> getAllKeywords(){
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> getAllKeywordsCommand(daoManager));
+        Object executionResult = daoManager.executeAndClose(manager -> getAllKeywordsCommand(daoManager));
 
-        return checkAndCastObjectToList(executingResult);
+        return checkAndCastObjectToList(executionResult);
     }
 
     /**
@@ -136,9 +136,9 @@ public class BookService extends Service{
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> getAllAuthorsCommand(manager));
+        Object executionResult = daoManager.executeAndClose(manager -> getAllAuthorsCommand(manager));
 
-        return checkAndCastObjectToList(executingResult);
+        return checkAndCastObjectToList(executionResult);
     }
 
     /**
@@ -156,18 +156,39 @@ public class BookService extends Service{
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> findBooksCommand(manager, authorId, keywordId, partOfTitle, recordsQuantity, previousRecordNumber));
+        Object executionResult = daoManager.executeAndClose(manager -> findBooksCommand(manager, authorId, keywordId, partOfTitle, recordsQuantity, previousRecordNumber));
 
-        return checkAndCastObjectToList(executingResult);
+        return checkAndCastObjectToList(executionResult);
     }
 
-    public long getBooSearchResultCount(long authorId, long keywordId, String partOfTitle){
+    /**
+     * Counts all books in book search result
+     * @param keywordId - keyword's ID of target books
+     * @param partOfTitle - part of title or whole title of target books
+     * @return quantity of all books in book search result
+     */
+    public long getBookSearchResultCount(long authorId, long keywordId, String partOfTitle){
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager ->
+        Object executionResult = daoManager.executeAndClose(manager ->
                 ((BookDao) manager.getBookDao()).getBooSearchResultCount(authorId, keywordId, partOfTitle));
 
-        return checkAndCastObjectToLong(executingResult);
+        return checkAndCastObjectToLong(executionResult);
+    }
+
+    /**
+     * Gives an {@code Optional} with {@code BookDto} by
+     * given book ID
+     * @param bookId - ID of target book
+     * @return an {@code Optional} with {@code BookDto}
+     * or an empty {@code Optional}
+     */
+    public Optional<BookDto> getBookDtoById(long bookId) {
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
+
+        Object executionResult = daoManager.executeAndClose(manager -> getBookDtoByIdCommand(manager, bookId));
+
+        return checkAndCastObjectToOptional(executionResult);
     }
 
     //Commands which is needed to be executed in corresponding public service methods
@@ -215,8 +236,8 @@ public class BookService extends Service{
         return manager.getAuthorDao().getAll();
     }
 
-    List<BookDto> findBooksCommand(DaoManager manager, long authorId, long keywordId,
-                                   String partOfTitle, int recordsQuantity, int previousRecordNumber) throws SQLException {
+    private List<BookDto> findBooksCommand(DaoManager manager, long authorId, long keywordId,
+                                           String partOfTitle, int recordsQuantity, int previousRecordNumber) throws SQLException {
 
         BookDao bookDao = (BookDao) manager.getBookDao();
         List<Book> bookList = bookDao.getAllBookParameterized(authorId, keywordId, partOfTitle, recordsQuantity, previousRecordNumber);
@@ -289,6 +310,17 @@ public class BookService extends Service{
         manager.getBookKeywordDao().saveBookKeywordsJunction(bookDto.getBook(), newKeywords);
 
         return EXECUTING_SUCCESSFUL;
+    }
+
+    private Optional<BookDto> getBookDtoByIdCommand(DaoManager manager, long bookId) throws SQLException {
+        BookDao bookDao = (BookDao) manager.getBookDao();
+        Optional<Book> book = bookDao.get(bookId);
+
+        if (!book.isPresent()) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(createBookDtoFromBook(manager, book.get()));
     }
 
     /**

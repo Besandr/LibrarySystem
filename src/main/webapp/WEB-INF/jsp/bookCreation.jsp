@@ -111,7 +111,7 @@
             <div><input type="text" name="description" value="${form.description}" required></div>
         </div>
 
-        <button><fmt:message key="bookManagement.addBook"/></button>
+        <button><fmt:message key="bookManagement.createBook"/></button>
     </form>
 </div>
 

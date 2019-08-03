@@ -12,10 +12,24 @@
 
 <html>
 <head>
-    <title>!!!!!</title>
+    <c:import url="adminCabinet.jsp"/>
+
+    <title><fmt:message key="bookManagement.title"/></title>
 </head>
 <body>
-<h1>Unfortunately bad things occurred</h1>
-<a href="${contextPath}/title" class="link createLink">Continue</a>
+
+<div><fmt:message key="adminControl.chooseOperation"/></div>
+
+<a href="${contextPath}/admin/unapprovedLoans">
+    <fmt:message key="adminControl.unapprovedLoans"/>
+</a>
+<a href="${contextPath}/admin/activeLoans">
+    <fmt:message key="adminControl.activeLoans"/>
+</a>
+<%--todo EXPIRED LOANS--%>
+<a href="">
+    <fmt:message key="adminControl.expiredLoans"/>
+</a>
+
 </body>
 </html>
