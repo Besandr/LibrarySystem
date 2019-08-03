@@ -35,7 +35,7 @@ public class ShowBookManagementAction extends Action {
 
         Optional<BookDto> bookDto = bookService.getBookDtoById(bookId);
 
-        bookDto.ifPresent(dto -> request.setAttribute("bookDto", bookDto.get()));
+        bookDto.ifPresent(dto -> request.getSession().setAttribute("bookDto", bookDto.get()));
 
         return resources.getForward("ShowBookManagementPage");
     }

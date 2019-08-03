@@ -42,8 +42,8 @@ public class CreateBookAction extends Action {
                 creationForm.getNewAuthorLastNames(),
                 creationForm.getNewKeywords());
 
-        request.setAttribute("successfulAction", bookId);
-        return resources.getForward("successPage");
+        request.setAttribute("bookId", bookId);
+        return resources.getForward("BookManagementAction");
     }
 
     public void setBookService(Service bookService) {

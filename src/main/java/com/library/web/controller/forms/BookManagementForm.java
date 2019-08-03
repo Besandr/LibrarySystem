@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 @Builder
 public class BookManagementForm extends ActionForm {
 
-    long bookId;
+    private int booksQuantity;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void fill(HttpServletRequest request) {
-        bookId = getIdPropertyFromRequest(request, "bookId");
+        booksQuantity = (int) getIdPropertyFromRequest(request, "booksQuantity");
     }
 
     /**
@@ -30,7 +30,11 @@ public class BookManagementForm extends ActionForm {
      */
     @Override
     public ActionErrors validate() {
-        return new ActionErrors();
+        ActionErrors errors = new ActionErrors();
+        if (booksQuantity == 0) {
+            errors.addError("booksQuantity", "zero books quantity");
+        }
+        return errors;
     }
 
 

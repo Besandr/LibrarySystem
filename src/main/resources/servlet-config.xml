@@ -233,6 +233,19 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/admin/bookManagement/addBooks</path>
+            <type>com.library.web.controller.actions.AddBooksAction</type>
+            <form-name>BookManagementForm</form-name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/addBooks.jsp</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LocationService</class>
+                    <name>locationService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/admin/userProfile</path>
             <type>com.library.web.controller.actions.ShowUserProfileAction</type>
             <form-name>UserProfileForm</form-name>
@@ -316,6 +329,10 @@
         <entry>
             <key>ShowBookManagementPage</key>
             <value>/WEB-INF/jsp/bookManagement.jsp</value>
+        </entry>
+        <entry>
+            <key>BookManagementAction</key>
+            <value>/admin/bookManagement</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

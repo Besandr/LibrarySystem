@@ -17,35 +17,36 @@
     <title><fmt:message key="bookManagement.title"/></title>
 </head>
 <body>
-<c:choose>
-    <c:when test="${not empty bookDto}">
-        <%--    Storing BookDto in request again for further operations--%>
-        <c:set var="bookDto" scope="request" value="${bookDto}"/>
-<%--        TODO TRANSLATE--%>
-        <div>ВЫБРАННАЯ КНИГА:</div>
-<%--        Book info--%>
-        <div>
-            <c:forEach var="author" items="${bookDto.authors}">
-                <div>${author.firstName} ${author.lastName}</div>
-            </c:forEach>
-        </div>
-        <br>
-        <div>"${bookDto.book.title}"</div>
-<%--        Showing managements actions--%>
-        <a href=""><fmt:message key="bookManagement.addBooks"/></a>
-        <a href=""><fmt:message key="bookManagement.removeBooks"/></a>
-        <a href=""><fmt:message key="bookManagement.changeBookProperties"/></a>
-        <a href=""><fmt:message key="bookManagement.deleteBook"/></a>
-        <a href="${contextPath}/admin/activeBookLoans?bookId=${bookDto.book.id}"><fmt:message key="bookManagement.showBorrowers"/></a>
 
-    </c:when>
-    <c:otherwise>
-<%--        todo TRANSLATE--%>
-        <div>Создайте новую книгу или выберите существующую для дальнейших действий</div>
-        <a href="${contextPath}/admin/createBook"><fmt:message key="bookManagement.createBook"/></a>
-        <a href="${contextPath}/bookSearch"><fmt:message key="bookManagement.findBook"/></a>
-    </c:otherwise>
-</c:choose>
+<c:if test="${not empty actionResult}">
+    <div>
+        <fmt:message key="${actionResult}"/>
+    </div>
+</c:if>
+
+<c:if test="${not empty bookDto}">
+    <div><fmt:message key="bookManagement.chosenBook"/> </div>
+<%--        Book info--%>
+    <div>
+        <c:forEach var="author" items="${bookDto.authors}">
+            <div>${author.firstName} ${author.lastName}</div>
+        </c:forEach>
+    </div>
+    <br>
+    <div>"${bookDto.book.title}"</div>
+<%--        Showing managements actions--%>
+    <a href="${contextPath}/admin/bookManagement/addBooks"><fmt:message key="bookManagement.addBooks"/></a>
+    <a href=""><fmt:message key="bookManagement.removeBooks"/></a>
+    <a href=""><fmt:message key="bookManagement.changeBookProperties"/></a>
+    <a href=""><fmt:message key="bookManagement.deleteBook"/></a>
+    <a href="${contextPath}/admin/activeBookLoans?bookId=${bookDto.book.id}"><fmt:message key="bookManagement.showBorrowers"/></a>
+
+</c:if>
+
+<%--Actions for another book--%>
+<div><fmt:message key="bookManagement.findOrCreate"/> </div>
+<a href="${contextPath}/admin/createBook"><fmt:message key="bookManagement.createBook"/></a>
+<a href="${contextPath}/bookSearch"><fmt:message key="bookManagement.findBook"/></a>
 
 
 </body>
