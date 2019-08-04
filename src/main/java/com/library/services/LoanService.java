@@ -219,7 +219,7 @@ public class LoanService extends Service{
     }
 
     private List<LoanDto> getActiveLoansByBookCommand(DaoManager manager, long bookId) throws SQLException {
-        List<LoanDto> loanDtoList = manager.getLoanDtoDao().getActiveLoansByBook(bookId);
+        List<LoanDto> loanDtoList = manager.getLoanDtoDao().getActiveLoansByBookId(bookId);
         addAuthorsToLoanDtoInList(manager, loanDtoList);
         return loanDtoList;
     }

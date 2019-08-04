@@ -35,8 +35,8 @@
     <br>
     <div>"${bookDto.book.title}"</div>
 <%--        Showing managements actions--%>
-    <a href="${contextPath}/admin/bookManagement/addBooks"><fmt:message key="bookManagement.addBooks"/></a>
-    <a href=""><fmt:message key="bookManagement.removeBooks"/></a>
+    <a href="${contextPath}/admin/bookManagement/addBooks.do"><fmt:message key="bookManagement.addBooks"/></a>
+    <a href="${contextPath}/admin/bookManagement/removeBooks.do"><fmt:message key="bookManagement.removeBooks"/></a>
     <a href=""><fmt:message key="bookManagement.changeBookProperties"/></a>
     <a href=""><fmt:message key="bookManagement.deleteBook"/></a>
     <a href="${contextPath}/admin/activeBookLoans?bookId=${bookDto.book.id}"><fmt:message key="bookManagement.showBorrowers"/></a>

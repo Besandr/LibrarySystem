@@ -58,7 +58,6 @@ public class ServletResources {
     public String getForward(String forwardName) {
         String forward = forwards.get(forwardName);
         if (forward == null) {
-            log.error("Can't find forward by name: " + forwardName);
             return "/WEB-INF/jsp/404.jsp";
         } else {
             return forward;

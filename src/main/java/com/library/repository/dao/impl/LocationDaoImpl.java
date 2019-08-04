@@ -108,16 +108,16 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public void deleteBookFromAllLocations(Book book) {
+    public void deleteBookFromAllLocations(long bookId) {
 
         try{
             PreparedStatement statement = connection.prepareStatement(DBQueries.DELETE_BOOK_FROM_ALL_LOCATIONS_QUERY);
-            statement.setLong(1, book.getId());
+            statement.setLong(1, bookId);
 
             statement.execute();
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't delete book from all locations. Book: %s. Cause: %s", book, e.getMessage());
+            String errorText = String.format("Can't delete book from all locations. BookId: %s. Cause: %s", bookId, e.getMessage());
             log.error(errorText, e);
             throw new DaoException(errorText, e);
         }

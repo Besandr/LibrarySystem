@@ -33,7 +33,7 @@
         <div>"${bookDto.book.title}"</div>
 
 <%--        Books adding form--%>
-        <form action="${contextPath}/admin/bookManagement/addBooks">
+        <form action="${contextPath}/admin/bookManagement/addBooks.do">
             <label for="quantityInput"><fmt:message key="bookManagement.quantity"/> </label>
             <input id="quantityInput" type="text" name="booksQuantity" required>
             <button><fmt:message key="bookManagement.addBooks"/> </button>

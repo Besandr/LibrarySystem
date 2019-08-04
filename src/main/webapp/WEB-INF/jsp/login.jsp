@@ -31,7 +31,7 @@
     <form action="${contextPath}/login.do" method="post">
         <label>
             <h3><fmt:message key="email"/></h3>
-            <input name="email" type="text" value="${form.email}" required>
+            <input name="email" type="text" value="${form.email}" required autofocus>
             <c:if test="${errors.errorsMap['email'] != null}">
                 <fmt:message key="${errors.errorsMap['email']}"/>
             </c:if>

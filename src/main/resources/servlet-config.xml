@@ -67,10 +67,6 @@
      -->
     <action-mappings>
         <action>
-            <path>/</path>
-            <type>com.library.web.controller.actions.ShowTitlePageAction</type>
-        </action>
-        <action>
             <path>/bookSearch</path>
             <type>com.library.web.controller.actions.ShowBookSearchPageAction</type>
             <service-dependencies>
@@ -107,10 +103,6 @@
             </service-dependencies>
         </action>
         <action>
-            <path>/login</path>
-            <type>com.library.web.controller.actions.ShowLoginPageAction</type>
-        </action>
-        <action>
             <path>/login.do</path>
             <type>com.library.web.controller.actions.LoginAction</type>
             <form-name>userLoginForm</form-name>
@@ -128,10 +120,6 @@
             <type>com.library.web.controller.actions.LogoutAction</type>
         </action>
         <action>
-            <path>/registration</path>
-            <type>com.library.web.controller.actions.ShowUserRegistrationPageAction</type>
-        </action>
-        <action>
             <path>/register.do</path>
             <type>com.library.web.controller.actions.RegisterUserAction</type>
             <form-name>userRegistrationForm</form-name>
@@ -145,20 +133,8 @@
             </service-dependencies>
         </action>
         <action>
-            <path>/title</path>
-            <type>com.library.web.controller.actions.ShowTitlePageAction</type>
-        </action>
-        <action>
             <path>/cabinet</path>
             <type>com.library.web.controller.actions.ShowPersonalCabinetAction</type>
-        </action>
-        <action>
-            <path>/admin/loansManagement</path>
-            <type>com.library.web.controller.actions.ShowLoansManagementPage</type>
-        </action>
-        <action>
-            <path>/admin/bookcaseManagement</path>
-            <type>com.library.web.controller.actions.ShowBookcaseManagementPage</type>
         </action>
         <action>
             <path>/admin/unapprovedLoans</path>
@@ -241,7 +217,7 @@
             </service-dependencies>
         </action>
         <action>
-            <path>/admin/bookManagement/addBooks</path>
+            <path>/admin/bookManagement/addBooks.do</path>
             <type>com.library.web.controller.actions.AddBooksAction</type>
             <form-name>BookManagementForm</form-name>
             <validate>true</validate>
@@ -254,7 +230,17 @@
             </service-dependencies>
         </action>
         <action>
-            <path>/admin/bookcaseManagement/add</path>
+            <path>/admin/bookManagement/removeBooks.do</path>
+            <type>com.library.web.controller.actions.RemoveBookAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LocationService</class>
+                    <name>locationService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
+            <path>/admin/bookcaseManagement/add.do</path>
             <type>com.library.web.controller.actions.AddBookcaseAction</type>
             <form-name>AddBookcaseForm</form-name>
             <validate>true</validate>
@@ -292,12 +278,28 @@
     -->
     <forwards>
         <entry>
+            <key>/</key>
+            <value>/WEB-INF/jsp/titlePage.jsp</value>
+        </entry>
+        <entry>
+            <key>/title</key>
+            <value>/WEB-INF/jsp/titlePage.jsp</value>
+        </entry>
+        <entry>
             <key>ShowTitlePage</key>
             <value>/WEB-INF/jsp/titlePage.jsp</value>
         </entry>
         <entry>
+            <key>/login</key>
+            <value>/WEB-INF/jsp/login.jsp</value>
+        </entry>
+        <entry>
             <key>ShowLoginPage</key>
             <value>/WEB-INF/jsp/login.jsp</value>
+        </entry>
+        <entry>
+            <key>/registration</key>
+            <value>/WEB-INF/jsp/registration.jsp</value>
         </entry>
         <entry>
             <key>ShowRegistrationPage</key>
@@ -320,8 +322,12 @@
             <value>/cabinet</value>
         </entry>
         <entry>
-            <key>ShowLoansManagementPage</key>
+            <key>/admin/loansManagement</key>
             <value>/WEB-INF/jsp/loansManagement.jsp</value>
+        </entry>
+        <entry>
+            <key>/admin/bookcaseManagement</key>
+            <value>/WEB-INF/jsp/bookcaseManagement.jsp</value>
         </entry>
         <entry>
             <key>ShowBookcaseManagementPage</key>
@@ -362,6 +368,10 @@
         <entry>
             <key>ShowBookManagementPage</key>
             <value>/WEB-INF/jsp/bookManagement.jsp</value>
+        </entry>
+        <entry>
+            <key>/admin/bookcaseManagement/add</key>
+            <value>/WEB-INF/jsp/addBookcase.jsp</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

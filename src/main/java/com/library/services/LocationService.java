@@ -3,9 +3,10 @@ package com.library.services;
 import com.library.repository.DaoManager;
 import com.library.repository.DaoManagerFactory;
 import com.library.repository.dao.BookcaseDao;
+import com.library.repository.dao.LoanDao;
 import com.library.repository.dao.LoanDtoDao;
 import com.library.repository.dao.LocationDao;
-import com.library.repository.entity.Book;
+import com.library.repository.dto.LoanDto;
 import com.library.repository.entity.Bookcase;
 import com.library.repository.entity.Location;
 
@@ -62,14 +63,14 @@ public class LocationService extends Service {
 
     /**
      * Removes the given book from the storage
-     * @param book - id of book which is needed to be removed
+     * @param bookId - id of book which is needed to be removed
      * @return - boolean representation of result of method executing
      */
-    public boolean removeBookFromStorage(Book book) {
+    public boolean removeBookFromStorage(long bookId) {
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeTransaction(manager -> removeBookFromStorageCommand(manager, book));
+        Object executingResult = daoManager.executeTransaction(manager -> removeBookFromStorageCommand(manager, bookId));
 
         return checkAndCastExecutingResult(executingResult);
     }
@@ -111,15 +112,24 @@ public class LocationService extends Service {
         return EXECUTING_SUCCESSFUL;
     }
 
-    private boolean removeBookFromStorageCommand(DaoManager manager, Book book) throws SQLException {
+    private boolean removeBookFromStorageCommand(DaoManager manager, long bookId) throws SQLException {
 
+        // Checking for not returned books
         LoanDtoDao loanDtoDao = manager.getLoanDtoDao();
-        if (!loanDtoDao.getActiveLoansByBook(book.getId()).isEmpty()) {
+        if (!loanDtoDao.getActiveLoansByBookId(bookId).isEmpty()) {
             return EXECUTING_FAILED;
         }
 
+        // Removing unapproved loans for the book being deleted
+        List<LoanDto> unapprovedLoans = loanDtoDao.getUnapprovedLoansByBookId(bookId);
+        LoanDao loanDao = (LoanDao) manager.getLoanDao();
+        for (LoanDto loanDto : unapprovedLoans) {
+            loanDao.delete(loanDto.getLoan());
+        }
+
+        // Removing book from the storage
         LocationDao locationDao = (LocationDao) manager.getLocationDao();
-        locationDao.deleteBookFromAllLocations(book);
+        locationDao.deleteBookFromAllLocations(bookId);
 
         return EXECUTING_SUCCESSFUL;
     }

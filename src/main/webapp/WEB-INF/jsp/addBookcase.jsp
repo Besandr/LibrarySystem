@@ -24,7 +24,7 @@
     <div style="color:red"><fmt:message key="bookcaseManagement.addingBookcase.errors"/></div>
 </c:if>
 
-<form action="${contextPath}/admin/bookcaseManagement/add">
+<form action="${contextPath}/admin/bookcaseManagement/add.do">
 
     <c:if test="${errors.errorsMap['shelfQuantity'] != null}">
         <div><fmt:message key="${errors.errorsMap['shelfQuantity']}"/></div>

@@ -69,5 +69,13 @@ public interface LoanDtoDao {
      * @return - a list with active loans for target book
      *          or the empty list if there is no any
      */
-    List<LoanDto> getActiveLoansByBook(long bookId);
+    List<LoanDto> getActiveLoansByBookId(long bookId);
+
+    /**
+     * Gets a list of unapproved  loans for target book.
+     * @param bookId - ID of a target reading by users book
+     * @return - a list with active loans for target book
+     *          or the empty list if there is no any
+     */
+    List<LoanDto> getUnapprovedLoansByBookId(long bookId);
 }

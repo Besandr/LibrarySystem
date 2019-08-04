@@ -82,7 +82,9 @@ public class ActionServlet extends HttpServlet {
         if (userAction != null) {
             redirectPath = executeAction(request, response, userAction, actionPath, servletResources);
         } else {
-            redirectPath = "WEB-INF/jsp/404.jsp";
+            // If there is no action bound to a current action path
+            // trying to find forward path bound with this action path
+            redirectPath = servletResources.getForward(actionPath);
         }
 
         //This condition defines a way to direct the request. It will be forwarded or redirect

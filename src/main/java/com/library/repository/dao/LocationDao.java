@@ -22,7 +22,7 @@ public interface LocationDao extends Dao<Location> {
      * Deletes information of given book in every location occupied by it
      * @param book - book for deleting.
      */
-    void deleteBookFromAllLocations(Book book);
+    void deleteBookFromAllLocations(long bookId);
 
     /**
      * Changes is_occupied state of given location

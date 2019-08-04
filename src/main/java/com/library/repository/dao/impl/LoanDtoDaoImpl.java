@@ -138,7 +138,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
      * {@inheritDoc}
      */
     @Override
-    public List<LoanDto> getActiveLoansByBook(long bookId) {
+    public List<LoanDto> getActiveLoansByBookId(long bookId) {
         try{
             PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ACTIVE_LOANS_BY_BOOK_QUERY);
             statement.setLong(1, bookId);
@@ -148,7 +148,27 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
             return createLoanDtoListFromResultSet(rs);
 
         } catch (SQLException e) {
-            String errorText = "Can't get loanDtos list from DB. Cause: " + e.getMessage();
+            String errorText = "Can't get active loanDtos list from DB. Cause: " + e.getMessage();
+            log.error(errorText, e);
+            throw new DaoException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LoanDto> getUnapprovedLoansByBookId(long bookId) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_UNAPPROVED_LOANS_BY_BOOK_QUERY);
+            statement.setLong(1, bookId);
+
+            ResultSet rs = statement.executeQuery();
+
+            return createLoanDtoListFromResultSet(rs);
+
+        } catch (SQLException e) {
+            String errorText = "Can't get unapproved loanDtos list from DB. Cause: " + e.getMessage();
             log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
