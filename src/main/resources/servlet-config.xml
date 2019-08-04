@@ -240,6 +240,20 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/admin/bookManagement/deleteBooks.do</path>
+            <type>com.library.web.controller.actions.DeleteBookAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LocationService</class>
+                    <name>locationService</name>
+                </dependency>
+                <dependency>
+                    <class>com.library.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/admin/bookcaseManagement/add.do</path>
             <type>com.library.web.controller.actions.AddBookcaseAction</type>
             <form-name>AddBookcaseForm</form-name>
