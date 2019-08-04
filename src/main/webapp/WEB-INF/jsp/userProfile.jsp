@@ -12,11 +12,11 @@
 
 <html>
 <head>
-    <c:import url="adminCabinet.jsp"/>
-
     <title><fmt:message key="userProfile.title"/></title>
 </head>
 <body>
+
+<div><c:import url="adminCabinet.jsp"/></div>
 
 <div style="text-align-all: center">
     <div><fmt:message key="userProfile.title"/></div>

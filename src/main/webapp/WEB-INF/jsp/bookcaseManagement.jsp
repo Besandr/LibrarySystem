@@ -12,11 +12,11 @@
 
 <html>
 <head>
-    <c:import url="adminCabinet.jsp"/>
-
     <title><fmt:message key="bookcaseManagement.title"/> </title>
 </head>
 <body>
+
+<div><c:import url="adminCabinet.jsp"/></div>
 
 <c:if test="${not empty actionResult}">
     <div>

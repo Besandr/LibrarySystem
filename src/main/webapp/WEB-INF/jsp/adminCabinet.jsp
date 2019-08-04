@@ -12,11 +12,12 @@
 
 <html>
 <head>
-    <c:import url="header.jsp"/>
-
     <title><fmt:message key="adminCabinet.title"/></title>
 </head>
 <body>
+
+<div><c:import url="header.jsp"/></div>
+
 <div>
     <c:import url="adminControl.jsp"/>
 </div>

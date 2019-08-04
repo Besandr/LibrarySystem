@@ -12,11 +12,11 @@
 
 <html>
 <head>
-    <c:import url="header.jsp"/>
-
     <title><fmt:message key="accessDenied.title"/></title>
 </head>
 <body>
+
+<div><c:import url="header.jsp"/></div>
 
 <div>
     <fmt:message key="accessDenied.deniedMessage"/>

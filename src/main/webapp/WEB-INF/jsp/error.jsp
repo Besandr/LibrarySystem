@@ -15,6 +15,9 @@
     <title>!!!!!</title>
 </head>
 <body>
+
+<div><c:import url="header.jsp"/></div>
+
 <h1>Unfortunately bad things occurred</h1>
 <a href="${contextPath}/title" class="link createLink">Continue</a>
 </body>

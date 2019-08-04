@@ -12,11 +12,12 @@
 
 <html>
 <head>
-    <c:import url="header.jsp"/>
-
     <title><fmt:message key="userCabinet.title"/></title>
 </head>
 <body>
+
+<div><c:import url="header.jsp"/></div>
+
 User's cabinet
 </body>
 </html>

@@ -12,11 +12,12 @@
 
 <html>
 <head>
-    <c:import url="header.jsp"/>
-
     <title><fmt:message key="registration.title"/></title>
 </head>
 <body>
+
+<div><c:import url="header.jsp"/></div>
+
 <c:if test="${errors.hasErrors}">
     <p  style="color:red"><fmt:message key="registration.errors"/></p>
 </c:if>

@@ -12,11 +12,11 @@
 
 <html>
 <head>
-    <c:import url="header.jsp"/>
-
     <title><fmt:message key="bookSearch.title"/></title>
 </head>
 <body>
+
+<div><c:import url="header.jsp"/></div>
 
 <div>
     <h2><fmt:message key="bookSearch.title"/></h2>

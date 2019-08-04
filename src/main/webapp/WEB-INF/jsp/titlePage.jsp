@@ -12,12 +12,12 @@
 
 <html>
 <head>
-    <c:import url="header.jsp"/>
-
     <title><fmt:message key="title.title"/></title>
-
 </head>
 <body>
+
+<div><c:import url="header.jsp"/></div>
+
 <br>
 <a href="${contextPath}/bookSearch"><fmt:message key="title.findBooks"/> </a>
 </body>
