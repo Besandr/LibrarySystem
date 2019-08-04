@@ -25,7 +25,7 @@ public class ApproveLoanForm extends ActionForm{
      */
     @Override
     public void fill(HttpServletRequest request) {
-        loanId = getIdPropertyFromRequest(request, "loanId");
+        loanId = getLongPropertyFromRequest(request, "loanId");
     }
 
     /**

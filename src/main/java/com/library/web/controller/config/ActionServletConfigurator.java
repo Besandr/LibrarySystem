@@ -106,6 +106,7 @@ public class ActionServletConfigurator {
      * @param formFactory - the {@code FormFactory} instance
      */
     void addFormToFormFactory(ActionConfig actionConfig, ActionServletConfig actionServletConfig, FormFactory formFactory){
+        // Getting a config of bound with action form
         Optional<FormConfig> formConfigOptional = actionServletConfig.getForms()
                 .stream()
                 .filter(f -> actionConfig.getFormName().equals(f.getName()))
@@ -114,7 +115,7 @@ public class ActionServletConfigurator {
         if (formConfigOptional.isPresent()) {
             formFactory.addFormClass(actionConfig.getPath(), formConfigOptional.get().getType());
         } else {
-            String errorText = "In servlet config file action with validation doesn't have matching form";
+            String errorText = "In servlet config file action with validation doesn't have matching form: " + actionConfig.getFormName();
             log.fatal(errorText);
             throw new ServletConfigException(errorText);
         }

@@ -42,6 +42,10 @@
             <type>com.library.web.controller.forms.BookManagementForm</type>
         </form>
         <form>
+            <name>AddBookcaseForm</name>
+            <type>com.library.web.controller.forms.AddBookcaseForm</type>
+        </form>
+        <form>
             <name>UserProfileForm</name>
             <type>com.library.web.controller.forms.UserProfileForm</type>
         </form>
@@ -153,6 +157,10 @@
             <type>com.library.web.controller.actions.ShowLoansManagementPage</type>
         </action>
         <action>
+            <path>/admin/bookcaseManagement</path>
+            <type>com.library.web.controller.actions.ShowBookcaseManagementPage</type>
+        </action>
+        <action>
             <path>/admin/unapprovedLoans</path>
             <type>com.library.web.controller.actions.ShowUnapprovedLoansAction</type>
             <service-dependencies>
@@ -246,6 +254,19 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/admin/bookcaseManagement/add</path>
+            <type>com.library.web.controller.actions.AddBookcaseAction</type>
+            <form-name>AddBookcaseForm</form-name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/addBookcase.jsp</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LocationService</class>
+                    <name>locationService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/admin/userProfile</path>
             <type>com.library.web.controller.actions.ShowUserProfileAction</type>
             <form-name>UserProfileForm</form-name>
@@ -303,6 +324,10 @@
             <value>/WEB-INF/jsp/loansManagement.jsp</value>
         </entry>
         <entry>
+            <key>ShowBookcaseManagementPage</key>
+            <value>/WEB-INF/jsp/bookcaseManagement.jsp</value>
+        </entry>
+        <entry>
             <key>showUnapprovedLoans</key>
             <value>/WEB-INF/jsp/unapprovedLoans.jsp</value>
         </entry>
@@ -333,6 +358,10 @@
         <entry>
             <key>BookManagementAction</key>
             <value>/admin/bookManagement</value>
+        </entry>
+        <entry>
+            <key>ShowBookManagementPage</key>
+            <value>/WEB-INF/jsp/bookManagement.jsp</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

@@ -16,3 +16,6 @@
 <a href="${contextPath}/admin/bookManagement">
     <fmt:message key="adminControl.bookManagement"/>
 </a>
+<a href="${contextPath}/admin/bookcaseManagement">
+    <fmt:message key="bookcaseManagement.title"/>
+</a>

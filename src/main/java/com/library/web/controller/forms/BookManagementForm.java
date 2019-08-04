@@ -22,7 +22,7 @@ public class BookManagementForm extends ActionForm {
      */
     @Override
     public void fill(HttpServletRequest request) {
-        booksQuantity = (int) getIdPropertyFromRequest(request, "booksQuantity");
+        booksQuantity = (int) getLongPropertyFromRequest(request, "booksQuantity");
     }
 
     /**

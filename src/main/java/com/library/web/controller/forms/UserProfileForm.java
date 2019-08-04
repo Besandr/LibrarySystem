@@ -22,7 +22,7 @@ public class UserProfileForm extends ActionForm {
      */
     @Override
     public void fill(HttpServletRequest request) {
-        userId = getIdPropertyFromRequest(request, "userId");
+        userId = getLongPropertyFromRequest(request, "userId");
     }
 
     /**

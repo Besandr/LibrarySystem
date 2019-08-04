@@ -26,10 +26,16 @@ public class LocationService extends Service {
     /**
      * Adds a new bookcase to the library storage and creates free locations
      * provided by it
-     * @param bookcase - new library's bookcase
+     * @param shelfQuantity - quantity of shelves of the new bookcase
+     * @param cellsQuantity - quantity of book cells on the shelves
      * @return - boolean representation of result of method executing
      */
-    public boolean addBookcaseToStorage(Bookcase bookcase) {
+    public boolean addBookcaseToStorage(int shelfQuantity, int cellsQuantity) {
+
+        Bookcase bookcase = Bookcase.builder()
+                .shelfQuantity(shelfQuantity)
+                .cellQuantity(cellsQuantity)
+                .build();
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 

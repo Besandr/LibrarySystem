@@ -25,7 +25,7 @@ public class BookIdForm extends ActionForm {
      */
     @Override
     public void fill(HttpServletRequest request) {
-        bookId = getIdPropertyFromRequest(request, "bookId");
+        bookId = getLongPropertyFromRequest(request, "bookId");
     }
 
     /**
