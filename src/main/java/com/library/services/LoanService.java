@@ -81,6 +81,19 @@ public class LoanService extends Service{
     }
 
     /**
+     * Gives a quantity of all unapproved loans
+     * @param userId - ID of a target user whose loans quantity is need to be returned
+     * @return a quantity of all unapproved loans
+     */
+    public long getUnapprovedLoansByUserQuantity(long userId){
+        DaoManager daoManager = daoManagerFactory.createDaoManager();
+
+        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoansByUserIdQuantity(userId));
+
+        return checkAndCastObjectToLong(executingResult);
+    }
+
+    /**
      * Gets a list with all active loans (not returned yet).
      * @param recordsQuantity - quantity of records per page
      * @param previousRecordNumber - number of previous record
@@ -109,15 +122,17 @@ public class LoanService extends Service{
 
     /**
      * Gets a list with all unapproved loans of given User.
-     * @param user - user whose unapproved loans need to
+     * @param userId - ID of user whose unapproved loans need to
      *             be returned
+     * @param previousRecordNumber - number of previous record
+     * @param recordsQuantity - quantity of records per page
      * @return a list with user's unapproved loans
      */
-    public List<LoanDto> getUnapprovedLoansByUser(User user){
+    public List<LoanDto> getUnapprovedLoansByUser(long userId, int recordsQuantity, int previousRecordNumber){
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> manager.getLoanDtoDao().getUnapprovedLoansByUser(user));
+        Object executingResult = daoManager.executeAndClose(manager -> getUnapprovedLoansByUserCommand(manager, userId, recordsQuantity, previousRecordNumber));
 
         return checkAndCastObjectToList(executingResult);
 
@@ -210,6 +225,14 @@ public class LoanService extends Service{
         addBookQuantityToLoanDtoInList(manager, loanDtos);
 
         return loanDtos;
+    }
+
+    private Object getUnapprovedLoansByUserCommand(DaoManager manager, long userId, int recordsQuantity, int previousRecordNumber) throws SQLException {
+        List<LoanDto> loanDtoList = manager.getLoanDtoDao().
+                getUnapprovedLoansByUserId(userId, recordsQuantity, previousRecordNumber);
+
+        addAuthorsToLoanDtoInList(manager, loanDtoList);
+        return loanDtoList;
     }
 
     private List<LoanDto> getActiveLoansCommand(DaoManager manager, int recordsQuantity, int previousRecordNumber) throws SQLException {

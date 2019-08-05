@@ -18,6 +18,10 @@
 
 <div><c:import url="header.jsp"/></div>
 
-User's cabinet
+<br>
+<a href="${contextPath}/user/orderedBooks" ><fmt:message key="userCabinet.orderedBooks"/> </a>
+<a href="" ><fmt:message key="userCabinet.borrowedBooks"/> </a>
+
+
 </body>
 </html>

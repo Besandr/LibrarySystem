@@ -39,11 +39,22 @@ public interface LoanDtoDao {
 
     /**
      * Gets a list of unapproved loans for target user.
-     * @param user - a target user whose loans is need to be returned
+     *
+     * @param userId - ID of a target user whose loans is need to be returned
+     * @param limit the number of loans returned
+     * @param offset of the first loan to return
      * @return - a list with unapproved loans for target user
      *          or the empty list if there is no any
      */
-    List<LoanDto> getUnapprovedLoansByUser(User user);
+    List<LoanDto> getUnapprovedLoansByUserId(long userId, int limit, int offset);
+
+    /**
+     * Gives a quantity of all user's unapproved loans
+     * @param userId - ID of a target user whose loans quantity
+     *               is need to be returned
+     * @return a quantity of all user's unapproved loans
+     */
+    long getUnapprovedLoansByUserIdQuantity(long userId);
 
     /**
      * Gets a list of active(not returned) loans for

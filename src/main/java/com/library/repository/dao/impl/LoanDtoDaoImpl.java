@@ -82,16 +82,40 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
      * {@inheritDoc}
      */
     @Override
-    public List<LoanDto> getUnapprovedLoansByUser(User user) {
+    public List<LoanDto> getUnapprovedLoansByUserId(long userId, int limit, int offset) {
 
         try{
             PreparedStatement statement = connection.prepareStatement(DBQueries.GET_UNAPPROVED_LOANS_BY_USER_QUERY);
-            statement.setLong(1, user.getId());
+            statement.setLong(1, userId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             return createLoanDtoListFromResultSet(statement.executeQuery());
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get unapproved loans by user. User: %s. Cause: %s.", user, e.getMessage());
+            String errorText = String.format("Can't get unapproved loans by user. User: %s. Cause: %s.", userId, e.getMessage());
+            log.error(errorText, e);
+            throw new DaoException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getUnapprovedLoansByUserIdQuantity(long userId) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_UNAPPROVED_LOANS_BY_USER_QUANTITY);
+            statement.setLong(1, userId);
+
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            String errorText = "Can't get user's unapproved loans quantity";
             log.error(errorText, e);
             throw new DaoException(errorText, e);
         }

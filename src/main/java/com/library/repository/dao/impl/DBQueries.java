@@ -96,13 +96,15 @@ class DBQueries {
             "ORDER BY apply_date LIMIT ? OFFSET ?;";
 
     static final String GET_UNAPPROVED_LOANS_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE COALESCE (loan_date, expired_date, return_date) IS NULL;";
+    static final String GET_UNAPPROVED_LOANS_BY_USER_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE COALESCE (loan_date, expired_date, return_date) IS NULL AND l.user_id = ?;";
     static final String GET_ACTIVE_LOANS_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE loan_date IS NOT NULL AND return_date IS NULL;";
 
     static final String GET_UNAPPROVED_LOANS_BY_USER_QUERY = "SELECT * FROM library_system.loan AS l \n" +
             "INNER JOIN library_system.book AS b ON l.book_id = b.book_id\n" +
             "INNER JOIN library_system.user AS u ON l.user_id = u.user_id\n" +
             "WHERE COALESCE (loan_date, expired_date, return_date) IS NULL\n" +
-            "AND l.user_id = ?";
+            "AND l.user_id = ?\n" +
+            "ORDER BY apply_date LIMIT ? OFFSET ?;";
 
     static final String GET_ACTIVE_LOANS_QUERY = "SELECT * FROM library_system.loan AS l \n" +
             "INNER JOIN library_system.book AS b ON l.book_id = b.book_id\n" +
