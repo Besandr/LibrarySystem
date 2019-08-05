@@ -96,9 +96,9 @@ class DBQueries {
             "ORDER BY apply_date LIMIT ? OFFSET ?;";
 
     static final String GET_UNAPPROVED_LOANS_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE COALESCE (loan_date, expired_date, return_date) IS NULL;";
-    static final String GET_UNAPPROVED_LOANS_BY_USER_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE COALESCE (loan_date, expired_date, return_date) IS NULL AND l.user_id = ?;";
-    static final String GET_ACTIVE_LOANS_BY_USER_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE loan_date IS NOT NULL AND return_date IS NULL AND l.user_id = ?;";
-    static final String GET_RETURNED_LOANS_BY_USER_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE return_date IS NOT NULL AND l.user_id = ?;";
+    static final String GET_UNAPPROVED_LOANS_BY_USER_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE COALESCE (loan_date, expired_date, return_date) IS NULL AND user_id = ?;";
+    static final String GET_ACTIVE_LOANS_BY_USER_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE loan_date IS NOT NULL AND return_date IS NULL AND user_id = ?;";
+    static final String GET_RETURNED_LOANS_BY_USER_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE return_date IS NOT NULL AND user_id = ?;";
     static final String GET_ACTIVE_LOANS_QUANTITY = "SELECT COUNT(*) FROM library_system.loan WHERE loan_date IS NOT NULL AND return_date IS NULL;";
 
     static final String GET_UNAPPROVED_LOANS_BY_USER_QUERY = "SELECT * FROM library_system.loan AS l \n" +

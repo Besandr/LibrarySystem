@@ -34,6 +34,10 @@
             <type>com.library.web.controller.forms.BookIdForm</type>
         </form>
         <form>
+            <name>LoanIdForm</name>
+            <type>com.library.web.controller.forms.LoanIdForm</type>
+        </form>
+        <form>
             <name>BookCreationForm</name>
             <type>com.library.web.controller.forms.BookCreationForm</type>
         </form>
@@ -316,6 +320,18 @@
         <action>
             <path>/user/borrowedBooks</path>
             <type>com.library.web.controller.actions.ShowBorrowedBooksAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
+            <path>/userCabinet/returnBook.do</path>
+            <type>com.library.web.controller.actions.ReturnBookAction</type>
+            <form-name>LoanIdForm</form-name>
+            <validate>false</validate>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LoanService</class>

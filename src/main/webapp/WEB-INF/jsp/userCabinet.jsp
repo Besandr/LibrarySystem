@@ -18,6 +18,12 @@
 
 <div><c:import url="header.jsp"/></div>
 
+<c:if test="${not empty actionResult}">
+    <div>
+        <fmt:message key="${actionResult}"/>
+    </div>
+</c:if>
+
 <br>
 <a href="${contextPath}/user/orderedBooks" ><fmt:message key="userCabinet.orderedBooks"/> </a>
 <a href="${contextPath}/user/borrowedBooks" ><fmt:message key="userCabinet.borrowedBooks"/> </a>

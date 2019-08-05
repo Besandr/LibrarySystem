@@ -45,8 +45,8 @@
                 <td>${loanDTO.loan.loanDate}</td>
                 <td>${loanDTO.loan.expiredDate}</td>
                 <td>
-                    <form action="">
-                        <input type="text" value="${loanDTO.loan.id}" hidden>
+                    <form action="${contextPath}/userCabinet/returnBook.do">
+                        <input type="text" name="loanId" value="${loanDTO.loan.id}" hidden>
                         <button><fmt:message key="userCabinet.returnBook"/></button>
                     </form>
                 </td>
