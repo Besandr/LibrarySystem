@@ -41,7 +41,7 @@ public class AuthorBookDaoImpl implements AuthorBookDao {
                 statement.addBatch();
             }
 
-            statement.execute();
+            statement.executeBatch();
         } catch (SQLException e) {
             String errorText = String.format("Can't add rows to author_book table. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText, e);

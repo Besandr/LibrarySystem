@@ -41,7 +41,7 @@ public class BookKeywordDaoImpl implements BookKeywordDao {
                 statement.addBatch();
             }
 
-            statement.execute();
+            statement.executeBatch();
         } catch (SQLException e) {
             String errorText = String.format("Can't add rows to book_keyword table. Book: %s. Cause: %s", book, e.getMessage());
             log.error(errorText, e);
