@@ -59,19 +59,40 @@ public interface LoanDtoDao {
     /**
      * Gets a list of active(not returned) loans for
      * target user.
-     * @param user - a target user whose loans is need to be returned
+     * @param userId - ID of a target user whose loans is need to be returned
+     * @param limit the number of loans returned
+     * @param offset of the first loan to return
      * @return - a list with active loans for target user
      *          or the empty list if there is no any
      */
-    List<LoanDto> getActiveLoansByUser(User user);
+    List<LoanDto> getActiveLoansByUserId(long userId, int limit, int offset);
+
+    /**
+     * Gives a quantity of all user's active loans
+     * @param userId - ID of a target user whose loans quantity
+     *               is need to be returned
+     * @return a quantity of all user's active loans
+     */
+    long getActiveLoansByUserIdQuantity(long userId);
 
     /**
      * Gets a list of all loans for target user.
-     * @param user - a target user whose loans is need to be returned
-     * @return - a list with all loans for target user
+     * @param userId - ID of a target user whose returned loans
+     *               is need to be returned from method
+     * @param limit the number of loans returned
+     * @param offset of the first loan to return
+     * @return - a list with all returned loans for target user
      *          or the empty list if there is no any
      */
-    List<LoanDto> getAllLoansByUser(User user);
+    List<LoanDto> getReturnedLoansByUserId(long userId, int limit, int offset);
+
+    /**
+     * Gives a quantity of all user's returned loans
+     * @param userId - ID of a target user whose loans quantity
+     *               is need to be returned
+     * @return a quantity of all user's returned loans
+     */
+    long getReturnedLoansByUserIdQuantity(long userId);
 
     /**
      * Gets a list of active (not returned) loans for

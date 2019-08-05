@@ -10,18 +10,9 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<html>
-<head>
-    <title><fmt:message key="userCabinet.title"/></title>
-</head>
-<body>
-
 <div><c:import url="header.jsp"/></div>
 
-<br>
 <a href="${contextPath}/user/orderedBooks" ><fmt:message key="userCabinet.orderedBooks"/> </a>
 <a href="${contextPath}/user/borrowedBooks" ><fmt:message key="userCabinet.borrowedBooks"/> </a>
 
 
-</body>
-</html>

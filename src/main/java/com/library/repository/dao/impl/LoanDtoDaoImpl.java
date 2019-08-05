@@ -125,16 +125,18 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
      * {@inheritDoc}
      */
     @Override
-    public List<LoanDto> getActiveLoansByUser(User user) {
+    public List<LoanDto> getActiveLoansByUserId(long userId, int limit, int offset) {
 
         try{
             PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ACTIVE_LOANS_BY_USER_QUERY);
-            statement.setLong(1, user.getId());
+            statement.setLong(1, userId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             return createLoanDtoListFromResultSet(statement.executeQuery());
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get active loans for given user. User: %s. Cause: %s", user, e.getMessage());
+            String errorText = String.format("Can't get active loans for given user. User: %s. Cause: %s", userId, e.getMessage());
             log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
@@ -144,15 +146,61 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
      * {@inheritDoc}
      */
     @Override
-    public List<LoanDto> getAllLoansByUser(User user) {
+    public long getReturnedLoansByUserIdQuantity(long userId) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_RETURNED_LOANS_BY_USER_QUANTITY);
+            statement.setLong(1, userId);
+
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            String errorText = "Can't get user's returned loans quantity";
+            log.error(errorText, e);
+            throw new DaoException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<LoanDto> getReturnedLoansByUserId(long userId, int limit, int offset) {
         try{
             PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ALL_LOANS_BY_USER_QUERY);
-            statement.setLong(1, user.getId());
+            statement.setLong(1, userId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             return createLoanDtoListFromResultSet(statement.executeQuery());
 
         } catch (SQLException e) {
-            String errorText = String.format("Can't get all loans by user. User: %s. Cause: %s.", user, e.getMessage());
+            String errorText = String.format("Can't get all loans by user. User: %s. Cause: %s.", userId, e.getMessage());
+            log.error(errorText, e);
+            throw new DaoException(errorText, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long getActiveLoansByUserIdQuantity(long userId) {
+        try{
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ACTIVE_LOANS_BY_USER_QUANTITY);
+            statement.setLong(1, userId);
+
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            String errorText = "Can't get user's active loans quantity";
             log.error(errorText, e);
             throw new DaoException(errorText, e);
         }

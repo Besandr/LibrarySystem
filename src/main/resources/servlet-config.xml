@@ -314,6 +314,16 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/user/borrowedBooks</path>
+            <type>com.library.web.controller.actions.ShowBorrowedBooksAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/changeLanguage</path>
             <type>com.library.web.controller.actions.ChangeLanguageAction</type>
         </action>
@@ -429,6 +439,10 @@
         <entry>
             <key>ShowOrderedBooksPage</key>
             <value>/WEB-INF/jsp/userOrderedBooks.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowBorrowedBooksPage</key>
+            <value>/WEB-INF/jsp/UserBorrowedBooks.jsp</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>
