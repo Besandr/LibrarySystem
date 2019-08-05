@@ -93,7 +93,7 @@ public class BookCreationForm extends ActionForm {
      */
     private void titleValidation(ActionErrors errors, String title) {
         if (title.isEmpty()) {
-            errors.addError("emptyTitle", "bookManagement.errors.title");
+            errors.addError("emptyTitle", "bookManagement.bookForm.errors.title");
         }
     }
 
@@ -102,7 +102,7 @@ public class BookCreationForm extends ActionForm {
      */
     private void yearValidation(ActionErrors errors, String yearString) {
         if (yearString.isEmpty()) {
-            errors.addError("year", "bookManagement.errors.emptyYear");
+            errors.addError("year", "bookManagement.bookForm.errors.emptyYear");
             return;
         }
 
@@ -110,12 +110,12 @@ public class BookCreationForm extends ActionForm {
             year = Integer.parseInt(yearString);
         } catch (NumberFormatException e) {
             //Entered invalid year
-            errors.addError("year", "bookManagement.errors.invalidYear");
+            errors.addError("year", "bookManagement.bookForm.errors.invalidYear");
             return;
         }
 
         if (year < 1800 || year > LocalDate.now().getYear()) {
-            errors.addError("year", "bookManagement.errors.invalidYear");
+            errors.addError("year", "bookManagement.bookForm.errors.invalidYear");
         }
     }
 
@@ -124,7 +124,7 @@ public class BookCreationForm extends ActionForm {
      */
     private void descriptionValidation(ActionErrors errors, String description) {
         if (description.isEmpty()) {
-            errors.addError("emptyDescription", "bookManagement.errors.emptyDescription");
+            errors.addError("emptyDescription", "bookManagement.bookForm.errors.emptyDescription");
         }
     }
 
@@ -136,13 +136,13 @@ public class BookCreationForm extends ActionForm {
         for (int i = 0; i < newAuthorFirstNames.size(); i++) {
             if (newAuthorLastNames.get(i).isEmpty()
                     && !newAuthorFirstNames.get(i).isEmpty()) {
-                errors.addError("newAuthors", "bookManagement.errors.emptyLastName");
+                errors.addError("newAuthors", "bookManagement.bookForm.errors.emptyLastName");
                 return;
             }
         }
 
         if (newAuthorLastNames.isEmpty() && oldAuthorsId.isEmpty()) {
-            errors.addError("newAuthors", "bookManagement.errors.emptyAuthors");
+            errors.addError("newAuthors", "bookManagement.bookForm.errors.emptyAuthors");
             return;
         }
 
@@ -152,7 +152,7 @@ public class BookCreationForm extends ActionForm {
         for (String firstName : newAuthorFirstNames) {
             matcher = pattern.matcher(firstName);
             if (!firstName.isEmpty() && !matcher.matches()) {
-                errors.addError("newAuthors", "bookManagement.errors.namePatternConformance");
+                errors.addError("newAuthors", "bookManagement.bookForm.errors.namePatternConformance");
                 return;
             }
         }
@@ -160,7 +160,7 @@ public class BookCreationForm extends ActionForm {
         for (String lastName : newAuthorLastNames) {
             matcher = pattern.matcher(lastName);
             if (!lastName.isEmpty() && !matcher.matches()) {
-                errors.addError("newAuthors", "bookManagement.errors.namePatternConformance");
+                errors.addError("newAuthors", "bookManagement.bookForm.errors.namePatternConformance");
             }
         }
     }

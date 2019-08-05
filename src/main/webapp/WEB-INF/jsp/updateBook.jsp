@@ -1,18 +1,18 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <c:if test="${empty sessionScope.language}">
     <c:set var="language" value="${applicationScope.language}" scope="session"/>
 </c:if>
-<fmt:setLocale value="${sessionScope.language}"/>
-<fmt:setBundle basename="textContent"/>
+<fmt:setLocale value="${sessionScope.language}" />
+<fmt:setBundle basename="textContent" />
 
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <html>
 <head>
-    <title><fmt:message key="bookManagement.creationTitle"/></title>
+    <title><fmt:message key="bookManagement.updatingTitle"/></title>
     <script src="${contextPath}/resources/js/form.js"></script>
 </head>
 <body>
@@ -26,7 +26,7 @@
 </div>
 
 <div>
-    <form action="${contextPath}/admin/bookManagement/createBook.do" method="post">
+    <form action="${contextPath}/admin/bookManagement/updateBook.do" method="post">
         <%--    Checking for existing errors in previous form sumbiting--%>
         <c:if test="${errors.errorsMap['newAuthors'] != null}">
             <div style="color:red"><fmt:message key="${errors.errorsMap['newAuthors']}"/></div>
@@ -38,7 +38,7 @@
             <%--        Authors selects from saved in a request data--%>
             <c:if test="${not empty form.oldAuthorsId}">
                 <c:forEach items="${form.oldAuthorsId}" var="authorId">
-                    <div>
+                    <div id="oldAuthor${authorId}">
                         <select name="oldAuthorId">
                             <c:forEach var="author" items="${authors}">
                                 <c:choose>
@@ -51,6 +51,7 @@
                                 </c:choose>
                             </c:forEach>
                         </select>
+                        <button type="button>" onclick="deleteNodeById('oldAuthor${authorId}')">-</button>
                     </div>
                     <br>
                 </c:forEach>
@@ -78,7 +79,7 @@
             <%--        New authors from saved in a request data--%>
             <c:if test="${not empty form.newAuthorLastNames}">
                 <c:forEach items="${form.newAuthorLastNames}" varStatus="loop">
-                    <tr>
+                    <tr id="newAuthor${loop.index}">
                         <td><input type="text" name="newAuthorFirstName" value="${form.newAuthorFirstNames[loop.index]}"></td>
                         <td><input type="text" name="newAuthorLastName" value="${form.newAuthorLastNames[loop.index]}"></td>
                     </tr>
@@ -99,8 +100,8 @@
             <%--            Keywords selects from saved in a request data--%>
             <c:if test="${not empty form.oldKeywordsId}">
                 <c:forEach items="${form.oldKeywordsId}" var="keywordId">
-                    <div>
-                        <select name="oldKeywordId">
+                    <div id="oldKeyword${keywordId}">
+                        <select name="oldKeywordsId">
                             <c:forEach var="keyword" items="${keywords}">
                                 <c:choose>
                                     <c:when test="${keyword.id == keywordId}">
@@ -112,6 +113,7 @@
                                 </c:choose>
                             </c:forEach>
                         </select>
+                        <button type="button>" onclick="deleteNodeById('oldKeyword${keywordId}')">-</button>
                     </div>
                     <br>
                 </c:forEach>
@@ -138,7 +140,7 @@
             <%--        New keywords from stored in request data--%>
             <c:if test="${not empty form.newKeywords}">
                 <c:forEach items="${form.newKeywords}" var="keyword">
-                    <tr>
+                    <tr id="newWord${keyword}">
                         <td><input type="text" name="newKeyword" value="${keyword}"></td>
                     </tr>
                 </c:forEach>
@@ -174,11 +176,9 @@
             <div><input type="text" name="description" value="${form.description}" required></div>
         </div>
 
-        <button><fmt:message key="bookManagement.createBook"/></button>
+        <button><fmt:message key="bookManagement.changeBookProperties"/></button>
     </form>
 </div>
 
 </body>
-
-
 </html>

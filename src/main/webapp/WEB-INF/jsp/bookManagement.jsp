@@ -34,10 +34,16 @@
     </div>
     <br>
     <div>"${bookDto.book.title}"</div>
+    <div>"${bookDto.book.year}"</div>
+    <div>
+        <c:forEach var="keyword" items="${bookDto.keywords}">
+            <div>${keyword.word}</div>
+        </c:forEach>
+    </div>
 <%--        Showing managements actions--%>
     <a href="${contextPath}/admin/bookManagement/addBooks.do"><fmt:message key="bookManagement.addBooks"/></a>
     <a href="${contextPath}/admin/bookManagement/removeBooks.do"><fmt:message key="bookManagement.removeBooks"/></a>
-    <a href=""><fmt:message key="bookManagement.changeBookProperties"/></a>
+    <a href="${contextPath}/admin/bookManagement/updateBook"><fmt:message key="bookManagement.changeBookProperties"/></a>
     <a href="${contextPath}/admin/bookManagement/deleteBooks.do"><fmt:message key="bookManagement.deleteBook"/></a>
     <a href="${contextPath}/admin/activeBookLoans?bookId=${bookDto.book.id}"><fmt:message key="bookManagement.showBorrowers"/></a>
 
@@ -45,7 +51,7 @@
 
 <%--Actions for another book--%>
 <div><fmt:message key="bookManagement.findOrCreate"/> </div>
-<a href="${contextPath}/admin/createBook"><fmt:message key="bookManagement.createBook"/></a>
+<a href="${contextPath}/admin/bookManagement/createBook"><fmt:message key="bookManagement.createBook"/></a>
 <a href="${contextPath}/bookSearch"><fmt:message key="bookManagement.findBook"/></a>
 
 

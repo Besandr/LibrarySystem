@@ -42,7 +42,7 @@
     </c:when>
     <c:otherwise>
         <div><fmt:message key="bookManagement.findOrCreate"/> </div>
-        <a href="${contextPath}/admin/createBook"><fmt:message key="bookManagement.createBook"/></a>
+        <a href="${contextPath}/admin/bookManagement/createBook"><fmt:message key="bookManagement.createBook"/></a>
         <a href="${contextPath}/bookSearch"><fmt:message key="bookManagement.findBook"/></a>
     </c:otherwise>
 </c:choose>

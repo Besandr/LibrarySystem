@@ -41,7 +41,7 @@
         </label>
         <br>
         <label>
-            <fmt:message key="bookSearch.keyword"/>:
+            <fmt:message key="keyword"/>:
             <select name="keywordId">
                 <option disabled selected value><fmt:message key="bookSearch.chooseKeyword"/></option>
                 <c:forEach var="keyword" items="${keywords}">

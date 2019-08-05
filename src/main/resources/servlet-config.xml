@@ -181,7 +181,7 @@
             </service-dependencies>
         </action>
         <action>
-            <path>/admin/createBook</path>
+            <path>/admin/bookManagement/createBook</path>
             <type>com.library.web.controller.actions.ShowBookCreationPageAction</type>
             <service-dependencies>
                 <dependency>
@@ -191,11 +191,36 @@
             </service-dependencies>
         </action>
         <action>
-            <path>/admin/createBook.do</path>
+            <path>/admin/bookManagement/createBook.do</path>
             <type>com.library.web.controller.actions.CreateBookAction</type>
             <form-name>BookCreationForm</form-name>
             <validate>true</validate>
-            <input>/admin/createBook</input>
+            <input>/admin/bookManagement/createBook</input>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
+            <path>/admin/bookManagement/updateBook</path>
+            <type>com.library.web.controller.actions.ShowUpdateBookPage</type>
+            <form-name>BookCreationForm</form-name>
+            <validate>false</validate>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.BookService</class>
+                    <name>bookService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
+            <path>/admin/bookManagement/updateBook.do</path>
+            <type>com.library.web.controller.actions.UpdateBookAction</type>
+            <form-name>BookCreationForm</form-name>
+            <validate>true</validate>
+            <input>/WEB-INF/jsp/updateBook.jsp</input>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.BookService</class>
@@ -334,6 +359,10 @@
         <entry>
             <key>ShowPersonalCabinetAction</key>
             <value>/cabinet</value>
+        </entry>
+        <entry>
+            <key>ShowBookUpdatingPage</key>
+            <value>/WEB-INF/jsp/updateBook.jsp</value>
         </entry>
         <entry>
             <key>/admin/loansManagement</key>

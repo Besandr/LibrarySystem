@@ -73,48 +73,65 @@ public class BookService extends Service{
 
     /**
      * Updates a book's fields properties
-     * @param bookDto - DTO object contains the book which properties
-     *                is need to be updated
+     *
      * @return - the boolean type result of executing this method
      */
-    public boolean updateBookProperties(BookDto bookDto) {
+    public boolean updateBookDtoProperties(long bookId,
+                                           String title,
+                                           int year,
+                                           String description,
+                                           List<Long> oldAuthorsId,
+                                           List<Long> oldKeywordsId,
+                                           List<String> newAuthorFirstNames,
+                                           List<String> newAuthorLastNames,
+                                           List<String> newKeywords) {
+
+        Book book = Book.builder()
+                .id(bookId)
+                .title(title)
+                .year(year)
+                .description(description)
+                .build();
+
+        Set<Author> authors = createAuthorsSet(oldAuthorsId, newAuthorFirstNames, newAuthorLastNames);
+        Set<Keyword> keywords = createKeywordsSet(oldKeywordsId, newKeywords);
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executionResult = daoManager.executeAndClose(manager -> updateBookPropertiesCommand(manager, bookDto));
+        Object executionResult = daoManager.executeAndClose(manager -> updateBookDtoPropertiesCommand(manager, book, authors, keywords));
 
         return checkAndCastExecutingResult(executionResult);
     }
 
-    /**
-     * Updates a book's authors
-     * @param bookDto - DTO object contains the book which authors
-     *                is need to be updated
-     * @return - the boolean type result of executing this method
-     */
-    public boolean updateBookAuthorsSet(BookDto bookDto) {
+//    /**
+//     * Updates a book's authors
+//     * @param bookDto - DTO object contains the book which authors
+//     *                is need to be updated
+//     * @return - the boolean type result of executing this method
+//     */
+//    public boolean updateBookAuthorsSet(BookDto bookDto) {
+//
+//        DaoManager daoManager = daoManagerFactory.createDaoManager();
+//
+//        Object executionResult = daoManager.executeTransaction(manager -> updateBookAuthorsSetCommand(manager, bookDto));
+//
+//        return checkAndCastExecutingResult(executionResult);
+//    }
 
-        DaoManager daoManager = daoManagerFactory.createDaoManager();
-
-        Object executionResult = daoManager.executeTransaction(manager -> updateBookAuthorsSetCommand(manager, bookDto));
-
-        return checkAndCastExecutingResult(executionResult);
-    }
-
-    /**
-     * Updates a book's keywords
-     * @param bookDto - DTO object contains the book which keywords
-     *                is need to be updated
-     * @return - the boolean type result of executing this method
-     */
-    public boolean updateBookKeywordsSet(BookDto bookDto) {
-
-        DaoManager daoManager = daoManagerFactory.createDaoManager();
-
-        Object executionResult = daoManager.executeTransaction(manager -> updateBookKeywordsSetCommand(manager, bookDto));
-
-        return checkAndCastExecutingResult(executionResult);
-    }
+//    /**
+//     * Updates a book's keywords
+//     * @param bookDto - DTO object contains the book which keywords
+//     *                is need to be updated
+//     * @return - the boolean type result of executing this method
+//     */
+//    public boolean updateBookKeywordsSet(BookDto bookDto) {
+//
+//        DaoManager daoManager = daoManagerFactory.createDaoManager();
+//
+//        Object executionResult = daoManager.executeTransaction(manager -> updateBookKeywordsSetCommand(manager, bookDto));
+//
+//        return checkAndCastExecutingResult(executionResult);
+//    }
 
     /**
      * Gets the list with all keywords in the library
@@ -250,67 +267,88 @@ public class BookService extends Service{
         return bookDtos;
     }
 
-    synchronized boolean updateBookPropertiesCommand(DaoManager manager, BookDto bookDto) throws SQLException {
+    synchronized boolean updateBookDtoPropertiesCommand(DaoManager manager, Book book, Set<Author> authors, Set<Keyword> keywords) throws SQLException {
 
-        BookDao bookDao = (BookDao) manager.getBookDao();
+        updateBookProperties(manager, book);
+        updateBookAuthorsSet(manager, book, authors);
+        updateBookKeywordsSet(manager, book, keywords);
 
-        bookDao.update(bookDto.getBook());
         // If updating fails the manager in caller method will return null.
         return EXECUTING_SUCCESSFUL;
 
     }
 
-    synchronized boolean updateBookAuthorsSetCommand(DaoManager manager, BookDto bookDto) throws SQLException {
-        //Updated authors set doesn't contain removed from book authors
+    synchronized void updateBookAuthorsSet(DaoManager manager, Book book, Set<Author> authors) throws SQLException {
+        // Updated authors set doesn't contain removed from book authors
         AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
-        //Getting old book authors list
-        List<Author> deletedAuthors = authorDao.getByBookId(bookDto.getBook().getId());
-        //Filtering it to remain only deleted from book authors
-        deletedAuthors.removeAll(bookDto.getAuthors());
+        // Getting old book authors list
+        List<Author> authorsBeforeUpdate = authorDao.getByBookId(book.getId());
+        // Creating list with deletedAuthors by filtering old authors
+        // to remain only deleted from book authors
+        List<Author> deletedAuthors = new ArrayList<>(authorsBeforeUpdate);
+        deletedAuthors.removeAll(authors);
         AuthorBookDao authorBookDao = manager.getAuthorBookDao();
-        //Deleting records from junction author_book table
+        // Deleting records from junction author_book table
         for (Author author : deletedAuthors) {
-            authorBookDao.deleteAuthorBookJunction(author, bookDto.getBook());
+            authorBookDao.deleteAuthorBookJunction(author, book);
         }
-
         deleteAuthors(manager, deletedAuthors);
 
-        //Updated authors set may contain new authors
-        Set<Author> newAuthors = bookDto.getAuthors().stream()
+        // Creating list with remained after book updating authors
+        List<Author> remainedAuthors = new ArrayList<>(authorsBeforeUpdate);
+        remainedAuthors.removeAll(deletedAuthors);
+        // Remove from authors set remained in book authors
+        // for creating a new junction for added to book authors
+        authors.removeAll(remainedAuthors);
+
+        // Updated authors set may contain new authors
+        Set<Author> newAuthors = authors.stream()
                 .filter(a -> a.getId() == 0)
                 .collect(Collectors.toCollection(HashSet::new));
         saveAuthors(manager, newAuthors);
-        //Filling a junction table author_book
-        manager.getAuthorBookDao().saveAuthorBookJunction(bookDto.getBook(), newAuthors);
-
-        return EXECUTING_SUCCESSFUL;
+        // Filling a junction table author_book
+        manager.getAuthorBookDao().saveAuthorBookJunction(book, authors);
     }
 
-    synchronized boolean updateBookKeywordsSetCommand(DaoManager manager, BookDto bookDto) throws SQLException {
+    synchronized void updateBookKeywordsSet(DaoManager manager, Book book, Set<Keyword> keywords) throws SQLException {
         //Updated keywords set doesn't contain removed from book keywords
         KeywordDao keywordDao = (KeywordDao) manager.getKeywordDao();
         //Getting old book keywords list
-        List<Keyword> deletedKeywords = keywordDao.getByBookId(bookDto.getBook().getId());
+        List<Keyword> keywordsBeforeUpdate = keywordDao.getByBookId(book.getId());
+        // Creating list with deletedKeywords by filtering old keywords
+        // to remain only deleted from book keywords
+        List<Keyword> deletedKeywords = new ArrayList<>(keywordsBeforeUpdate);
         //Filtering it to remain only deleted from book keywords
-        deletedKeywords.removeAll(bookDto.getKeywords());
+        deletedKeywords.removeAll(keywords);
         BookKeywordDao keywordBookDao = manager.getBookKeywordDao();
         //Deleting records from junction book_keyword table
         for (Keyword keyword : deletedKeywords) {
-            keywordBookDao.deleteBookKeywordJunction(keyword, bookDto.getBook());
+            keywordBookDao.deleteBookKeywordJunction(keyword, book);
         }
-
         deleteKeywords(manager, deletedKeywords);
 
+        // Creating list with remained after book updating keywords
+        List<Keyword> remainedKeywords = new ArrayList<>(keywordsBeforeUpdate);
+        remainedKeywords.removeAll(deletedKeywords);
+        // Remove from keywords set remained in book keywords
+        // for creating a new junction for added to book keywords
+        keywords.removeAll(remainedKeywords);
+
         //Updated keywords set may contain new keywords
-        Set<Keyword> newKeywords = bookDto.getKeywords().stream()
+        Set<Keyword> newKeywords = keywords.stream()
                 .filter(a -> a.getId() == 0)
                 .collect(Collectors.toCollection(HashSet::new));
         saveKeywords(manager, newKeywords);
         //Filling a junction table keyword_book
-        manager.getBookKeywordDao().saveBookKeywordsJunction(bookDto.getBook(), newKeywords);
-
-        return EXECUTING_SUCCESSFUL;
+        manager.getBookKeywordDao().saveBookKeywordsJunction(book, keywords);
     }
+
+    private synchronized void updateBookProperties(DaoManager manager, Book book) throws SQLException {
+        BookDao bookDao = (BookDao) manager.getBookDao();
+        bookDao.update(book);
+    }
+
+
 
     private Optional<BookDto> getBookDtoByIdCommand(DaoManager manager, long bookId) throws SQLException {
         BookDao bookDao = (BookDao) manager.getBookDao();
