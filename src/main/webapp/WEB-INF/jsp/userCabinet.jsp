@@ -27,6 +27,7 @@
 <br>
 <a href="${contextPath}/user/orderedBooks" ><fmt:message key="userCabinet.orderedBooks"/> </a>
 <a href="${contextPath}/user/borrowedBooks" ><fmt:message key="userCabinet.borrowedBooks"/> </a>
+<a href="${contextPath}/user/returnedBooks" ><fmt:message key="userCabinet.returnedBooks"/> </a>
 
 
 </body>

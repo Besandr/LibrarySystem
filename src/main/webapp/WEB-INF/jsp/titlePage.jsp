@@ -12,6 +12,8 @@
 
 <html>
 <head>
+    <link rel="stylesheet" href="${contextPath}/resources/css/librarySystem.css" type='text/css'>
+
     <title><fmt:message key="title.title"/></title>
 </head>
 <body>

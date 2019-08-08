@@ -133,8 +133,8 @@ class DBQueries {
             "WHERE COALESCE (loan_date, expired_date, return_date) IS NULL\n" +
             "AND l.book_id = ?;";
 
-    static final String GET_ALL_LOANS_BY_USER_QUERY = "SELECT * FROM library_system.loan AS l \n" +
+    static final String GET_RETURNED_LOANS_BY_USER_QUERY = "SELECT * FROM library_system.loan AS l \n" +
             "INNER JOIN library_system.book AS b ON l.book_id = b.book_id\n" +
             "INNER JOIN library_system.user AS u ON l.user_id = u.user_id\n" +
-            "WHERE l.user_id = ? ORDER BY apply_date DESC LIMIT ? OFFSET ?;";
+            "WHERE l.user_id = ? AND l.return_date IS NOT NULL ORDER BY return_date DESC LIMIT ? OFFSET ?;";
 }

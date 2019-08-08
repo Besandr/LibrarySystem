@@ -170,7 +170,7 @@ public class LoanDtoDaoImpl implements LoanDtoDao {
     @Override
     public List<LoanDto> getReturnedLoansByUserId(long userId, int limit, int offset) {
         try{
-            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_ALL_LOANS_BY_USER_QUERY);
+            PreparedStatement statement = connection.prepareStatement(DBQueries.GET_RETURNED_LOANS_BY_USER_QUERY);
             statement.setLong(1, userId);
             statement.setInt(2, limit);
             statement.setInt(3, offset);

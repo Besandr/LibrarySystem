@@ -328,6 +328,16 @@
             </service-dependencies>
         </action>
         <action>
+            <path>/user/returnedBooks</path>
+            <type>com.library.web.controller.actions.ShowReturnedBooksAction</type>
+            <service-dependencies>
+                <dependency>
+                    <class>com.library.services.LoanService</class>
+                    <name>loanService</name>
+                </dependency>
+            </service-dependencies>
+        </action>
+        <action>
             <path>/userCabinet/returnBook.do</path>
             <type>com.library.web.controller.actions.ReturnBookAction</type>
             <form-name>LoanIdForm</form-name>
@@ -458,7 +468,11 @@
         </entry>
         <entry>
             <key>ShowBorrowedBooksPage</key>
-            <value>/WEB-INF/jsp/UserBorrowedBooks.jsp</value>
+            <value>/WEB-INF/jsp/userBorrowedBooks.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowReturnedBooksPage</key>
+            <value>/WEB-INF/jsp/userReturnedBooks.jsp</value>
         </entry>
         <entry>
             <key>ShowAccessDeniedPage</key>

@@ -41,7 +41,7 @@ public class ShowBorrowedBooksAction extends Action {
     }
 
     /**
-     * Gives a {@code List} with paginated part of all unapproved loans
+     * Gives a {@code List} with paginated part of all active loans
      */
     private List<LoanDto> getActiveLoans(long userId, HttpServletRequest request, LoanService loanService, PaginationHelper paginationHelper) {
 

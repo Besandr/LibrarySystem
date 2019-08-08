@@ -58,7 +58,7 @@
 <%------------------------- Pagination part -------------------------------%>
 <%--For displaying Previous link except for the 1st page --%>
 <c:if test="${currentPage != 1}">
-    <td><a href="${contextPath}/admin/activeLoans?page=${currentPage - 1}"><fmt:message key="pagination.previous"/> </a></td>
+    <td><a href="${contextPath}/admin/borrowedBooks?page=${currentPage - 1}"><fmt:message key="pagination.previous"/> </a></td>
 </c:if>
 
 <%--For displaying Page numbers.
@@ -71,7 +71,7 @@ The when condition does not display a link for the current page--%>
                     <td>${i}</td>
                 </c:when>
                 <c:otherwise>
-                    <td><a href="${contextPath}/admin/activeLoans?page=${i}">${i}</a></td>
+                    <td><a href="${contextPath}/admin/borrowedBooks?page=${i}">${i}</a></td>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
@@ -80,7 +80,7 @@ The when condition does not display a link for the current page--%>
 
 <%--For displaying Next link --%>
 <c:if test="${currentPage lt pagesQuantity}">
-    <td><a href="${contextPath}/admin/activeLoans?page=${currentPage + 1}"><fmt:message key="pagination.next"/> </a></td>
+    <td><a href="${contextPath}/admin/borrowedBooks?page=${currentPage + 1}"><fmt:message key="pagination.next"/> </a></td>
 </c:if>
 
 </body>
