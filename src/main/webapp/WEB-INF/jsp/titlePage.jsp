@@ -13,14 +13,20 @@
 <html>
 <head>
     <link rel="stylesheet" href="${contextPath}/resources/css/librarySystem.css" type='text/css'>
+    <link rel="stylesheet" href="${contextPath}/resources/css/bootstrap.css" type='text/css'>
+    <link rel="stylesheet" href="${contextPath}/resources/css/bootstrap-grid.css" type='text/css'>
 
     <title><fmt:message key="title.title"/></title>
 </head>
-<body>
+<body class="title-body">
 
 <div><c:import url="header.jsp"/></div>
 
 <br>
-<a href="${contextPath}/bookSearch"><fmt:message key="title.findBooks"/> </a>
+<div class="container d-flex h-100 align-items-center">
+    <div class="mx-auto text-center">
+        <a class="btn btn-warning btn-lg" href="${contextPath}/bookSearch"><fmt:message key="title.findBooks"/> </a>
+    </div>
+</div>
 </body>
 </html>

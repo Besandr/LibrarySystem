@@ -1,0 +1,25 @@
+.title-body {
+  background: url('../img/storage.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+
+.navbar-custom{
+  background-color: #5d4037;
+  color:#ffea00;
+}
+
+.nav-link {
+  color:#ffea00;
+}
+
+.navbar-text {
+  font-weight: bold;
+}
+
+
+.nav-link:focus, .nav-link:hover {
+  color: #ffffff;
+}
