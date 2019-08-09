@@ -94,3 +94,6 @@ ALTER TABLE `location` ADD CONSTRAINT `location_fk0` FOREIGN KEY (`book_id`) REF
 
 ALTER TABLE `location` ADD CONSTRAINT `location_fk1` FOREIGN KEY (`bookcase_id`) REFERENCES `bookcase`(`bookcase_id`)  ON DELETE CASCADE;
 
+-- CREATE USER 'andrey'@'localhost' IDENTIFIED BY 'fancyPa55w0rd';
+-- GRANT ALL PRIVILEGES ON * . * TO 'andrey'@'localhost';
+-- FLUSH PRIVILEGES;
