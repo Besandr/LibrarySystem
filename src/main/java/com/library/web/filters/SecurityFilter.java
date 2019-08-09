@@ -150,4 +150,14 @@ public class SecurityFilter implements Filter {
         session.removeAttribute("postponedRequestParameters");
         session.removeAttribute("postponedRequestUrl");
     }
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void destroy() {
+
+    }
 }

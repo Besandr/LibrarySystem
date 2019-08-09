@@ -10,6 +10,7 @@ public class EncodingFilter implements Filter {
 
     private String encoding;
 
+    @Override
     public void init(FilterConfig config) throws ServletException {
         // read encoding param from config in web.xml
         encoding = config.getInitParameter("encoding");
