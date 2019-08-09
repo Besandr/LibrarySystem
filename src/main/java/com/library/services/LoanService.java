@@ -9,7 +9,6 @@ import com.library.repository.dao.UserDao;
 import com.library.repository.dto.LoanDto;
 import com.library.repository.entity.Loan;
 import com.library.repository.entity.Location;
-import com.library.repository.entity.User;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -18,6 +17,7 @@ import java.util.Optional;
 
 /**
  * Service class which has methods bound with loan operations
+ * and DAO
  */
 public class LoanService extends Service{
 
@@ -296,7 +296,7 @@ public class LoanService extends Service{
 
     private boolean approveLoanCommand(DaoManager manager, long loanId) throws SQLException {
 
-        LoanDao loanDao = (LoanDao) manager.getLoanDao();
+        LoanDao loanDao = manager.getLoanDao();
         Optional<Loan> loan = loanDao.get(loanId);
         //check is loan with given id persistent in the DB
         //and not approved yet
@@ -305,7 +305,7 @@ public class LoanService extends Service{
         }
 
         //check is there a target book on the shelves
-        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        LocationDao locationDao = manager.getLocationDao();
         Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), true);
 
         if (locationOptional.isPresent()) {
@@ -324,7 +324,7 @@ public class LoanService extends Service{
 
     private boolean returnBookCommand(DaoManager manager, long loanId) throws SQLException {
 
-        LoanDao loanDao = (LoanDao) manager.getLoanDao();
+        LoanDao loanDao = manager.getLoanDao();
         Optional<Loan> loan;
 
         synchronized (this) {
@@ -334,16 +334,21 @@ public class LoanService extends Service{
             if (!loan.isPresent() || loan.get().getReturnDate() != null) {
                 return EXECUTING_FAILED;
             }
+
             //Setting the loan status as "returned"(set today's date as return date in the loan record)
             loanDao.updateReturnDate(loanId, LocalDate.now());
+
             //Returning the book to the library's storage
-            LocationDao locationDao = (LocationDao) manager.getLocationDao();
+            LocationDao locationDao = manager.getLocationDao();
             Optional<Location> locationOptional = locationDao.getBookLocation(loan.get().getBookId(), false);
+            if (!locationOptional.isPresent()) {
+                return EXECUTING_FAILED;
+            }
             locationDao.updateIsOccupied(locationOptional.get().getId(), true);
+
+            updateUsersKarma(manager, loan.get());
+
         }
-
-        updateUsersKarma(manager, loan);
-
         return EXECUTING_SUCCESSFUL;
     }
 
@@ -352,14 +357,13 @@ public class LoanService extends Service{
      * @param manager - {@code DadManager} for accessing {@code Dao} is needed
      * @param loan - returned loan
      */
-    private void updateUsersKarma(DaoManager manager, Optional<Loan> loan) throws SQLException {
+    private void updateUsersKarma(DaoManager manager, Loan loan) throws SQLException {
 
         LocalDate today = LocalDate.now();
 
-        if (loan.get().getExpiredDate().isBefore(today)) {
-
-            UserDao userDao = (UserDao) manager.getUserDao();
-            userDao.updateKarma(loan.get().getUserId(), -1);
+        if (loan.getExpiredDate().isBefore(today)) {
+            UserDao userDao = manager.getUserDao();
+            userDao.updateKarma(loan.getUserId(), -1);
         }
     }
 
@@ -367,7 +371,7 @@ public class LoanService extends Service{
      * Adds authors list to each {@code LoanDto} in the given list
      */
     private void addAuthorsToLoanDtoInList(DaoManager manager, List<LoanDto> loanDtos) throws SQLException {
-        AuthorDao authorDao = (AuthorDao) manager.getAuthorDao();
+        AuthorDao authorDao = manager.getAuthorDao();
         for (LoanDto loanDto : loanDtos) {
             long bookId = loanDto.getBook().getId();
             loanDto.setAuthors(authorDao.getByBookId(bookId));
@@ -378,7 +382,7 @@ public class LoanService extends Service{
      * Adds book quantity to each {@code LoanDto} in the given list
      */
     private void addBookQuantityToLoanDtoInList(DaoManager manager, List<LoanDto> loanDtos) throws SQLException {
-        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        LocationDao locationDao = manager.getLocationDao();
         for (LoanDto loanDto : loanDtos) {
             long bookId = loanDto.getBook().getId();
             loanDto.setBookQuantity(locationDao.getBookQuantity(bookId));

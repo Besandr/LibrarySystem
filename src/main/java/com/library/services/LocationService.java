@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Service class which has methods bound with location operations
+ * and DAO
  */
 public class LocationService extends Service {
 
@@ -78,12 +79,12 @@ public class LocationService extends Service {
     //Commands which is needed to be executed in corresponding public service methods
     boolean addBookcaseToStorageCommand(DaoManager manager, Bookcase bookcase) throws SQLException {
         //saving the bookcase
-        BookcaseDao bookcaseDao =(BookcaseDao) manager.getBookcaseDao();
+        BookcaseDao bookcaseDao = manager.getBookcaseDao();
         long bookcaseId = bookcaseDao.save(bookcase);
         bookcase.setId(bookcaseId);
 
         //creating new locations provided by the new bookcase
-        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        LocationDao locationDao = manager.getLocationDao();
         for (int i = 1; i <= bookcase.getShelfQuantity(); i++) {
             for (int j = 1; j <= bookcase.getCellQuantity(); j++) {
                 Location location = Location.builder()
@@ -98,7 +99,7 @@ public class LocationService extends Service {
     }
 
     boolean addBooksToStorageCommand(DaoManager manager, long bookId, int booksQuantity) throws SQLException {
-        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        LocationDao locationDao = manager.getLocationDao();
         List<Location> locations = locationDao.getAllLocations(true);
 
         if (locations.size() < booksQuantity) {
@@ -122,13 +123,13 @@ public class LocationService extends Service {
 
         // Removing unapproved loans for the book being deleted
         List<LoanDto> unapprovedLoans = loanDtoDao.getUnapprovedLoansByBookId(bookId);
-        LoanDao loanDao = (LoanDao) manager.getLoanDao();
+        LoanDao loanDao = manager.getLoanDao();
         for (LoanDto loanDto : unapprovedLoans) {
             loanDao.delete(loanDto.getLoan());
         }
 
         // Removing book from the storage
-        LocationDao locationDao = (LocationDao) manager.getLocationDao();
+        LocationDao locationDao = manager.getLocationDao();
         locationDao.deleteBookFromAllLocations(bookId);
 
         return EXECUTING_SUCCESSFUL;

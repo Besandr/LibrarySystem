@@ -1,10 +1,7 @@
 package com.library.repository;
 
+import com.library.repository.dao.*;
 import com.library.repository.dao.impl.*;
-import com.library.repository.dao.AuthorBookDao;
-import com.library.repository.dao.BookKeywordDao;
-import com.library.repository.dao.Dao;
-import com.library.repository.dao.LoanDtoDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +9,9 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Manages connections lifecycle, transactions and DAO creations
+ */
 public class DaoManager {
 
     private static final Logger log = LogManager.getLogger(DaoManager.class);
@@ -102,11 +102,11 @@ public class DaoManager {
     }
 
     // Dao getters
-    public Dao getAuthorDao() throws SQLException {
+    public AuthorDao getAuthorDao() throws SQLException {
         return new AuthorDaoImpl(getConnection());
     }
 
-    public Dao getBookDao() throws SQLException {
+    public BookDao getBookDao() throws SQLException {
         return new BookDaoImpl(getConnection());
     }
 
@@ -114,7 +114,7 @@ public class DaoManager {
         return new AuthorBookDaoImpl(getConnection());
     }
 
-    public Dao getKeywordDao() throws SQLException {
+    public KeywordDao getKeywordDao() throws SQLException {
         return new KeywordDaoImpl(getConnection());
     }
 
@@ -122,19 +122,19 @@ public class DaoManager {
         return new BookKeywordDaoImpl(getConnection());
     }
 
-    public Dao getLocationDao() throws SQLException {
+    public LocationDao getLocationDao() throws SQLException {
         return new LocationDaoImpl(getConnection());
     }
 
-    public Dao getLoanDao() throws SQLException {
+    public LoanDao getLoanDao() throws SQLException {
         return new LoanDaoImpl(getConnection());
     }
 
-    public Dao getBookcaseDao() throws SQLException {
+    public BookcaseDao getBookcaseDao() throws SQLException {
         return new BookcaseDaoImpl(getConnection());
     }
 
-    public Dao getUserDao() throws SQLException {
+    public UserDao getUserDao() throws SQLException {
         return new UserDaoImpl(getConnection());
     }
 
@@ -142,10 +142,8 @@ public class DaoManager {
         return new LoanDtoDaoImpl(this, getConnection());
     }
 
-    DaoManager(){}
-
     /**
-     * Command for executing by DaoManager
+     * Command class for executing by DaoManager
      */
     @FunctionalInterface
     public interface DaoManagerCommand{
