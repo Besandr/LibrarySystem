@@ -67,7 +67,7 @@ public class ActionFactory {
     Action createAction(String actionClassName, boolean needValidate, String inputPath, List<ServiceDependencyConfig> serviceDependencyList) {
         try {
             Class actionClass = Class.forName(actionClassName);
-            Action action = (Action) actionClass.newInstance();
+            Action action = (Action) actionClass.getDeclaredConstructor().newInstance();
 
             action.setNeedValidate(needValidate);
             action.setInputPath(inputPath);

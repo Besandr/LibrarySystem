@@ -4,6 +4,7 @@ import com.library.web.controller.forms.ActionForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
@@ -35,9 +36,10 @@ public class FormFactory {
         if (actionClassName != null) {
             try {
                 Class actionClass = Class.forName(actionClassName);
-                return (ActionForm) actionClass.newInstance();
+                return (ActionForm) actionClass.getDeclaredConstructor().newInstance();
 
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            } catch (ClassNotFoundException | InstantiationException
+                    | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 log.error(String.format("Can't create action class by name: %s. Cause: %s", actionClassName, e.getMessage()), e);
             }
         }

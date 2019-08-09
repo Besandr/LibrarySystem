@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementing of BookDao for working with a MySql server
+ * Implementing of BookDao for working with a SQL server
  */
 public class UserDaoImpl implements UserDao {
 
@@ -178,28 +178,6 @@ public class UserDaoImpl implements UserDao {
             log.error(errorText, e);
             throw new DaoException(errorText, e);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateRole(long userId, long roleId) {
-
-        try {
-            PreparedStatement updateStatement = connection.prepareStatement(DBQueries.UPDATE_USER_ROLE_QUERY);
-            updateStatement.setLong(1, roleId);
-            updateStatement.setLong(2, userId);
-
-            updateStatement.execute();
-
-        } catch (SQLException e) {
-            String errorText = String.format("Can't update user's role_id. User id: %s. Role id: %s. " +
-                    "Cause: %s",userId, roleId, e.getMessage());
-            log.error(errorText, e);
-            throw new DaoException(errorText, e);
-        }
-
     }
 
     /**

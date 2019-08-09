@@ -25,7 +25,7 @@
 <br>
 <div class="container d-flex h-100 align-items-center">
     <div class="mx-auto text-center">
-        <a class="btn btn-warning btn-lg" href="${contextPath}/bookSearch"><fmt:message key="title.findBooks"/> </a>
+        <a class="btn btn-warning btn-lg find-book-link" href="${contextPath}/bookSearch"><fmt:message key="title.findBooks"/> </a>
     </div>
 </div>
 </body>

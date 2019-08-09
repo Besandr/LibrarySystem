@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementing of AuthorDao for working with a MySql server
+ * Implementing of AuthorDao for working with a SQL server
  */
 public class LoanDaoImpl implements LoanDao {
 

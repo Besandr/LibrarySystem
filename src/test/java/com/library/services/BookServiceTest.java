@@ -115,41 +115,6 @@ public class BookServiceTest {
 
     }
 
-//    @Test
-//    public void saveBookShouldSetIdAndReturnTrue() throws SQLException {
-//
-//        long id = 3;
-//
-//        BookDao mockDao = mock(BookDao.class);
-//        Book mockBook = mock(Book.class);
-//        when(mockManager.getBookDao()).thenReturn(mockDao);
-//        when(mockDao.save(mockBook)).thenReturn(id);
-//
-//        ArgumentCaptor valueCapture = ArgumentCaptor.forClass(Long.class);
-//
-//        doNothing().when(mockBook).setId((Long)valueCapture.capture());
-//
-//        boolean result = mockService.saveBook(mockManager, mockBook);
-//
-//        assertEquals(id, valueCapture.getValue());
-//        assertTrue(result);
-//    }
-
-//    @Test
-//    public void saveBookShouldReturnFalse() throws SQLException {
-//
-//        long id = -1;
-//
-//        BookDao mockDao = mock(BookDao.class);
-//        Book mockBook = mock(Book.class);
-//        when(mockManager.getBookDao()).thenReturn(mockDao);
-//        when(mockDao.save(mockBook)).thenReturn(id);
-//
-//        boolean result = mockService.saveBook(mockManager, mockBook);
-//
-//        assertFalse(result);
-//    }
-
     @Test
     public void testCreateBookDtoFromBook() throws SQLException {
 
@@ -247,34 +212,47 @@ public class BookServiceTest {
                 expected, mockService.getKeywordByWord(mockKeywordDao, "anotherWord"));
     }
 
-//    @Test
-//    public void addBookToCatalogueCommandShouldExecuteSavingMethodsAndReturnTrue() throws SQLException {
-//
-//        doReturn(true).when(mockService).saveBook(mockManager, mockBook);
-//
-//        when(mockManager.getAuthorBookDao()).thenReturn(mockAuthorBookDao);
-//        when(mockManager.getBookKeywordDao()).thenReturn(mockBookKeywordDao);
-//
-//        boolean result = mockService.addBookToCatalogueCommand(mockManager, mockBookDto, authors, keywords);
-//
-//        verify(mockService, times(1)).saveBook(mockManager, mockBook);
-//        verify(mockService, times(1)).saveAuthors(eq(mockManager), anySet());
-//        verify(mockService, times(1)).saveKeywords(eq(mockManager), anySet());
-//        verify(mockAuthorBookDao, times(1)).saveAuthorBookJunction(eq(mockBook), anySet());
-//        verify(mockBookKeywordDao, times(1)).saveBookKeywordsJunction(eq(mockBook), anySet());
-//
-//        assertTrue(result);
-//    }
+    @Test
+    public void addBookToCatalogueCommandShouldExecuteSavingMethodsAndReturnCorrectLong() throws SQLException {
+        doReturn(3L).when(mockBookDao).save(mockBook);
 
-//    @Test
-//    public void addBookToCatalogueCommandShouldReturnFalse() throws SQLException {
-//
-//        doReturn(false).when(mockService).saveBook(mockManager, mockBook);
-//
-//        boolean result = mockService.addBookToCatalogueCommand(mockManager, mockBookDto, authors, keywords);
-//
-//        assertFalse(result);
-//    }
+        Set<Author> authors = new HashSet<>();
+        Set<Keyword> keywords = new HashSet<>();
+        keywords.add(Keyword.builder().build());
+
+
+        long result = mockService.addBookToCatalogueCommand(mockManager, mockBook, authors, keywords);
+
+        verify(mockBookDao, times(1)).save(mockBook);
+        verify(mockService, times(1)).saveAuthors(mockManager, authors);
+        verify(mockService, times(1)).saveKeywords(mockManager, keywords);
+        verify(mockAuthorBookDao, times(1)).saveAuthorBookJunction(mockBook, authors);
+        verify(mockBookKeywordDao, times(1)).saveBookKeywordsJunction(mockBook, keywords);
+
+        assertEquals(3L, result);
+    }
+
+    @Test
+    public void addBookToCatalogueCommandShouldNotExecuteSaveBookKeywordsJunction() throws SQLException {
+        doReturn(3L).when(mockBookDao).save(mockBook);
+        doNothing().when(mockService).saveAuthors(eq(mockManager), any());
+
+        Set<Keyword> keywords = new HashSet<>();
+
+        mockService.addBookToCatalogueCommand(mockManager, mockBook, null, keywords);
+
+        verify(mockBookKeywordDao, never()).saveBookKeywordsJunction(mockBook, keywords);
+    }
+
+    @Test
+    public void addBookToCatalogueCommandShouldReturnNegativeLong() throws SQLException {
+
+        doReturn(-1L).when(mockBookDao).save(mockBook);
+
+        long result = mockService.addBookToCatalogueCommand(mockManager, mockBook, null, null);
+
+        assertEquals(-1, result);
+    }
 
     @Test
     public void removeBookFromCatalogueCommandShouldReturnFalse() throws SQLException {
@@ -298,74 +276,77 @@ public class BookServiceTest {
         assertTrue(result);
     }
 
-//    @Test
-//    public void testUpdateBookPropertiesCommand() throws SQLException {
-//
-//        boolean result = mockService.updateBookDtoPropertiesCommand(mockManager, mockBookDto);
-//
-//        verify(mockBookDao, times(1)).update(mockBook);
-//        assertTrue(result);
-//    }
+    @Test
+    public void updateBookPropertiesCommandShouldCallAnotherMethodsAndReturnTrue() throws SQLException {
+        Set<Author> authors = new HashSet<>();
+        Set<Keyword> keywords = new HashSet<>();
+        doNothing().when(mockService).updateBookProperties(mockManager, mockBook);
+        doNothing().when(mockService).updateBookAuthorsSet(mockManager, mockBook, authors);
+        doNothing().when(mockService).updateBookKeywordsSet(mockManager, mockBook, keywords);
 
-//    @Test
-//    public void testUpdateBookAuthorsSetCommand() throws SQLException {
-//
-//        Author authorDeleted = Author.builder().firstName("deleted").id(1).build();
-//        Author authorRemainedInLibrary = Author.builder().firstName("remainedInLib").id(2).build();
-//        Author authorRemainedInBook = Author.builder().firstName("remainedInBook").id(3).build();
-//        Author authorNewInBook = Author.builder().firstName("newInBook").id(4).build();
-//        Author authorNewInLibrary = Author.builder().firstName("newInLib").id(0).build();
-//
-//        List<Author> oldAuthors = Stream.of(authorDeleted, authorRemainedInLibrary, authorRemainedInBook).collect(Collectors.toList());
-//        when(mockAuthorDao.getByBookId(mockBook.getId())).thenReturn(oldAuthors);
-//
-//        Set<Author> newAuthors = Stream.of(authorRemainedInBook, authorNewInBook, authorNewInLibrary).collect(Collectors.toSet());
-//        when(mockBookDto.getAuthors()).thenReturn(newAuthors);
-//
-//        ArgumentCaptor<Collection<Author>> capturedDeletedAuthorsCollection = ArgumentCaptor.forClass(Collection.class);
-//        ArgumentCaptor<Collection<Author>> capturedNewAuthorsCollection = ArgumentCaptor.forClass(Collection.class);
-//
-//        doNothing().when(mockService).deleteAuthors(eq(mockManager), capturedDeletedAuthorsCollection.capture());
-//        doNothing().when(mockService).saveAuthors(eq(mockManager), capturedNewAuthorsCollection.capture());
-//
-//        boolean result = mockService.updateBookAuthorsSetCommand(mockManager, mockBookDto);
-//
-//        verify(mockAuthorBookDao, times(2)).deleteAuthorBookJunction(any(Author.class), eq(mockBook));
-//        verify(mockAuthorBookDao, times(1)).saveAuthorBookJunction(mockBook, (Set<Author>) capturedNewAuthorsCollection.getValue());
-//        assertEquals(2, capturedDeletedAuthorsCollection.getValue().size());
-//        assertEquals(1, capturedNewAuthorsCollection.getValue().size());
-//        assertTrue(result);
-//    }
+        boolean result = mockService.updateBookDtoPropertiesCommand(mockManager, mockBook, authors, keywords);
 
-//    @Test
-//    public void testUpdateBookKeywordsSetCommand() throws SQLException {
-//
-//        Keyword keywordDeleted = Keyword.builder().word("deleted").id(1).build();
-//        Keyword keywordRemainedInLibrary = Keyword.builder().word("remainedInLib").id(2).build();
-//        Keyword keywordRemainedInBook = Keyword.builder().word("remainedInBook").id(3).build();
-//        Keyword keywordNewInBook = Keyword.builder().word("newInBook").id(4).build();
-//        Keyword keywordNewInLibrary = Keyword.builder().word("newInLib").id(0).build();
-//
-//        List<Keyword> oldKeywords = Stream.of(keywordDeleted, keywordRemainedInLibrary, keywordRemainedInBook).collect(Collectors.toList());
-//        when(mockKeywordDao.getByBookId(mockBook.getId())).thenReturn(oldKeywords);
-//
-//        Set<Keyword> newKeywords = Stream.of(keywordRemainedInBook, keywordNewInBook, keywordNewInLibrary).collect(Collectors.toSet());
-//        when(mockBookDto.getKeywords()).thenReturn(newKeywords);
-//
-//        ArgumentCaptor<Collection<Keyword>> capturedDeletedKeywordsCollection = ArgumentCaptor.forClass(Collection.class);
-//        ArgumentCaptor<Collection<Keyword>> capturedNewKeywordsCollection = ArgumentCaptor.forClass(Collection.class);
-//
-//        doNothing().when(mockService).deleteKeywords(eq(mockManager), capturedDeletedKeywordsCollection.capture());
-//        doNothing().when(mockService).saveKeywords(eq(mockManager), capturedNewKeywordsCollection.capture());
-//
-//        boolean result = mockService.updateBookKeywordsSetCommand(mockManager, mockBookDto);
-//
-//        verify(mockBookKeywordDao, times(2)).deleteBookKeywordJunction(any(Keyword.class), eq(mockBook));
-//        verify(mockBookKeywordDao, times(1)).saveBookKeywordsJunction(mockBook, (Set<Keyword>) capturedNewKeywordsCollection.getValue());
-//        assertEquals(2, capturedDeletedKeywordsCollection.getValue().size());
-//        assertEquals(1, capturedNewKeywordsCollection.getValue().size());
-//        assertTrue(result);
-//    }
+        verify(mockService, times(1)).updateBookProperties(mockManager, mockBook);
+        verify(mockService, times(1)).updateBookAuthorsSet(mockManager, mockBook, authors);
+        verify(mockService, times(1)).updateBookKeywordsSet(mockManager, mockBook, keywords);
+        assertTrue(result);
+    }
+
+    @Test
+    public void testUpdateBookAuthorsSet() throws SQLException {
+
+        Author authorDeleted = Author.builder().firstName("deleted").id(1).build();
+        Author authorRemainedInLibrary = Author.builder().firstName("remainedInLib").id(2).build();
+        Author authorRemainedInBook = Author.builder().firstName("remainedInBook").id(3).build();
+        Author authorNewInBook = Author.builder().firstName("newInBook").id(4).build();
+        Author authorNewInLibrary = Author.builder().firstName("newInLib").id(0).build();
+
+        List<Author> oldAuthors = Stream.of(authorDeleted, authorRemainedInLibrary, authorRemainedInBook).collect(Collectors.toList());
+        when(mockAuthorDao.getByBookId(mockBook.getId())).thenReturn(oldAuthors);
+
+        Set<Author> newAuthors = Stream.of(authorRemainedInBook, authorNewInBook, authorNewInLibrary).collect(Collectors.toSet());
+
+        ArgumentCaptor<Collection<Author>> capturedDeletedAuthorsCollection = ArgumentCaptor.forClass(Collection.class);
+        ArgumentCaptor<Collection<Author>> capturedNewAuthorsCollection = ArgumentCaptor.forClass(Collection.class);
+
+        doNothing().when(mockService).deleteAuthors(eq(mockManager), capturedDeletedAuthorsCollection.capture());
+        doNothing().when(mockService).saveAuthors(eq(mockManager), capturedNewAuthorsCollection.capture());
+
+        mockService.updateBookAuthorsSet(mockManager, mockBook, newAuthors);
+
+        verify(mockAuthorBookDao, times(2)).deleteAuthorBookJunction(any(Author.class), eq(mockBook));
+        verify(mockAuthorBookDao, times(1)).saveAuthorBookJunction(mockBook, newAuthors);
+        assertEquals(2, capturedDeletedAuthorsCollection.getValue().size());
+        assertEquals(1, capturedNewAuthorsCollection.getValue().size());
+    }
+
+    @Test
+    public void testUpdateBookKeywordsSet() throws SQLException {
+
+        Keyword keywordDeleted = Keyword.builder().word("deleted").id(1).build();
+        Keyword keywordRemainedInLibrary = Keyword.builder().word("remainedInLib").id(2).build();
+        Keyword keywordRemainedInBook = Keyword.builder().word("remainedInBook").id(3).build();
+        Keyword keywordNewInBook = Keyword.builder().word("newInBook").id(4).build();
+        Keyword keywordNewInLibrary = Keyword.builder().word("newInLib").id(0).build();
+
+        List<Keyword> oldKeywords = Stream.of(keywordDeleted, keywordRemainedInLibrary, keywordRemainedInBook).collect(Collectors.toList());
+        when(mockKeywordDao.getByBookId(mockBook.getId())).thenReturn(oldKeywords);
+
+        Set<Keyword> newKeywords = Stream.of(keywordRemainedInBook, keywordNewInBook, keywordNewInLibrary).collect(Collectors.toSet());
+
+        ArgumentCaptor<Collection<Keyword>> capturedDeletedKeywordsCollection = ArgumentCaptor.forClass(Collection.class);
+        ArgumentCaptor<Collection<Keyword>> capturedNewKeywordsCollection = ArgumentCaptor.forClass(Collection.class);
+
+        doNothing().when(mockService).deleteKeywords(eq(mockManager), capturedDeletedKeywordsCollection.capture());
+        doNothing().when(mockService).saveKeywords(eq(mockManager), capturedNewKeywordsCollection.capture());
+
+        mockService.updateBookKeywordsSet(mockManager, mockBook, newKeywords);
+
+        verify(mockBookKeywordDao, times(2)).deleteBookKeywordJunction(any(Keyword.class), eq(mockBook));
+        verify(mockBookKeywordDao, times(1)).saveBookKeywordsJunction(mockBook, newKeywords);
+        assertEquals(2, capturedDeletedKeywordsCollection.getValue().size());
+        assertEquals(1, capturedNewKeywordsCollection.getValue().size());
+    }
 
     @Test
     public void testGetAllKeywordsCommand() throws SQLException {
@@ -387,40 +368,85 @@ public class BookServiceTest {
         assertEquals(mockList, result);
     }
 
-//    @Test
-//    public void testFindBooksCommandWithExpectedList() throws SQLException {
-//
-//        List<Book> bookList = new ArrayList<>();
-//        bookList.add(mockBook);
-//        bookList.add(mockBook);
-//
-//        when(mockBookDao.getAllBookParameterized(-1, -1, "", recordsQuantity, previousRecordNumber)).thenReturn(bookList);
-//        doReturn(mockBookDto).when(mockService).createBookDtoFromBook(mockManager, mockBook);
-//
-//        List<BookDto> expectedList = new ArrayList<>();
-//        expectedList.add(mockBookDto);
-//        expectedList.add(mockBookDto);
-//
-//        assertEquals("findBooksCommand(...) should return expected list",
-//                expectedList, mockService.findBooksCommand(mockManager, -1, -1, "", recordsQuantity, previousRecordNumber));
-//    }
+    @Test
+    public void testFindBooksCommandShouldReturnExpectedList() throws SQLException {
 
-//    @Test
-//    public void testFindBooksCommandWithNotExpectedList() throws SQLException {
-//
-//        List<Book> bookList = new ArrayList<>();
-//        bookList.add(mockBook);
-//        bookList.add(mockBook);
-//
-//        when(mockBookDao.getAllBookParameterized(-1, -1, "", recordsQuantity, previousRecordNumber)).thenReturn(bookList);
-//        doReturn(mockBookDto).when(mockService).createBookDtoFromBook(mockManager, mockBook);
-//
-//        List<BookDto> notExpectedList = new ArrayList<>();
-//        notExpectedList.add(mockBookDto);
-//        notExpectedList.add(mockBookDto);
-//        notExpectedList.add(mockBookDto);
-//
-//        assertNotEquals("findBooksCommand(...) should not return notExpectedList list",
-//                notExpectedList, mockService.findBooksCommand(mockManager, -1, -1, "", recordsQuantity, previousRecordNumber));
-//    }
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(mockBook);
+        bookList.add(mockBook);
+
+        when(mockBookDao.getAllBookParameterized(-1, -1, "", 100, 0)).thenReturn(bookList);
+        doReturn(mockBookDto).when(mockService).createBookDtoFromBook(mockManager, mockBook);
+
+        List<BookDto> expectedList = new ArrayList<>();
+        expectedList.add(mockBookDto);
+        expectedList.add(mockBookDto);
+
+        assertEquals("findBooksCommand(...) should return expected list",
+                expectedList, mockService.findBooksCommand(mockManager, -1, -1, "", 100, 0));
+    }
+
+    @Test
+    public void testFindBooksCommandWithNotExpectedList() throws SQLException {
+
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(mockBook);
+        bookList.add(mockBook);
+
+        when(mockBookDao.getAllBookParameterized(-1, -1, "", 100, 0)).thenReturn(bookList);
+        doReturn(mockBookDto).when(mockService).createBookDtoFromBook(mockManager, mockBook);
+
+        List<BookDto> notExpectedList = new ArrayList<>();
+        notExpectedList.add(mockBookDto);
+        notExpectedList.add(mockBookDto);
+        notExpectedList.add(mockBookDto);
+
+        assertNotEquals("findBooksCommand(...) should not return notExpectedList list",
+                notExpectedList, mockService.findBooksCommand(mockManager, -1, -1, "", 100, 0));
+    }
+
+    @Test
+    public void getBookDtoByIdCommandShouldReturnEmptyOptional() throws SQLException {
+        when(mockBookDao.get(1L)).thenReturn(Optional.empty());
+
+        Optional<BookDto> result = mockService.getBookDtoByIdCommand(mockManager, 1L);
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    public void getBookDtoByIdCommandShouldReturnExpectedOptional() throws SQLException {
+        when(mockBookDao.get(1L)).thenReturn(Optional.of(mockBook));
+        doReturn(mockBookDto).when(mockService).createBookDtoFromBook(mockManager, mockBook);
+
+        Optional<BookDto> result = mockService.getBookDtoByIdCommand(mockManager, 1L);
+
+        assertEquals(Optional.of(mockBookDto), result);
+    }
+
+    @Test
+    public void createAuthorsSetShouldCollectThreeListsInOneSet() {
+        List<Long> oldAuthorsId = Arrays.asList(1L, 2L);
+        List<String> newAuthorFirstNames = Arrays.asList("nameOne", "nameTwo");
+        List<String> newAuthorLastNames = Arrays.asList("lastNameOne", "lastNameTwo");
+
+        Set<Author> resultSet = mockService.createAuthorsSet(oldAuthorsId, newAuthorFirstNames, newAuthorLastNames);
+
+        assertTrue(resultSet.contains(Author.builder().id(1L).build()));
+        assertTrue(resultSet.contains(Author.builder().id(2L).build()));
+        assertTrue(resultSet.contains(Author.builder().firstName("nameOne").lastName("lastNameOne").build()));
+        assertTrue(resultSet.contains(Author.builder().firstName("nameTwo").lastName("lastNameTwo").build()));
+    }
+
+    @Test
+    public void createKeywordsSetShouldCollectTwoListsInOneSet() {
+        List<Long> oldKeywordsId = Arrays.asList(1L, 2L);
+        List<String> newKeywords = Arrays.asList("wordOne", "wordTwo");
+
+        Set<Keyword> resultSet = mockService.createKeywordsSet(oldKeywordsId, newKeywords);
+
+        assertTrue(resultSet.contains(Keyword.builder().id(1L).build()));
+        assertTrue(resultSet.contains(Keyword.builder().id(2L).build()));
+        assertTrue(resultSet.contains(Keyword.builder().word("wordOne").build()));
+        assertTrue(resultSet.contains(Keyword.builder().word("wordTwo").build()));
+    }
 }

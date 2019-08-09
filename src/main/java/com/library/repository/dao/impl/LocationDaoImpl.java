@@ -2,7 +2,6 @@ package com.library.repository.dao.impl;
 
 import com.library.repository.DBUtils;
 import com.library.repository.dao.LocationDao;
-import com.library.repository.entity.Book;
 import com.library.repository.entity.Location;
 import com.library.repository.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing of LocationDao for working with a SQL server
+ */
 public class LocationDaoImpl implements LocationDao {
 
     private static final Logger log = LogManager.getLogger(LocationDao.class);
@@ -23,6 +25,9 @@ public class LocationDaoImpl implements LocationDao {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Location> get(long locationId) {
 
@@ -50,11 +55,17 @@ public class LocationDaoImpl implements LocationDao {
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Location> getAll() {
         return getAllLocations(false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long save(Location location) {
 
@@ -83,12 +94,15 @@ public class LocationDaoImpl implements LocationDao {
     /**
      * Universal update is not supported. Use special update
      * for special cases
-     * @param location
      */
     @Override
     public void update(Location location) {
+        throw new UnsupportedOperationException("Universal update is not supported. Use special update for special cases");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void saveBookToLocation(long locationId, long bookId) {
 
@@ -107,6 +121,9 @@ public class LocationDaoImpl implements LocationDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteBookFromAllLocations(long bookId) {
 
@@ -123,6 +140,9 @@ public class LocationDaoImpl implements LocationDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateIsOccupied(long locationId, boolean isOccupied) {
 
@@ -142,6 +162,9 @@ public class LocationDaoImpl implements LocationDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Location location) {
 
@@ -159,6 +182,9 @@ public class LocationDaoImpl implements LocationDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getBookQuantity(long book_id) {
 
@@ -216,6 +242,9 @@ public class LocationDaoImpl implements LocationDao {
         return locations;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Location> getBookLocation(long book_id, boolean isOccupied) {
 
@@ -241,9 +270,9 @@ public class LocationDaoImpl implements LocationDao {
         return resultOptional;
     }
 
-    protected Location getLocationFromResultRow(ResultSet rs) throws SQLException {
+    private Location getLocationFromResultRow(ResultSet rs) throws SQLException {
 
-        Location location = Location.builder()
+        return Location.builder()
                 .id(rs.getLong("location_id"))
                 .bookcaseId(rs.getLong("bookcase_id"))
                 .shelfNumber(rs.getInt("shelf_number"))
@@ -251,7 +280,5 @@ public class LocationDaoImpl implements LocationDao {
                 .bookId(rs.getLong("book_id"))
                 .isOccupied(rs.getBoolean("is_occupied"))
                 .build();
-
-        return location;
     }
 }

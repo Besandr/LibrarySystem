@@ -5,7 +5,7 @@ import com.library.repository.entity.Loan;
 import java.time.LocalDate;
 
 /**
- * Dao for Books entity
+ * Dao for Loans entity
  */
 public interface LoanDao extends Dao<Loan> {
 

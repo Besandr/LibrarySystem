@@ -5,7 +5,7 @@ import com.library.repository.entity.User;
 import java.util.Optional;
 
 /**
- * Dao for Books entity
+ * Dao for Users entity
  */
 public interface UserDao extends Dao<User> {
 
@@ -18,14 +18,6 @@ public interface UserDao extends Dao<User> {
      *              karma. Can be negative and positive
      */
     void updateKarma(long userId, int delta);
-
-    /**
-     * Changes the user's role in the application
-     * @param userId - id of user whose role is needed
-     *                 to be changed
-     * @param roleId - the id of new user's role
-     */
-    void updateRole(long userId, long roleId);
 
     /**
      * Gets an {@code Optional} with user by its email & password

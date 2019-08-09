@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Implementing of AuthorBookDao for working with a MySql server
+ * Implementing of AuthorBookDao for working with a SQL server
  */
 public class AuthorBookDaoImpl implements AuthorBookDao {
 
@@ -80,11 +80,7 @@ public class AuthorBookDaoImpl implements AuthorBookDao {
             statement.setLong(1, author.getId());
             //Result set will contain only one string with given author books quantity
             ResultSet rs = statement.executeQuery();
-            if (rs.next() && rs.getInt(1) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return rs.next() && rs.getInt(1) > 0;
 
         } catch (SQLException e) {
             String errorText = String.format("Can't count books of author. Author: %s. Cause: %s", author, e.getMessage());

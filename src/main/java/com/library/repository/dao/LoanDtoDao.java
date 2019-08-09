@@ -5,6 +5,9 @@ import com.library.repository.entity.User;
 
 import java.util.List;
 
+/**
+ * Dao for operations with {@code LoanDto} and Database
+ */
 public interface LoanDtoDao {
 
     /**

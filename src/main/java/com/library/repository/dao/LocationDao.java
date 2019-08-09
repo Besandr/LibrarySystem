@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Dao for Books entity
+ * Dao for Locations entity
  */
 public interface LocationDao extends Dao<Location> {
 
@@ -20,7 +20,7 @@ public interface LocationDao extends Dao<Location> {
 
     /**
      * Deletes information of given book in every location occupied by it
-     * @param book - book for deleting.
+     * @param bookId - ID of book for deleting.
      */
     void deleteBookFromAllLocations(long bookId);
 

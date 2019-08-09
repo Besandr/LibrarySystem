@@ -23,3 +23,8 @@
 .nav-link:focus, .nav-link:hover {
   color: #ffffff;
 }
+
+.find-book-link{
+  padding: 10% 70;
+  background-color: #ffffff;
+}

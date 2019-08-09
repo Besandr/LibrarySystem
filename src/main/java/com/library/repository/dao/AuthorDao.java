@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Dao for Books entity
+ * Dao for Authors entity
  */
 public interface AuthorDao extends Dao<Author> {
 

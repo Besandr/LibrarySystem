@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Implementing of BookKeywordDao for working with a MySql server
+ * Implementing of BookKeywordDao for working with a SQL server
  */
 public class BookKeywordDaoImpl implements BookKeywordDao {
 

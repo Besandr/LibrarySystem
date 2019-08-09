@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementing of BookcaseDao for working with a SQL server
+ */
 public class BookcaseDaoImpl implements BookcaseDao {
 
     private static final Logger log = LogManager.getLogger(BookcaseDao.class);
@@ -22,6 +25,9 @@ public class BookcaseDaoImpl implements BookcaseDao {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Bookcase> get(long id) {
 
@@ -49,6 +55,9 @@ public class BookcaseDaoImpl implements BookcaseDao {
         return resultOptional;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Bookcase> getAll() {
 
@@ -74,6 +83,9 @@ public class BookcaseDaoImpl implements BookcaseDao {
         return bookcases;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long save(Bookcase bookcase) {
 
@@ -98,6 +110,9 @@ public class BookcaseDaoImpl implements BookcaseDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Bookcase bookcase) {
 
@@ -117,6 +132,9 @@ public class BookcaseDaoImpl implements BookcaseDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Bookcase bookcase) {
 
@@ -134,14 +152,12 @@ public class BookcaseDaoImpl implements BookcaseDao {
         }
     }
 
-    protected Bookcase getBookcaseFromResultRow(ResultSet rs) throws SQLException {
+    private Bookcase getBookcaseFromResultRow(ResultSet rs) throws SQLException {
 
-        Bookcase bookcase = Bookcase.builder()
+        return Bookcase.builder()
                 .id(rs.getLong("bookcase_id"))
                 .shelfQuantity(rs.getInt("shelf_quantity"))
                 .cellQuantity(rs.getInt("cell_quantity"))
                 .build();
-
-        return bookcase;
     }
 }

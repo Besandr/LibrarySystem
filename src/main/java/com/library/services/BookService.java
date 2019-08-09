@@ -183,7 +183,7 @@ public class BookService extends Service{
     }
 
     //Commands which is needed to be executed in corresponding public service methods
-    private synchronized long addBookToCatalogueCommand(DaoManager manager, Book book, Set<Author> authors, Set<Keyword> keywords) throws SQLException {
+    synchronized long addBookToCatalogueCommand(DaoManager manager, Book book, Set<Author> authors, Set<Keyword> keywords) throws SQLException {
         //trying to save the new book to the library's catalogue
         long bookId = manager.getBookDao().save(book);
 
@@ -227,7 +227,7 @@ public class BookService extends Service{
         return manager.getAuthorDao().getAll();
     }
 
-    private List<BookDto> findBooksCommand(DaoManager manager, long authorId, long keywordId,
+    List<BookDto> findBooksCommand(DaoManager manager, long authorId, long keywordId,
                                            String partOfTitle, int recordsQuantity, int previousRecordNumber) throws SQLException {
 
         BookDao bookDao = manager.getBookDao();
@@ -241,7 +241,7 @@ public class BookService extends Service{
         return bookDtos;
     }
 
-    private synchronized boolean updateBookDtoPropertiesCommand(DaoManager manager, Book book, Set<Author> authors, Set<Keyword> keywords) throws SQLException {
+    synchronized boolean updateBookDtoPropertiesCommand(DaoManager manager, Book book, Set<Author> authors, Set<Keyword> keywords) throws SQLException {
 
         updateBookProperties(manager, book);
         updateBookAuthorsSet(manager, book, authors);
@@ -252,7 +252,7 @@ public class BookService extends Service{
 
     }
 
-    private synchronized void updateBookAuthorsSet(DaoManager manager, Book book, Set<Author> authors) throws SQLException {
+    synchronized void updateBookAuthorsSet(DaoManager manager, Book book, Set<Author> authors) throws SQLException {
         // Updated authors set doesn't contain removed from book authors
         AuthorDao authorDao =manager.getAuthorDao();
         // Getting old book authors list
@@ -284,7 +284,7 @@ public class BookService extends Service{
         manager.getAuthorBookDao().saveAuthorBookJunction(book, authors);
     }
 
-    private synchronized void updateBookKeywordsSet(DaoManager manager, Book book, Set<Keyword> keywords) throws SQLException {
+    synchronized void updateBookKeywordsSet(DaoManager manager, Book book, Set<Keyword> keywords) throws SQLException {
         //Updated keywords set doesn't contain removed from book keywords
         KeywordDao keywordDao = manager.getKeywordDao();
         //Getting old book keywords list
@@ -317,12 +317,12 @@ public class BookService extends Service{
         manager.getBookKeywordDao().saveBookKeywordsJunction(book, keywords);
     }
 
-    private synchronized void updateBookProperties(DaoManager manager, Book book) throws SQLException {
+    synchronized void updateBookProperties(DaoManager manager, Book book) throws SQLException {
         BookDao bookDao = manager.getBookDao();
         bookDao.update(book);
     }
 
-    private Optional<BookDto> getBookDtoByIdCommand(DaoManager manager, long bookId) throws SQLException {
+    Optional<BookDto> getBookDtoByIdCommand(DaoManager manager, long bookId) throws SQLException {
         BookDao bookDao = manager.getBookDao();
         Optional<Book> book = bookDao.get(bookId);
 
@@ -340,7 +340,7 @@ public class BookService extends Service{
      * @param newKeywords  - list with new keywords
      * @return a converted and combined {@code Set} from two given {@code List}
      */
-    private Set<Keyword> createKeywordsSet(List<Long> oldKeywordsId, List<String> newKeywords) {
+    Set<Keyword> createKeywordsSet(List<Long> oldKeywordsId, List<String> newKeywords) {
         Set<Keyword> keywords = new HashSet<>();
         for (Long id : oldKeywordsId) {
             keywords.add(Keyword
@@ -365,7 +365,7 @@ public class BookService extends Service{
      * @param newAuthorLastNames - list with last names of new authors
      * @return a converted and combined {@code Set} from three given {@code List}
      */
-    private Set<Author> createAuthorsSet(List<Long> oldAuthorsId, List<String> newAuthorFirstNames, List<String> newAuthorLastNames) {
+    Set<Author> createAuthorsSet(List<Long> oldAuthorsId, List<String> newAuthorFirstNames, List<String> newAuthorLastNames) {
         Set<Author> authors = new HashSet<>();
         for (Long id : oldAuthorsId) {
             authors.add(Author

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementing of BookDao for working with a MySql server
+ * Implementing of BookDao for working with a SQL server
  */
 public class BookDaoImpl implements BookDao {
 
