@@ -2,6 +2,15 @@ CREATE DATABASE IF NOT EXISTS library_system;
 
 USE library_system;
 
+CREATE TABLE IF NOT EXISTS `book` (
+	`book_id` bigint NOT NULL AUTO_INCREMENT,
+	`title` varchar(255) NOT NULL,
+	`year` int(4) NOT NULL,
+	`description` varchar(500),
+	PRIMARY KEY (`book_id`),
+    UNIQUE KEY (title, year, description)
+);
+
 CREATE TABLE IF NOT EXISTS `author` (
 	`author_id` bigint NOT NULL AUTO_INCREMENT,
 	`first_name` varchar(25) NOT NULL,
@@ -19,16 +28,18 @@ CREATE TABLE IF NOT EXISTS `keyword` (
 CREATE TABLE IF NOT EXISTS `book_keyword` (
 	`book_id` bigint NOT NULL,
 	`keyword_id` bigint NOT NULL,
-	PRIMARY KEY (`book_id`,`keyword_id`)
+	PRIMARY KEY (`book_id`,`keyword_id`),
+	CONSTRAINT `book_keyword_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`)  ON DELETE CASCADE,
+	CONSTRAINT `book_keyword_fk1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword`(`keyword_id`) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS `book` (
-	`book_id` bigint NOT NULL AUTO_INCREMENT,
-	`title` varchar(255) NOT NULL,
-	`year` int(4) NOT NULL,
-	`description` varchar(500),
-	PRIMARY KEY (`book_id`),
-    UNIQUE KEY (title, year, description)
+CREATE TABLE IF NOT EXISTS `author_book` (
+	`author_id` bigint NOT NULL,
+	`book_id` bigint NOT NULL,
+	PRIMARY KEY (`author_id`,`book_id`),
+    UNIQUE KEY (author_id, book_id),
+    CONSTRAINT `author_book_fk0` FOREIGN KEY (`author_id`) REFERENCES `author`(`author_id`) ON DELETE CASCADE,
+    CONSTRAINT `author_book_fk1` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -51,24 +62,9 @@ CREATE TABLE IF NOT EXISTS `loan` (
 	`loan_date` DATE,
 	`expired_date` DATE,
 	`return_date` DATE,
-	PRIMARY KEY (`loan_id`)
-);
-
-CREATE TABLE IF NOT EXISTS `author_book` (
-	`author_id` bigint NOT NULL,
-	`book_id` bigint NOT NULL,
-	PRIMARY KEY (`author_id`,`book_id`),
-    UNIQUE KEY (author_id, book_id)
-);
-
-CREATE TABLE IF NOT EXISTS `location` (
-	`location_id` bigint NOT NULL AUTO_INCREMENT,
-	`book_id` bigint,
-	`bookcase_id` bigint NOT NULL,
-	`shelf_number` int NOT NULL,
-	`cell_number` int NOT NULL,
-	`is_occupied` BOOLEAN NOT NULL DEFAULT false,
-	PRIMARY KEY (`location_id`)
+	PRIMARY KEY (`loan_id`),
+	CONSTRAINT `loan_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE,
+	CONSTRAINT `loan_fk1` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE NO ACTION
 );
 
 CREATE TABLE IF NOT EXISTS `bookcase` (
@@ -78,21 +74,18 @@ CREATE TABLE IF NOT EXISTS `bookcase` (
 	PRIMARY KEY (`bookcase_id`)
 );
 
-ALTER TABLE `book_keyword` ADD CONSTRAINT `book_keyword_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`)  ON DELETE CASCADE;
+CREATE TABLE IF NOT EXISTS `location` (
+	`location_id` bigint NOT NULL AUTO_INCREMENT,
+	`book_id` bigint,
+	`bookcase_id` bigint NOT NULL,
+	`shelf_number` int NOT NULL,
+	`cell_number` int NOT NULL,
+	`is_occupied` BOOLEAN NOT NULL DEFAULT false,
+	PRIMARY KEY (`location_id`),
+	CONSTRAINT `location_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE,
+	CONSTRAINT `location_fk1` FOREIGN KEY (`bookcase_id`) REFERENCES `bookcase`(`bookcase_id`)  ON DELETE CASCADE
+);
 
-ALTER TABLE `book_keyword` ADD CONSTRAINT `book_keyword_fk1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword`(`keyword_id`) ON DELETE CASCADE;
-
-ALTER TABLE `loan` ADD CONSTRAINT `loan_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE;
-
-ALTER TABLE `loan` ADD CONSTRAINT `loan_fk1` FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE NO ACTION;
-
-ALTER TABLE `author_book` ADD CONSTRAINT `author_book_fk0` FOREIGN KEY (`author_id`) REFERENCES `author`(`author_id`) ON DELETE CASCADE;
-
-ALTER TABLE `author_book` ADD CONSTRAINT `author_book_fk1` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE;
-
-ALTER TABLE `location` ADD CONSTRAINT `location_fk0` FOREIGN KEY (`book_id`) REFERENCES `book`(`book_id`) ON DELETE CASCADE;
-
-ALTER TABLE `location` ADD CONSTRAINT `location_fk1` FOREIGN KEY (`bookcase_id`) REFERENCES `bookcase`(`bookcase_id`)  ON DELETE CASCADE;
 
 -- CREATE USER 'andrey'@'localhost' IDENTIFIED BY 'fancyPa55w0rd';
 -- GRANT ALL PRIVILEGES ON * . * TO 'andrey'@'localhost';

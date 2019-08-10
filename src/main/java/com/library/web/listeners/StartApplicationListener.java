@@ -1,5 +1,8 @@
 package com.library.web.listeners;
 
+import com.library.repository.DBUtils;
+import com.library.repository.DaoManager;
+import com.library.repository.DaoManagerFactory;
 import com.library.repository.entity.Languages;
 
 import javax.servlet.ServletContext;
@@ -15,8 +18,7 @@ import java.util.stream.Stream;
 public class StartApplicationListener implements ServletContextListener{
 
     // Public constructor is required by servlet spec
-    public StartApplicationListener() {
-    }
+    public StartApplicationListener() {}
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -25,7 +27,11 @@ public class StartApplicationListener implements ServletContextListener{
 
         addLanguagesListToContext(context);
         setDefaultApplicationLanguage(context);
+
+        // Creating DB schema if not exist
+        DBUtils.runSQLScript("schema.sql");
     }
+
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
@@ -35,7 +41,7 @@ public class StartApplicationListener implements ServletContextListener{
      * Adds languages list to the application(servlet) context
      * @param sc - the application(servlet) context
      */
-    protected void addLanguagesListToContext(ServletContext sc) {
+    private void addLanguagesListToContext(ServletContext sc) {
         List<Languages> languages = Stream
                 .of(Languages.ENGLISH, Languages.RUSSIAN, Languages.UKRAINIAN)
                 .collect(Collectors.toList());
@@ -46,7 +52,7 @@ public class StartApplicationListener implements ServletContextListener{
      * Sets a default application language in the application(servlet) context
      * @param sc - the application(servlet) context
      */
-    protected void setDefaultApplicationLanguage(ServletContext sc) {
+    private void setDefaultApplicationLanguage(ServletContext sc) {
         sc.setAttribute("language", Languages.ENGLISH.getCode());
     }
 }

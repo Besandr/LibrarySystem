@@ -1,11 +1,36 @@
 package com.library.repository;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
 
 /**
  * Contains util methods for DAOs
  */
 public class DBUtils {
+
+    private static final Logger log = LogManager.getLogger(DBUtils.class);
+
+    /**
+     *
+     * @param sqlScriptFilePath path to SQL script file in resource directory
+     */
+    public static void runSQLScript(String sqlScriptFilePath){
+        try(InputStreamReader reader = new InputStreamReader(
+                DBService.class.getClassLoader().getResourceAsStream(sqlScriptFilePath))) {
+            Connection connection = DBService.getInstance().getConnection();
+            ScriptRunner runner = new ScriptRunner(connection, false, false);
+            runner.runScript(reader);
+        } catch (SQLException e) {
+            log.error("Can't run SQL script. Cause: " + e.getMessage(), e);
+        } catch (IOException e) {
+            log.error("Can't read SQL script from file. Cause: " + e.getMessage(), e);
+        }
+    }
 
     /**
      * Returns id from executed insert statement
