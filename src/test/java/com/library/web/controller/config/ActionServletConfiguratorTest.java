@@ -19,7 +19,7 @@ public class ActionServletConfiguratorTest {
     ActionServletConfig actionServletConfig;
 
     @Mock
-    ActionConfig actionConfig;
+    ActionConfig mockActionConfig;
 
     @Mock
     ActionFactory actionFactory;
@@ -40,10 +40,10 @@ public class ActionServletConfiguratorTest {
         List<FormConfig> formConfigs = Collections.singletonList(testForm);
 
         when(actionServletConfig.getForms()).thenReturn(formConfigs);
-        when(actionConfig.getFormName()).thenReturn("testName");
-        when(actionConfig.getPath()).thenReturn("testPath");
+        when(mockActionConfig.getFormName()).thenReturn("testName");
+        when(mockActionConfig.getPath()).thenReturn("testPath");
 
-        new ActionServletConfigurator().addFormToFormFactory(actionConfig, actionServletConfig, formFactory);
+        new ActionServletConfigurator().addFormToFormFactory(mockActionConfig, actionServletConfig, formFactory);
 
         verify(formFactory, times(1)).addFormClass("testPath", "testClassName");
     }
@@ -55,49 +55,52 @@ public class ActionServletConfiguratorTest {
         List<FormConfig> formConfigs = Collections.singletonList(testForm);
 
         when(actionServletConfig.getForms()).thenReturn(formConfigs);
-        when(actionConfig.getFormName()).thenReturn("anotherTestName");
+        when(mockActionConfig.getFormName()).thenReturn("anotherTestName");
 
-        new ActionServletConfigurator().addFormToFormFactory(actionConfig, actionServletConfig, formFactory);
+        new ActionServletConfigurator().addFormToFormFactory(mockActionConfig, actionServletConfig, formFactory);
     }
 
     @Test
     public void setUpFactoriesShouldAddActionAndForm() {
         ActionServletConfigurator configurator = spy(new ActionServletConfigurator());
-        ActionConfig action = new ActionConfig();
-        action.setInput("testInput");
-        action.setPath("testPath");
-        action.setValidate("true");
-        action.setType("testType");
-        List<ActionConfig> configs = Collections.singletonList(action);
+        ActionConfig actionConfig = new ActionConfig();
+        actionConfig.setInput("testInput");
+        actionConfig.setPath("testPath");
+        actionConfig.setValidate("true");
+        actionConfig.setType("testType");
+        actionConfig.setServiceDependencyList(Collections.emptyList());
+        actionConfig.setFormName("testForm");
+        List<ActionConfig> configs = Collections.singletonList(actionConfig);
 
         when(actionServletConfig.getActions()).thenReturn(configs);
         doNothing().when(configurator).addFormToFormFactory(any(), any(), any());
 
         configurator.setUpFactories(actionServletConfig, actionFactory, formFactory);
 
-        verify(actionFactory, times(1))
-                .addAction("testPath", "testType", true, "testInput", actionConfig.getServiceDependencyList());
+        verify(actionFactory)
+                .addAction("testPath", "testType", true, "testInput", Collections.emptyList());
 
-        verify(configurator, times(1)).addFormToFormFactory(action, actionServletConfig, formFactory);
+        verify(configurator).addFormToFormFactory(actionConfig, actionServletConfig, formFactory);
     }
 
     @Test
-    public void setUpFactoriesShouldAddActionAndNotAddForm() {
+    public void setUpFactoriesShouldAddActionAndDoesNotAddForm() {
         ActionServletConfigurator configurator = spy(new ActionServletConfigurator());
-        ActionConfig action = new ActionConfig();
-        action.setPath("testPath");
-        action.setValidate("false");
-        action.setType("testType");
-        List<ActionConfig> configs = Collections.singletonList(action);
+        ActionConfig actionConfig = new ActionConfig();
+        actionConfig.setPath("testPath");
+        actionConfig.setValidate("false");
+        actionConfig.setType("testType");
+        actionConfig.setServiceDependencyList(Collections.emptyList());
+
+        List<ActionConfig> configs = Collections.singletonList(actionConfig);
 
         when(actionServletConfig.getActions()).thenReturn(configs);
-        doNothing().when(configurator).addFormToFormFactory(any(), any(), any());
 
         configurator.setUpFactories(actionServletConfig, actionFactory, formFactory);
 
-        verify(actionFactory, times(1))
-                .addAction("testPath", "testType", false, null, actionConfig.getServiceDependencyList());
+        verify(actionFactory)
+                .addAction("testPath", "testType", false, null, Collections.emptyList());
 
-        verify(configurator, never()).addFormToFormFactory(action, actionServletConfig, formFactory);
+        verify(configurator, never()).addFormToFormFactory(actionConfig, actionServletConfig, formFactory);
     }
 }

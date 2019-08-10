@@ -47,6 +47,8 @@ public class ActionServletTest {
         assertNull(new ActionServlet().getActionPath(request));
     }
 
+    // TODO review this tests
+
 //    @Test
 //    public void fillAndValidateFormShouldReturnEmptyErrors() {
 //        ActionErrors errors = new ActionServlet().fillAndValidateForm(request, null, userAction);
@@ -102,7 +104,6 @@ public class ActionServletTest {
         ActionErrors errors = mock(ActionErrors.class);
         String actionPath = "testPath";
 
-        when(action.isNeedValidate()).thenReturn(false);
         when(action.execute(request, response, null, resources)).thenReturn("testForwardPath");
 
         String executingResult = servlet.executeAction(request, response, action, actionPath, resources);
@@ -128,15 +129,18 @@ public class ActionServletTest {
 
     @Test
     public void processRequestShouldForwardTo404() throws ServletException, IOException {
+        String testPath = "testPath";
+        String path404 = "WEB-INF/jsp/404.jsp";
         ActionServlet servlet = spy(new ActionServlet());
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
 
-        doReturn("testPath").when(servlet).getActionPath(request);
-        when(resources.getAction("testPath")).thenReturn(null);
-        when(request.getRequestDispatcher("WEB-INF/jsp/404.jsp")).thenReturn(dispatcher);
+        doReturn(testPath).when(servlet).getActionPath(request);
+        when(resources.getAction(testPath)).thenReturn(null);
+        when(resources.getForward(testPath)).thenReturn(path404);
+        when(request.getRequestDispatcher(path404)).thenReturn(dispatcher);
 
         servlet.processRequest(request, response, resources);
 
-        verify(dispatcher, times(1)).forward(request, response);
+        verify(dispatcher).forward(request, response);
     }
 }

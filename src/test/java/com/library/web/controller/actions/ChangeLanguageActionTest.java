@@ -45,21 +45,17 @@ public class ChangeLanguageActionTest {
         String expectedReturnValue = "Expected URL";
 
         when(request.getParameter("chosenLanguage")).thenReturn("RUSSIAN");
-        when(request.getParameter("currentPageUrl")).thenReturn(expectedReturnValue);
 
         ArgumentCaptor languageCodeCaptor = ArgumentCaptor.forClass(Object.class);
         doNothing().when(session).setAttribute(eq("language"), languageCodeCaptor.capture());
 
-        ArgumentCaptor previousRequestPathCaptor = ArgumentCaptor.forClass(Object.class);
-        doNothing().when(session).setAttribute(eq("previousRequestPath"), previousRequestPathCaptor.capture());
+        ChangeLanguageAction action = spy(new ChangeLanguageAction());
+        when(action.getRedirectToReferer(request, resources)).thenReturn(expectedReturnValue);
 
-        String returnedValue = new ChangeLanguageAction().execute(request, response, form, resources);
+        String returnedValue = action.execute(request, response, form, resources);
 
         assertEquals("Method execute() should set correct language code",
                 "ru", languageCodeCaptor.getValue());
-
-        assertEquals("Method execute() should set correct previous request path attribute",
-                expectedReturnValue, previousRequestPathCaptor.getValue());
 
         assertEquals("Method execute() should return expected value",
                 expectedReturnValue, returnedValue);
