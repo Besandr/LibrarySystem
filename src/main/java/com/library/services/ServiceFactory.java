@@ -1,7 +1,7 @@
 package com.library.services;
 
 import com.library.repository.DaoManagerFactory;
-import com.library.web.controller.config.ServletConfigException;
+import com.library.web.controllers.config.ServletConfigException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

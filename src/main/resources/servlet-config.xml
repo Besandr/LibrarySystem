@@ -11,47 +11,47 @@
     <forms>
         <form>
             <name>bookSearchForm</name>
-            <type>com.library.web.controller.forms.BookSearchForm</type>
+            <type>com.library.web.controllers.forms.BookSearchForm</type>
         </form>
         <form>
             <name>OrderBookForm</name>
-            <type>com.library.web.controller.forms.OrderBookForm</type>
+            <type>com.library.web.controllers.forms.OrderBookForm</type>
         </form>
         <form>
             <name>userLoginForm</name>
-            <type>com.library.web.controller.forms.UserLoginForm</type>
+            <type>com.library.web.controllers.forms.UserLoginForm</type>
         </form>
         <form>
             <name>userRegistrationForm</name>
-            <type>com.library.web.controller.forms.UserRegistrationForm</type>
+            <type>com.library.web.controllers.forms.UserRegistrationForm</type>
         </form>
         <form>
             <name>approveLoanForm</name>
-            <type>com.library.web.controller.forms.ApproveLoanForm</type>
+            <type>com.library.web.controllers.forms.ApproveLoanForm</type>
         </form>
         <form>
             <name>BookIdForm</name>
-            <type>com.library.web.controller.forms.BookIdForm</type>
+            <type>com.library.web.controllers.forms.BookIdForm</type>
         </form>
         <form>
             <name>LoanIdForm</name>
-            <type>com.library.web.controller.forms.LoanIdForm</type>
+            <type>com.library.web.controllers.forms.LoanIdForm</type>
         </form>
         <form>
             <name>BookCreationForm</name>
-            <type>com.library.web.controller.forms.BookCreationForm</type>
+            <type>com.library.web.controllers.forms.BookCreationForm</type>
         </form>
         <form>
             <name>BookManagementForm</name>
-            <type>com.library.web.controller.forms.BookManagementForm</type>
+            <type>com.library.web.controllers.forms.BookManagementForm</type>
         </form>
         <form>
             <name>AddBookcaseForm</name>
-            <type>com.library.web.controller.forms.AddBookcaseForm</type>
+            <type>com.library.web.controllers.forms.AddBookcaseForm</type>
         </form>
         <form>
             <name>UserProfileForm</name>
-            <type>com.library.web.controller.forms.UserProfileForm</type>
+            <type>com.library.web.controllers.forms.UserProfileForm</type>
         </form>
     </forms>
 
@@ -72,7 +72,7 @@
     <action-mappings>
         <action>
             <path>/bookSearch</path>
-            <type>com.library.web.controller.actions.ShowBookSearchPageAction</type>
+            <type>com.library.web.controllers.actions.ShowBookSearchPageAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.BookService</class>
@@ -82,7 +82,7 @@
         </action>
         <action>
             <path>/bookSearch.do</path>
-            <type>com.library.web.controller.actions.BookSearchAction</type>
+            <type>com.library.web.controllers.actions.BookSearchAction</type>
             <form-name>bookSearchForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
@@ -95,7 +95,7 @@
         </action>
         <action>
             <path>/user/orderBook.do</path>
-            <type>com.library.web.controller.actions.OrderBookAction</type>
+            <type>com.library.web.controllers.actions.OrderBookAction</type>
             <form-name>OrderBookForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/bookSearch.jsp</input>
@@ -108,7 +108,7 @@
         </action>
         <action>
             <path>/login.do</path>
-            <type>com.library.web.controller.actions.LoginAction</type>
+            <type>com.library.web.controllers.actions.LoginAction</type>
             <form-name>userLoginForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/login.jsp</input>
@@ -121,11 +121,11 @@
         </action>
         <action>
             <path>/logout</path>
-            <type>com.library.web.controller.actions.LogoutAction</type>
+            <type>com.library.web.controllers.actions.LogoutAction</type>
         </action>
         <action>
             <path>/register.do</path>
-            <type>com.library.web.controller.actions.RegisterUserAction</type>
+            <type>com.library.web.controllers.actions.RegisterUserAction</type>
             <form-name>userRegistrationForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/registration.jsp</input>
@@ -138,11 +138,11 @@
         </action>
         <action>
             <path>/cabinet</path>
-            <type>com.library.web.controller.actions.ShowPersonalCabinetAction</type>
+            <type>com.library.web.controllers.actions.ShowPersonalCabinetAction</type>
         </action>
         <action>
             <path>/admin/unapprovedLoans</path>
-            <type>com.library.web.controller.actions.ShowUnapprovedLoansAction</type>
+            <type>com.library.web.controllers.actions.ShowUnapprovedLoansAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LoanService</class>
@@ -152,7 +152,7 @@
         </action>
         <action>
             <path>/admin/approve.do</path>
-            <type>com.library.web.controller.actions.ApproveLoanAction</type>
+            <type>com.library.web.controllers.actions.ApproveLoanAction</type>
             <form-name>approveLoanForm</form-name>
             <validate>false</validate>
             <service-dependencies>
@@ -164,7 +164,7 @@
         </action>
         <action>
             <path>/admin/activeBookLoans</path>
-            <type>com.library.web.controller.actions.ShowActiveBookLoansAction</type>
+            <type>com.library.web.controllers.actions.ShowActiveBookLoansAction</type>
             <form-name>BookIdForm</form-name>
             <validate>false</validate>
             <service-dependencies>
@@ -176,7 +176,7 @@
         </action>
         <action>
             <path>/admin/activeLoans</path>
-            <type>com.library.web.controller.actions.ShowActiveLoansAction</type>
+            <type>com.library.web.controllers.actions.ShowActiveLoansAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LoanService</class>
@@ -186,7 +186,7 @@
         </action>
         <action>
             <path>/admin/bookManagement/createBook</path>
-            <type>com.library.web.controller.actions.ShowBookCreationPageAction</type>
+            <type>com.library.web.controllers.actions.ShowBookCreationPageAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.BookService</class>
@@ -196,7 +196,7 @@
         </action>
         <action>
             <path>/admin/bookManagement/createBook.do</path>
-            <type>com.library.web.controller.actions.CreateBookAction</type>
+            <type>com.library.web.controllers.actions.CreateBookAction</type>
             <form-name>BookCreationForm</form-name>
             <validate>true</validate>
             <input>/admin/bookManagement/createBook</input>
@@ -209,7 +209,7 @@
         </action>
         <action>
             <path>/admin/bookManagement/updateBook</path>
-            <type>com.library.web.controller.actions.ShowUpdateBookPage</type>
+            <type>com.library.web.controllers.actions.ShowUpdateBookPage</type>
             <form-name>BookCreationForm</form-name>
             <validate>false</validate>
             <service-dependencies>
@@ -221,7 +221,7 @@
         </action>
         <action>
             <path>/admin/bookManagement/updateBook.do</path>
-            <type>com.library.web.controller.actions.UpdateBookAction</type>
+            <type>com.library.web.controllers.actions.UpdateBookAction</type>
             <form-name>BookCreationForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/updateBook.jsp</input>
@@ -234,7 +234,7 @@
         </action>
         <action>
             <path>/admin/bookManagement</path>
-            <type>com.library.web.controller.actions.ShowBookManagementAction</type>
+            <type>com.library.web.controllers.actions.ShowBookManagementAction</type>
             <form-name>BookIdForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/bookManagement.jsp</input>
@@ -247,7 +247,7 @@
         </action>
         <action>
             <path>/admin/bookManagement/addBooks.do</path>
-            <type>com.library.web.controller.actions.AddBooksAction</type>
+            <type>com.library.web.controllers.actions.AddBooksAction</type>
             <form-name>BookManagementForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/addBooks.jsp</input>
@@ -260,7 +260,7 @@
         </action>
         <action>
             <path>/admin/bookManagement/removeBooks.do</path>
-            <type>com.library.web.controller.actions.RemoveBookAction</type>
+            <type>com.library.web.controllers.actions.RemoveBookAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LocationService</class>
@@ -270,7 +270,7 @@
         </action>
         <action>
             <path>/admin/bookManagement/deleteBooks.do</path>
-            <type>com.library.web.controller.actions.DeleteBookAction</type>
+            <type>com.library.web.controllers.actions.DeleteBookAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LocationService</class>
@@ -284,7 +284,7 @@
         </action>
         <action>
             <path>/admin/bookcaseManagement/add.do</path>
-            <type>com.library.web.controller.actions.AddBookcaseAction</type>
+            <type>com.library.web.controllers.actions.AddBookcaseAction</type>
             <form-name>AddBookcaseForm</form-name>
             <validate>true</validate>
             <input>/WEB-INF/jsp/addBookcase.jsp</input>
@@ -297,7 +297,7 @@
         </action>
         <action>
             <path>/admin/userProfile</path>
-            <type>com.library.web.controller.actions.ShowUserProfileAction</type>
+            <type>com.library.web.controllers.actions.ShowUserProfileAction</type>
             <form-name>UserProfileForm</form-name>
             <validate>false</validate>
             <service-dependencies>
@@ -309,7 +309,7 @@
         </action>
         <action>
             <path>/user/orderedBooks</path>
-            <type>com.library.web.controller.actions.ShowOrderedBooksAction</type>
+            <type>com.library.web.controllers.actions.ShowOrderedBooksAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LoanService</class>
@@ -319,7 +319,7 @@
         </action>
         <action>
             <path>/user/borrowedBooks</path>
-            <type>com.library.web.controller.actions.ShowBorrowedBooksAction</type>
+            <type>com.library.web.controllers.actions.ShowBorrowedBooksAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LoanService</class>
@@ -329,7 +329,7 @@
         </action>
         <action>
             <path>/user/returnedBooks</path>
-            <type>com.library.web.controller.actions.ShowReturnedBooksAction</type>
+            <type>com.library.web.controllers.actions.ShowReturnedBooksAction</type>
             <service-dependencies>
                 <dependency>
                     <class>com.library.services.LoanService</class>
@@ -339,7 +339,7 @@
         </action>
         <action>
             <path>/userCabinet/returnBook.do</path>
-            <type>com.library.web.controller.actions.ReturnBookAction</type>
+            <type>com.library.web.controllers.actions.ReturnBookAction</type>
             <form-name>LoanIdForm</form-name>
             <validate>false</validate>
             <service-dependencies>
@@ -351,7 +351,7 @@
         </action>
         <action>
             <path>/changeLanguage</path>
-            <type>com.library.web.controller.actions.ChangeLanguageAction</type>
+            <type>com.library.web.controllers.actions.ChangeLanguageAction</type>
         </action>
     </action-mappings>
 

@@ -35,7 +35,7 @@
 
     <servlet>
         <servlet-name>ActionServlet</servlet-name>
-        <servlet-class>com.library.web.controller.ActionServlet</servlet-class>
+        <servlet-class>com.library.web.controllers.ActionServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
