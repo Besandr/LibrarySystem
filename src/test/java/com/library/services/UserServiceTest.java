@@ -37,10 +37,23 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createNewUserCommand() throws SQLException {
+    public void createNewUserCommandShouldSaveUserAndReturnTrue() throws SQLException {
+        final long TEST_USER_ID = 3L;
+        when(mockUserDao.save(any(User.class))).thenReturn(TEST_USER_ID);
 
-        mockService.createNewUserCommand(mockDaoManager, mockUser);
-        verify(mockUserDao, times(1)).save(mockUser);
+        boolean result = mockService.createNewUserCommand(mockDaoManager, mockUser);
+        verify(mockUserDao).save(mockUser);
+        assertTrue(result);
+    }
+
+    @Test
+    public void createNewUserCommandShouldSaveUserAndReturnFalse() throws SQLException {
+        final long TEST_USER_ID = -1L;
+        when(mockUserDao.save(any(User.class))).thenReturn(TEST_USER_ID);
+
+        boolean result = mockService.createNewUserCommand(mockDaoManager, mockUser);
+        verify(mockUserDao).save(mockUser);
+        assertFalse(result);
     }
 
     @Test

@@ -83,7 +83,8 @@ public class UserService extends Service{
 
         DaoManager daoManager = daoManagerFactory.createDaoManager();
 
-        Object executingResult = daoManager.executeAndClose(manager -> getUserByLoginInfoCommand(manager, email, hashedPassword));
+        Object executingResult = daoManager.executeAndClose(manager ->
+                manager.getUserDao().getUserByEmailAndPassword(email, hashedPassword));
 
         return checkAndCastObjectToOptional(executingResult);
     }
@@ -113,14 +114,6 @@ public class UserService extends Service{
             return EXECUTING_FAILED;
         }
     }
-
-    private Optional<User> getUserByLoginInfoCommand(DaoManager manager, String email, String password) throws SQLException {
-
-        UserDao dao = manager.getUserDao();
-
-        return dao.getUserByEmailAndPassword(email, password);
-    }
-
 
     /**
      * Makes the hashed password for storing hash of the password instead
