@@ -106,12 +106,16 @@ public class ActionFactory {
      */
     private void createActionDependencies(Action action, Class<?> actionClass, List<ServiceDependencyConfig> serviceDependencyList, ServiceFactory serviceFactory) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         for (ServiceDependencyConfig dependency: serviceDependencyList){
-            String setterName = "set"
-                    + dependency.getServiceVarName().substring(0, 1).toUpperCase()
-                    + dependency.getServiceVarName().substring(1);
+            String setterName = createSetterName(dependency.getServiceVarName());
             Method setter = actionClass.getDeclaredMethod(setterName, Service.class);
             setter.invoke(action, serviceFactory.getService(dependency.getServiceClass()));
         }
+    }
+
+    String createSetterName(String variableName) {
+        return "set"
+                + variableName.substring(0, 1).toUpperCase()
+                + variableName.substring(1);
     }
 
     public static ActionFactory getInstance() {

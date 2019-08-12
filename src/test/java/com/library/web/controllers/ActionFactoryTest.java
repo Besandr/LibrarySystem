@@ -23,4 +23,13 @@ public class ActionFactoryTest {
         ActionFactory.getInstance().createAction("false class name", false, null, Collections.emptyList());
     }
 
+    @Test
+    public void createSetterNameShouldReturnExpectedName(){
+        ActionFactory factory = ActionFactory.getInstance();
+        String variableName = "test";
+        String expectedSetterName = "setTest";
+        String resultName = factory.createSetterName(variableName);
+        assertEquals(expectedSetterName, resultName);
+    }
+
 }
