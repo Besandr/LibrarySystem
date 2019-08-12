@@ -3,8 +3,6 @@ package com.library.web.controllers;
 import com.library.web.controllers.actions.Action;
 import com.library.web.controllers.config.ActionServletConfigurator;
 import com.library.web.controllers.forms.ActionForm;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +22,6 @@ import java.io.IOException;
  */
 public class ActionServlet extends HttpServlet {
 
-    private static final Logger log = LogManager.getLogger(ActionServlet.class);
-
     /**
      * Thread-safety servlets resources
      */
@@ -36,8 +32,7 @@ public class ActionServlet extends HttpServlet {
      * and {@code servletResources}
      */
     @Override
-    public void init() throws ServletException {
-        super.init();
+    public void init(){
         servletResources = new ActionServletConfigurator().createServletResources();
         getServletContext().setAttribute("servletResources", servletResources);
     }
