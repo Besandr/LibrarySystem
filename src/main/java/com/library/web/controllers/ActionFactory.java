@@ -64,6 +64,7 @@ public class ActionFactory {
      * @return target {@code Action} or throws {@code ServletConfigException} if
      * exceptions occurred during creating of the action
      */
+    @SuppressWarnings("unchecked")
     Action createAction(String actionClassName, boolean needValidate, String inputPath, List<ServiceDependencyConfig> serviceDependencyList) {
         try {
             Class actionClass = Class.forName(actionClassName);
