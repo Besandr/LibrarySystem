@@ -113,7 +113,7 @@ public class LocationService extends Service {
         return EXECUTING_SUCCESSFUL;
     }
 
-    private boolean removeBookFromStorageCommand(DaoManager manager, long bookId) throws SQLException {
+    synchronized boolean removeBookFromStorageCommand(DaoManager manager, long bookId) throws SQLException {
 
         // Checking for not returned books
         LoanDtoDao loanDtoDao = manager.getLoanDtoDao();
