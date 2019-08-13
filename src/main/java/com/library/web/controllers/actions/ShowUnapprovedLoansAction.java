@@ -44,8 +44,7 @@ public class ShowUnapprovedLoansAction extends Action {
     private List<LoanDto> getUnapprovedLoans(HttpServletRequest request, LoanService loanService, PaginationHelper paginationHelper) {
 
         int recordsPerPage = paginationHelper.getRecordsPerPage();
-        int currentPageNumber = paginationHelper.getCurrentPageNumber(request);
-        int previousRecordNumber = (currentPageNumber-1)*recordsPerPage;
+        int previousRecordNumber = paginationHelper.getPreviousRecordNumber(request, recordsPerPage);
 
         return loanService
                 .getUnapprovedLoans(recordsPerPage, previousRecordNumber);

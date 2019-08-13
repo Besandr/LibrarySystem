@@ -1,8 +1,6 @@
 package com.library.web.listeners;
 
 import com.library.repository.DBUtils;
-import com.library.repository.DaoManager;
-import com.library.repository.DaoManagerFactory;
 import com.library.repository.entity.Languages;
 
 import javax.servlet.ServletContext;

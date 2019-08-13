@@ -36,6 +36,17 @@ public class PaginationHelper {
     }
 
     /**
+     * Gives a number of previous record
+     * @param request holds pagination parameters
+     * @param recordsPerPage - quantity of records per page
+     * @return a number of previous record
+     */
+    public int getPreviousRecordNumber(HttpServletRequest request, int recordsPerPage) {
+        int currentPageNumber = getCurrentPageNumber(request);
+        return (currentPageNumber-1)*recordsPerPage;
+    }
+
+    /**
      * Calculates a pages quantity
      * @param recordsQuantity - quantity of all records
      * @param recordsPerPage - quantity of records per page

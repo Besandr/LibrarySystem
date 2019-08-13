@@ -33,8 +33,8 @@ public class BookSearchAction extends Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
 
-        long authorId = getIdFromString(((BookSearchForm)form).getAuthorId());
-        long keywordId = getIdFromString(((BookSearchForm)form).getKeywordId());
+        long authorId = ((BookSearchForm)form).getAuthorId();
+        long keywordId = ((BookSearchForm)form).getKeywordId();
         String bookTitle = ((BookSearchForm)form).getBookTitle();
 
         List<BookDto> bookDtoList = getBooksList(request, authorId, keywordId, bookTitle, bookService, paginationHelper);
@@ -53,7 +53,7 @@ public class BookSearchAction extends Action {
      * @param bookTitle - part of title or whole title of target books
      * @param bookDtoList - list with target books
      */
-    private void setRequestAttributes(HttpServletRequest request, long authorId, long keywordId,
+    void setRequestAttributes(HttpServletRequest request, long authorId, long keywordId,
                                       String bookTitle, List<BookDto> bookDtoList) {
         request.setAttribute("authorId", authorId);
         request.setAttribute("keywordId", keywordId);
@@ -72,34 +72,19 @@ public class BookSearchAction extends Action {
      * @param paginationHelper for helping in pagination
      * @return list with searching results
      */
-    private List<BookDto> getBooksList(HttpServletRequest request, long authorId, long keywordId,
+    List<BookDto> getBooksList(HttpServletRequest request, long authorId, long keywordId,
                                        String bookTitle, BookService bookService, PaginationHelper paginationHelper) {
 
         int recordsPerPage = paginationHelper.getRecordsPerPage();
-        int currentPageNumber = paginationHelper.getCurrentPageNumber(request);
-        int previousRecordNumber = (currentPageNumber-1)*recordsPerPage;
+        int previousRecordNumber = paginationHelper.getPreviousRecordNumber(request, recordsPerPage);
 
         return bookService.findBooks(authorId, keywordId, bookTitle, recordsPerPage, previousRecordNumber);
     }
 
     /**
-     * Converts {@code String} with long value to {@code Long}.
-     * @param stringId string representation of ID
-     * @return {@code} long value of ID or {@code -1} if
-     * given string can't be converted to {@code Long}
-     */
-    private long getIdFromString(String stringId) {
-        try{
-            return Long.parseLong(stringId);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-    }
-
-    /**
      * Adds pagination to request
      */
-    private void addPaginationToRequest(HttpServletRequest request, BookService bookService, long authorId, long keywordId, String bookTitle, PaginationHelper paginationHelper) {
+    void addPaginationToRequest(HttpServletRequest request, BookService bookService, long authorId, long keywordId, String bookTitle, PaginationHelper paginationHelper) {
         long recordsQuantity = bookService.getBookSearchResultCount(authorId, keywordId, bookTitle);
         paginationHelper.addPaginationToRequest(request, recordsQuantity);
     }

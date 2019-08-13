@@ -123,6 +123,7 @@ public class LocationServiceTest {
         assertTrue(result);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void removeBookFromStorageCommandShouldDoesNotCallDeletingMethodsAndReturnFalse() throws SQLException {
         List mockList = mock(List.class);

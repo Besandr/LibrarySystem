@@ -27,7 +27,6 @@ public class AddBookcaseAction extends Action {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, ActionForm form, ServletResources resources) {
-
         int shelfQuantity = ((AddBookcaseForm) form).getShelfQuantity();
         int cellQuantity = ((AddBookcaseForm) form).getCellQuantity();
 

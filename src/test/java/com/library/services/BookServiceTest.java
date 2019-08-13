@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentCaptor.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -292,6 +293,7 @@ public class BookServiceTest {
         assertTrue(result);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testUpdateBookAuthorsSet() throws SQLException {
 
@@ -306,8 +308,8 @@ public class BookServiceTest {
 
         Set<Author> newAuthors = Stream.of(authorRemainedInBook, authorNewInBook, authorNewInLibrary).collect(Collectors.toSet());
 
-        ArgumentCaptor<Collection<Author>> capturedDeletedAuthorsCollection = ArgumentCaptor.forClass(Collection.class);
-        ArgumentCaptor<Collection<Author>> capturedNewAuthorsCollection = ArgumentCaptor.forClass(Collection.class);
+        ArgumentCaptor<Collection<Author>> capturedDeletedAuthorsCollection = forClass(Collection.class);
+        ArgumentCaptor<Collection<Author>> capturedNewAuthorsCollection = forClass(Collection.class);
 
         doNothing().when(mockService).deleteAuthors(eq(mockManager), capturedDeletedAuthorsCollection.capture());
         doNothing().when(mockService).saveAuthors(eq(mockManager), capturedNewAuthorsCollection.capture());
@@ -320,6 +322,7 @@ public class BookServiceTest {
         assertEquals(1, capturedNewAuthorsCollection.getValue().size());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testUpdateBookKeywordsSet() throws SQLException {
 
@@ -334,8 +337,8 @@ public class BookServiceTest {
 
         Set<Keyword> newKeywords = Stream.of(keywordRemainedInBook, keywordNewInBook, keywordNewInLibrary).collect(Collectors.toSet());
 
-        ArgumentCaptor<Collection<Keyword>> capturedDeletedKeywordsCollection = ArgumentCaptor.forClass(Collection.class);
-        ArgumentCaptor<Collection<Keyword>> capturedNewKeywordsCollection = ArgumentCaptor.forClass(Collection.class);
+        ArgumentCaptor<Collection<Keyword>> capturedDeletedKeywordsCollection = forClass(Collection.class);
+        ArgumentCaptor<Collection<Keyword>> capturedNewKeywordsCollection = forClass(Collection.class);
 
         doNothing().when(mockService).deleteKeywords(eq(mockManager), capturedDeletedKeywordsCollection.capture());
         doNothing().when(mockService).saveKeywords(eq(mockManager), capturedNewKeywordsCollection.capture());
@@ -348,6 +351,7 @@ public class BookServiceTest {
         assertEquals(1, capturedNewKeywordsCollection.getValue().size());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testGetAllKeywordsCommand() throws SQLException {
         List mockList = mock(ArrayList.class);
@@ -358,6 +362,7 @@ public class BookServiceTest {
         assertEquals(mockList, result);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testGetAllAuthorsCommand() throws SQLException {
         List mockList = mock(ArrayList.class);

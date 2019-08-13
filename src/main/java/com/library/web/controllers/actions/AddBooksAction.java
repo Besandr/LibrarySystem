@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AddBooksAction extends Action {
 
-    LocationService locationService;
+    private LocationService locationService;
 
     /**
      * Adds to library's storage needed quantity of {@code BookDto}

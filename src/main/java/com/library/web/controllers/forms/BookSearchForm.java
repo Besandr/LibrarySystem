@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 @Builder
 public class BookSearchForm extends ActionForm {
 
-    private String authorId;
-    private String keywordId;
+    private long authorId;
+    private long keywordId;
     private String bookTitle;
 
     @Override
     public void fill(HttpServletRequest request) {
-        authorId = getPropertyFromRequest(request, "authorId");
-        keywordId = getPropertyFromRequest(request, "keywordId");
+        authorId = getLongPropertyFromRequest(request, "authorId");
+        keywordId = getLongPropertyFromRequest(request, "keywordId");
         bookTitle = getPropertyFromRequest(request, "bookTitle");
     }
 

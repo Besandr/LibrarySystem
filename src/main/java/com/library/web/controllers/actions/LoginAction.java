@@ -71,7 +71,7 @@ public class LoginAction extends Action {
      * @return path of postponed request or {@code null} if
      * there is no path postponed
      */
-    private String getPostponedPath(HttpSession session) {
+    String getPostponedPath(HttpSession session) {
         return (String) session.getAttribute("postponedRequestUrl");
     }
 
@@ -82,7 +82,7 @@ public class LoginAction extends Action {
      * @return - the target {@code Optional} with {@code User} or
      * an empty {@code Optional}
      */
-    private Optional<User> getUserAccount(ActionForm form) {
+    Optional<User> getUserAccount(ActionForm form) {
         UserLoginForm loginForm =(UserLoginForm) form;
         return userService.getUserByLoginInfo(loginForm.getEmail(), loginForm.getPassword());
     }
@@ -90,7 +90,7 @@ public class LoginAction extends Action {
     /**
      * Sets in request errors attribute
      */
-    private void setRequestErrorAttributes(HttpServletRequest request, ActionForm form) {
+    void setRequestErrorAttributes(HttpServletRequest request, ActionForm form) {
         ActionErrors errors = new ActionErrors();
         errors.addError("loginError", "login.error.noSuchUser");
         request.setAttribute("errors", errors);

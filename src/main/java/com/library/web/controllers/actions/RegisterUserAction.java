@@ -61,7 +61,7 @@ public class RegisterUserAction extends Action {
      * to the requested constrained resource. After successful login
      * we need to restore this path and forward an user to it.
      */
-    private String getRedirectPath(HttpSession session, ServletResources resources) {
+    String getRedirectPath(HttpSession session, ServletResources resources) {
         String postponedPath = (String) session.getAttribute("postponedRequestUrl");
         if (postponedPath != null) {
             return resources.createRedirectPath(postponedPath);
@@ -73,7 +73,7 @@ public class RegisterUserAction extends Action {
     /**
      * Creates an user from form data
      */
-    private Optional<User> createUser(ActionForm form) {
+    Optional<User> createUser(ActionForm form) {
         UserRegistrationForm userForm = (UserRegistrationForm) form;
         return userService.createNewUser(
                 userForm.getFirstName(),
@@ -86,7 +86,7 @@ public class RegisterUserAction extends Action {
     /**
      * Sets in request errors attribute
      */
-    private void setRequestErrorAttributes(HttpServletRequest request, ActionForm form) {
+    void setRequestErrorAttributes(HttpServletRequest request, ActionForm form) {
         ActionErrors errors = new ActionErrors();
         errors.addError("userError", "registration.error.userExist");
         request.setAttribute("errors", errors);

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ApproveLoanAction extends Action {
 
-    LoanService loanService;
+    private LoanService loanService;
 
     /**
      * Approves a loan and sets approving results as request parameters

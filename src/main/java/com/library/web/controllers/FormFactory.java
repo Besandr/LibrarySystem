@@ -31,6 +31,7 @@ public class FormFactory {
      * @return target {@code ActionForm} or {@code null} if {@code Action}
      * bound to the given path doesn't require any {@code ActionForm}
      */
+    @SuppressWarnings("unchecked")
     ActionForm getForm(String actionPath) {
         String actionClassName = formClasses.get(actionPath);
         if (actionClassName != null) {

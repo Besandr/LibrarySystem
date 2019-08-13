@@ -44,8 +44,7 @@ public class ShowReturnedBooksAction extends Action {
     private List<LoanDto> getReturnedLoans(long userId, HttpServletRequest request, LoanService loanService, PaginationHelper paginationHelper) {
 
         int recordsPerPage = paginationHelper.getRecordsPerPage();
-        int currentPageNumber = paginationHelper.getCurrentPageNumber(request);
-        int previousRecordNumber = (currentPageNumber-1)*recordsPerPage;
+        int previousRecordNumber = paginationHelper.getPreviousRecordNumber(request, recordsPerPage);
 
         return loanService
                 .getReturnedLoansByUser(userId, recordsPerPage, previousRecordNumber);

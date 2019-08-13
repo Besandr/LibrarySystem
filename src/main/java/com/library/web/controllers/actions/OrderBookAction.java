@@ -46,7 +46,7 @@ public class OrderBookAction extends Action {
      * @param form - form with target book's ID
      * @return boolean result of making application
      */
-    private boolean makeApplyForBook(HttpServletRequest request, ActionForm form) {
+    boolean makeApplyForBook(HttpServletRequest request, ActionForm form) {
 
         long bookId = ((OrderBookForm) form).getBookId();
         long userId = ((User) request.getSession().getAttribute("loggedInUser")).getId();

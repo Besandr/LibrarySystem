@@ -45,8 +45,7 @@ public class ShowActiveLoansAction extends Action {
     private List<LoanDto> getActiveLoans(HttpServletRequest request, LoanService loanService, PaginationHelper paginationHelper) {
 
         int recordsPerPage = paginationHelper.getRecordsPerPage();
-        int currentPageNumber = paginationHelper.getCurrentPageNumber(request);
-        int previousRecordNumber = (currentPageNumber-1)*recordsPerPage;
+        int previousRecordNumber = paginationHelper.getPreviousRecordNumber(request, recordsPerPage);
 
         return loanService
                 .getActiveLoans(recordsPerPage, previousRecordNumber);
