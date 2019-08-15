@@ -353,6 +353,10 @@
             <path>/changeLanguage</path>
             <type>com.library.web.controllers.actions.ChangeLanguageAction</type>
         </action>
+        <action>
+            <path>/error</path>
+            <type>com.library.web.controllers.actions.ErrorLoggingAction</type>
+        </action>
     </action-mappings>
 
     <!--
@@ -481,10 +485,6 @@
         <entry>
             <key>showErrorPage</key>
             <value>/WEB-INF/jsp/error.jsp</value>
-        </entry>
-        <entry>
-            <key>successPage</key>
-            <value>/WEB-INF/jsp/successfulRedirect.jsp</value>
         </entry>
     </forwards>
 

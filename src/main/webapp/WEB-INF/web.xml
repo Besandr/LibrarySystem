@@ -8,12 +8,12 @@
     <display-name>Library system</display-name>
 
     <filter>
-    <filter-name>EncodingFilter</filter-name>
-    <filter-class>com.library.web.filters.EncodingFilter</filter-class>
-    <init-param>
-      <param-name>encoding</param-name>
-      <param-value>UTF-8</param-value>
-    </init-param>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.library.web.filters.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
     </filter>
     <filter>
         <filter-name>SecurityFilter</filter-name>
@@ -30,7 +30,7 @@
     </filter-mapping>
 
     <listener>
-    <listener-class>com.library.web.listeners.StartApplicationListener</listener-class>
+        <listener-class>com.library.web.listeners.StartApplicationListener</listener-class>
     </listener>
 
     <servlet>
@@ -39,8 +39,8 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-    <servlet-name>ActionServlet</servlet-name>
-    <url-pattern>/</url-pattern>
+        <servlet-name>ActionServlet</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -53,7 +53,7 @@
         <location>/WEB-INF/jsp/404.jsp</location>
     </error-page>
     <error-page>
-        <location>/WEB-INF/jsp/error.jsp</location>
+        <location>/error</location>
     </error-page>
 
 </web-app>
