@@ -16,17 +16,23 @@
 </head>
 <body>
 
-<div><c:import url="adminCabinet.jsp"/></div>
+<div><c:import url="adminControl.jsp"/></div>
 
 <c:if test="${not empty actionResult}">
-    <div>
-        <fmt:message key="${actionResult}"/>
+    <div class="d-flex justify-content-center my-md-5">
+        <h3><fmt:message key="${actionResult}"/></h3>
     </div>
 </c:if>
 
-<div><fmt:message key="bookcaseManagement.header"/></div>
+<%--<div class="d-flex justify-content-center">--%>
+    <%--<h3><fmt:message key="cabinet.header"/></h3>--%>
+<%--</div>--%>
 <%--        Showing managements actions--%>
-<a href="${contextPath}/admin/bookcaseManagement/add"><fmt:message key="bookcaseManagement.addingBookcase.title"/></a>
+<div class="d-flex justify-content-center h-50 pt-md-5">
+    <a class="btn btn-lg brown-button mx-md-5 my-auto" href="${contextPath}/admin/bookcaseManagement/add">
+        <fmt:message key="bookcaseManagement.addingBookcase.title"/>
+    </a>
+</div>
 
 </body>
 </html>

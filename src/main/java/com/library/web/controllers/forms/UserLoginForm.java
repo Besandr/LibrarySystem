@@ -35,7 +35,7 @@ public class UserLoginForm extends ActionForm {
 
         ActionErrors errors = new ActionErrors();
 
-        if (!email.matches("^[A-z]+@[A-z]+\\.[A-z]+$")) {
+        if (!email.matches("^[A-z\\d]+@[A-z]+\\.[A-z]+$")) {
             errors.addError("email", "login.error.email");
         }
 

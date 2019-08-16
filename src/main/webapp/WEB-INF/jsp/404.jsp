@@ -12,11 +12,24 @@
 
 <html>
 <head>
-    <title>!!!!!</title>
+    <title>404</title>
 </head>
 <body>
-404
-<a href="${contextPath}/title" class="link createLink">Continue</a>
 
+<div><c:import url="header.jsp"/></div>
+
+<div class="d-flex justify-content-center my-md-5 display-1 text-danger">
+    404
+</div>
+
+<div class="d-flex justify-content-center my-md-5">
+    <h1><fmt:message key="message404"/> </h1>
+</div>
+
+<div class="d-flex justify-content-center my-md-5">
+    <a href="${contextPath}/title" class="btn btn-lg brown-button">
+        <fmt:message key="header.home" />
+    </a>
+</div>
 </body>
 </html>

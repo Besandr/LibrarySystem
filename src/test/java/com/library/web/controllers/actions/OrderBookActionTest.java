@@ -61,9 +61,9 @@ public class OrderBookActionTest {
     }
 
     @Test
-    public void executeShouldForwardToBookSearchPage() {
+    public void executeShouldReturnPathToShowOrderedBooksAction() {
         doReturn(false).when(action).makeApplyForBook(request, form);
-        when(resources.getForward("ShowBookSearchPage")).thenReturn("testPath");
+        when(resources.getForward("ShowOrderedBooksAction")).thenReturn("testPath");
         String returnedPath = action.execute(request, response, form, resources);
         assertEquals("testPath", returnedPath);
     }

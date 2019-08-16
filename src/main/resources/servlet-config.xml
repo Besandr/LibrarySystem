@@ -467,8 +467,16 @@
             <value>/WEB-INF/jsp/addBookcase.jsp</value>
         </entry>
         <entry>
+            <key>/admin/bookManagement/addBooks</key>
+            <value>/WEB-INF/jsp/addBooks.jsp</value>
+        </entry>
+        <entry>
             <key>ShowOrderedBooksPage</key>
             <value>/WEB-INF/jsp/userOrderedBooks.jsp</value>
+        </entry>
+        <entry>
+            <key>ShowOrderedBooksAction</key>
+            <value>/user/orderedBooks</value>
         </entry>
         <entry>
             <key>ShowBorrowedBooksPage</key>

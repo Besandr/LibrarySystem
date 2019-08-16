@@ -67,9 +67,13 @@ public abstract class ActionForm {
      */
     long getLongPropertyFromRequest(HttpServletRequest request, String property) {
         String idString = request.getParameter(property);
-        if (idString != null && !idString.isEmpty()) {
+        if (idString != null) {
+            if (idString.matches("\\d+")) {
+                return Long.parseLong(idString);
+            } else {
+                return 0L;
+            }
 
-            return Long.parseLong(idString);
 
         } else {
 

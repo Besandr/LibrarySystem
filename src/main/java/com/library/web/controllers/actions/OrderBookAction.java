@@ -37,7 +37,7 @@ public class OrderBookAction extends Action {
             request.setAttribute("orderResult", "bookSearch.result.failedOrder");
         }
 
-        return resources.getForward("ShowBookSearchPage");
+        return resources.getForward("ShowOrderedBooksAction");
     }
 
     /**

@@ -18,11 +18,11 @@
 
 <div><c:import url="header.jsp"/></div>
 
-<div>
-    <fmt:message key="accessDenied.deniedMessage"/>
+<div class="d-flex justify-content-center h-50 align-items-center">
+    <h1 class="text-danger"><fmt:message key="accessDenied.deniedMessage"/></h1>
 </div>
-<div>
-    <a href="${contextPath}/title"><fmt:message key="header.home" /></a>
+<div class="d-flex justify-content-center">
+    <a class="btn btn-lg brown-button" href="${contextPath}/title"><fmt:message key="header.home" /></a>
 </div>
 
 </body>

@@ -12,13 +12,16 @@
 
 <html>
 <head>
-    <title>!!!!!</title>
+    <title><fmt:message key="error.title"/> </title>
 </head>
 <body>
 
 <div><c:import url="header.jsp"/></div>
-
-<h1>Unfortunately bad things occurred</h1>
-<a href="${contextPath}/title" class="link createLink">Continue</a>
+<div class="d-flex justify-content-center h-50 align-items-center">
+    <h1><fmt:message key="error.message"/> </h1>
+</div>
+<div class="d-flex justify-content-center">
+    <a href="${contextPath}/title" class="btn btn-lg brown-button">Continue</a>
+</div>
 </body>
 </html>

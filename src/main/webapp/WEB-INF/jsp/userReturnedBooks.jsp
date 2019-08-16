@@ -19,63 +19,112 @@
 <div><c:import url="userControl.jsp"/></div>
 
 <div>
-    <table>
-        <tr>
-            <th><fmt:message key="loans.bookTitle"/></th>
-            <th><fmt:message key="loans.bookAuthors"/></th>
-            <th><fmt:message key="loans.loanDate"/></th>
-            <th><fmt:message key="loans.returnDate"/></th>
-            <th><fmt:message key="userCabinet.returningBook"/></th>
-        </tr>
 
-        <c:forEach var="loanDTO" items="${loans}">
-            <tr>
-                <td>${loanDTO.book.title}</td>
-                <td>
-                    <div>
-                        <ul style="list-style-type:none;">
-                            <li>
-                                <c:forEach var="author" items="${loanDTO.authors}">
-                                    ${author.firstName} ${author.lastName}
-                                </c:forEach>
+    <div class="d-flex justify-content-center my-md-5">
+        <h1><fmt:message key="userCabinet.returnedBooks"/></h1>
+    </div>
+
+    <c:choose>
+        <c:when test="${not empty loans}">
+            <div class="bg-semi-transparent mx-md-5 d-flex justify-content-center">
+                <table class="table table-hover table-md">
+                    <tr>
+                        <th><fmt:message key="loans.bookTitle"/></th>
+                        <th class="text-center"><fmt:message key="loans.bookAuthors"/></th>
+                        <th class="text-center"><fmt:message key="loans.loanDate"/></th>
+                        <th class="text-center"><fmt:message key="loans.returnDate"/></th>
+                    </tr>
+
+                    <c:forEach var="loanDTO" items="${loans}">
+                        <tr>
+                            <td>${loanDTO.book.title}</td>
+                            <td class="text-center">
+                                <div>
+                                    <ul style="list-style-type:none;">
+                                        <li>
+                                            <c:forEach var="author" items="${loanDTO.authors}">
+                                                ${author.firstName} ${author.lastName}
+                                            </c:forEach>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td class="text-center">${loanDTO.loan.loanDate}</td>
+                            <td class="text-center">${loanDTO.loan.returnDate}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+            <br>
+            <%------------------------- Pagination part -------------------------------%>
+
+            <nav>
+                <ul class="pagination justify-content-center">
+                        <%--For displaying Previous link except for the 1st page --%>
+                    <c:choose>
+                        <c:when test="${currentPage != 1}">
+                            <li class="page-item">
+                                <a class="page-link text-dark"
+                                   href="${contextPath}/user/returnedBooks?page=${currentPage - 1} "><fmt:message
+                                        key="pagination.previous"/> </a>
                             </li>
-                        </ul>
-                    </div>
-                </td>
-                <td>${loanDTO.loan.loanDate}</td>
-                <td>${loanDTO.loan.returnDate}</td>
-            </tr>
-        </c:forEach>
-    </table>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <a class="page-link text-dark"
+                                   href="${contextPath}/user/returnedBooks?page=${currentPage - 1}"><fmt:message
+                                        key="pagination.previous"/> </a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
+                        <%--For displaying Page numbers.
+                        The when condition does not display a link for the current page--%>
+
+                    <c:forEach begin="1" end="${pagesQuantity}" var="i">
+                        <c:choose>
+                            <c:when test="${currentPage eq i}">
+                                <li class="page-item">
+                                    <div class="page-link text-dark">${i}</div>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page-item"><a class="page-link text-dark"
+                                                         href="${contextPath}/user/returnedBooks?page=${i}">${i}</a></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
+
+                        <%--For displaying Next link --%>
+                    <c:choose>
+                        <c:when test="${currentPage lt pagesQuantity}">
+                            <li class="page-item">
+                                <a class="page-link text-dark"
+                                   href="${contextPath}/user/returnedBooks?page=${currentPage + 1}"><fmt:message
+                                        key="pagination.next"/> </a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <a class="page-link text-dark"
+                                   href="${contextPath}/user/returnedBooks?page=${currentPage + 1}"><fmt:message
+                                        key="pagination.next"/> </a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+                </ul>
+            </nav>
+        </c:when>
+        <c:otherwise>
+            <div class="d-flex justify-content-center">
+                <h3><fmt:message key="noData"/></h3>
+            </div>
+        </c:otherwise>
+    </c:choose>
+
+
 </div>
-
-<%------------------------- Pagination part -------------------------------%>
-<%--For displaying Previous link except for the 1st page --%>
-<c:if test="${currentPage != 1}">
-    <td><a href="${contextPath}/admin/returnedBooks?page=${currentPage - 1}"><fmt:message key="pagination.previous"/> </a></td>
-</c:if>
-
-<%--For displaying Page numbers.
-The when condition does not display a link for the current page--%>
-<table border="1" cellpadding="5" cellspacing="5">
-    <tr>
-        <c:forEach begin="1" end="${pagesQuantity}" var="i">
-            <c:choose>
-                <c:when test="${currentPage eq i}">
-                    <td>${i}</td>
-                </c:when>
-                <c:otherwise>
-                    <td><a href="${contextPath}/admin/returnedBooks?page=${i}">${i}</a></td>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
-    </tr>
-</table>
-
-<%--For displaying Next link --%>
-<c:if test="${currentPage lt pagesQuantity}">
-    <td><a href="${contextPath}/admin/returnedBooks?page=${currentPage + 1}"><fmt:message key="pagination.next"/> </a></td>
-</c:if>
 
 </body>
 </html>

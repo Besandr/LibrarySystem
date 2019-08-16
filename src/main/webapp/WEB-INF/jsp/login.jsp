@@ -5,10 +5,10 @@
 <c:if test="${empty sessionScope.language}">
     <c:set var="language" value="${applicationScope.language}" scope="session"/>
 </c:if>
-<fmt:setLocale value="${sessionScope.language}" />
-<fmt:setBundle basename="textContent" />
+<fmt:setLocale value="${sessionScope.language}"/>
+<fmt:setBundle basename="textContent"/>
 
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
 <head>
@@ -21,35 +21,70 @@
 <div>
 
     <c:if test="${errors.hasErrors}">
-        <p  style="color:red"><fmt:message key="login.error.noSuchUser"/></p>
+        <div class="d-flex justify-content-center invalid-feedback font-weight-bold">
+            <h3><fmt:message key="login.error.noSuchUser"/></h3>
+        </div>
     </c:if>
 
-<%--    Show message to user redirected to the login page--%>
+    <%--    Show message to user redirected to the login page--%>
     <c:if test="${not empty needAuthentication}">
-        <p style="color:red"><fmt:message key="login.needAuthentication"/> </p>
+        <div class="d-flex justify-content-center invalid-feedback font-weight-bold">
+            <h3><fmt:message key="login.needAuthentication"/></h3>
+        </div>
     </c:if>
 
-    <form action="${contextPath}/login.do" method="post">
-        <label>
-            <h3><fmt:message key="email"/></h3>
-            <input name="email" type="text" value="${form.email}" required autofocus>
-            <c:if test="${errors.errorsMap['email'] != null}">
-                <fmt:message key="${errors.errorsMap['email']}"/>
-            </c:if>
-        </label>
-        <label>
-            <h3><fmt:message key="password"/></h3>
-            <input name="password" type="password" value="${form.password}" required>
-            <c:if test="${errors.errorsMap['password'] != null}">
-                <fmt:message key="${errors.errorsMap['password']}"/>
-            </c:if>
-        </label>
 
-        <button><fmt:message key="header.login"/></button>
-    </form>
+    <div class="d-flex justify-content-center">
+
+        <form action="${contextPath}/login.do" method="post">
+            <div class="form-row">
+                <label for="userEmail">
+                    <h3><fmt:message key="email"/></h3>
+                </label>
+                <c:choose>
+                    <c:when test="${errors.errorsMap['email'] != null}">
+                        <input class="form-control is-invalid" id="userEmail" name="email" type="text"
+                               value="${form.email}" required autofocus>
+                        <div class="d-flex justify-content-center invalid-feedback font-weight-bold">
+                            <fmt:message key="${errors.errorsMap['email']}"/>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <input class="form-control" id="userEmail" name="email" type="text" value="${form.email}"
+                               required autofocus>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="form-row">
+                <label for="userPassword">
+                    <h3><fmt:message key="password"/></h3>
+                </label>
+                <c:choose>
+                    <c:when test="${errors.errorsMap['password'] != null}">
+                        <input class="form-control is-invalid" id="userPassword" name="password" type="password"
+                               value="${form.password}" required>
+                        <div class="d-flex justify-content-center invalid-feedback font-weight-bold">
+                            <fmt:message key="${errors.errorsMap['password']}"/>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <input class="form-control" id="userPassword" name="password" type="password"
+                               value="${form.password}" required>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="btn brown-button btn-lg" style="margin:3%"><fmt:message key="header.login"/></button>
+            </div>
+
+        </form>
+    </div>
+    <div class="d-flex justify-content-center">
+        <a class="btn btn-warning btn-lg" href="${contextPath}/registration"><fmt:message key="login.registration"/></a>
+    </div>
+
 </div>
-<div>
-    <a href="${contextPath}/registration"><fmt:message key="login.registration"/></a>
-</div>
+
+
 </body>
 </html>

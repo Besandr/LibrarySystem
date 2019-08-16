@@ -31,8 +31,8 @@ public class BookManagementForm extends ActionForm {
     @Override
     public ActionErrors validate() {
         ActionErrors errors = new ActionErrors();
-        if (booksQuantity == 0) {
-            errors.addError("booksQuantity", "zero books quantity");
+        if (booksQuantity <= 0) {
+            errors.addError("booksQuantity", "bookManagement.error.quantity");
         }
         return errors;
     }

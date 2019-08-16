@@ -16,44 +16,52 @@
 </head>
 <body>
 
-<div><c:import url="adminCabinet.jsp"/></div>
+<div><c:import url="adminControl.jsp"/></div>
+
 
 <c:if test="${not empty actionResult}">
-    <div>
-        <fmt:message key="${actionResult}"/>
+    <div class="d-flex justify-content-center">
+        <h2><fmt:message key="${actionResult}"/></h2>
     </div>
 </c:if>
 
 <c:if test="${not empty bookDto}">
-    <div><fmt:message key="bookManagement.chosenBook"/> </div>
-<%--        Book info--%>
-    <div>
+    <div class="d-flex justify-content-center my-md-5">
+        <h4><fmt:message key="bookManagement.chosenBook"/></h4>
+    </div>
+    <%--Book info--%>
+    <div class="d-flex justify-content-center">
         <c:forEach var="author" items="${bookDto.authors}">
-            <div>${author.firstName} ${author.lastName}</div>
+            <div class="ml-3">${author.firstName} ${author.lastName}</div>
         </c:forEach>
     </div>
     <br>
-    <div>"${bookDto.book.title}"</div>
-    <div>"${bookDto.book.year}"</div>
-    <div>
+    <div class="d-flex justify-content-center">"${bookDto.book.title}"</div>
+    <div class="d-flex justify-content-center">"${bookDto.book.year}"</div>
+    <div class="d-flex justify-content-center">
         <c:forEach var="keyword" items="${bookDto.keywords}">
             <div>${keyword.word}</div>
         </c:forEach>
     </div>
-<%--        Showing managements actions--%>
-    <a href="${contextPath}/admin/bookManagement/addBooks.do"><fmt:message key="bookManagement.addBooks"/></a>
-    <a href="${contextPath}/admin/bookManagement/removeBooks.do"><fmt:message key="bookManagement.removeBooks"/></a>
-    <a href="${contextPath}/admin/bookManagement/updateBook"><fmt:message key="bookManagement.changeBookProperties"/></a>
-    <a href="${contextPath}/admin/bookManagement/deleteBooks.do"><fmt:message key="bookManagement.deleteBook"/></a>
-    <a href="${contextPath}/admin/activeBookLoans?bookId=${bookDto.book.id}"><fmt:message key="bookManagement.showBorrowers"/></a>
+    <%--Showing managements actions--%>
+    <div class="d-flex justify-content-center h-20 pt-md-5">
+        <a class="btn btn-lg brown-button mx-md-1 my-auto" href="${contextPath}/admin/bookManagement/addBooks"><fmt:message key="bookManagement.addBooks"/></a>
+        <a class="btn btn-lg brown-button mx-md-1 my-auto" href="${contextPath}/admin/bookManagement/removeBooks.do"><fmt:message key="bookManagement.removeBooks"/></a>
+        <a class="btn btn-lg brown-button mx-md-1 my-auto" href="${contextPath}/admin/bookManagement/updateBook"><fmt:message key="bookManagement.changeBookProperties"/></a>
+        <a class="btn btn-lg brown-button mx-md-1 my-auto" href="${contextPath}/admin/bookManagement/deleteBooks.do"><fmt:message key="bookManagement.deleteBook"/></a>
+        <a class="btn btn-lg brown-button mx-md-1 my-auto" href="${contextPath}/admin/activeBookLoans?bookId=${bookDto.book.id}"><fmt:message key="bookManagement.showBorrowers"/></a>
+    </div>
 
 </c:if>
 
 <%--Actions for another book--%>
-<div><fmt:message key="bookManagement.findOrCreate"/> </div>
-<a href="${contextPath}/admin/bookManagement/createBook"><fmt:message key="bookManagement.createBook"/></a>
-<a href="${contextPath}/bookSearch"><fmt:message key="bookManagement.findBook"/></a>
-
+<div class="d-flex justify-content-center my-md-5">
+    <h3><fmt:message key="bookManagement.findOrCreate"/></h3>
+</div>
+<div class="d-flex justify-content-center h-20 pt-md-1">
+    <a class="btn btn-lg brown-button mx-md-1 my-auto" href="${contextPath}/admin/bookManagement/createBook"><fmt:message key="bookManagement.createBook"/></a>
+    <a class="btn btn-lg brown-button mx-md-1 my-auto" href="${contextPath}/bookSearch"><fmt:message key="bookManagement.findBook"/></a>
+</div>
 
 </body>
 </html>

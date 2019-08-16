@@ -16,90 +16,139 @@
 </head>
 <body>
 
-<div><c:import url="adminCabinet.jsp"/></div>
+<div><c:import url="adminControl.jsp"/></div>
 
 <%--Prints loan approving information if exists--%>
 <c:if test="${not empty approvingResult}">
     <c:choose>
         <c:when test="${approvingResult == true}">
-            <fmt:message key="loans.approvingSuccessful"/> ${loanId}
+            <div class="d-flex justify-content-center my-md-5">
+                <h3><fmt:message key="loans.approvingSuccessful"/> ${loanId}</h3>
+            </div>
         </c:when>
         <c:otherwise>
-            <fmt:message key="loans.approvingFailed"/> ${loanId}
+            <div class="d-flex justify-content-center my-md-5">
+                <h3><fmt:message key="loans.approvingFailed"/> ${loanId}</h3>
+            </div>
         </c:otherwise>
     </c:choose>
 </c:if>
 
-<div>
-    <table>
-        <tr>
-            <th>№</th>
-            <th><fmt:message key="loans.bookTitle"/></th>
-            <th><fmt:message key="loans.bookAuthors"/></th>
-            <th><fmt:message key="loans.userName"/></th>
-            <th><fmt:message key="loans.userKarma"/></th>
-            <th><fmt:message key="loans.applicationDate"/></th>
-            <th><fmt:message key="loans.availableBooks"/></th>
-            <th><fmt:message key="loans.approvement"/></th>
-        </tr>
-
-        <c:forEach var="loanDTO" items="${loans}">
-            <tr>
-                <td>${loanDTO.loan.id}</td>
-                <td>${loanDTO.book.title}</td>
-                <td>
-                    <div>
-                        <ul style="list-style-type:none;">
-                            <li>
-                                <c:forEach var="author" items="${loanDTO.authors}">
-                                    ${author.firstName} ${author.lastName}
-                                </c:forEach>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-                <td><a href="${contextPath}/admin/userProfile?userId=${loanDTO.user.id}">${loanDTO.user.lastName} ${loanDTO.user.firstName}</a></td>
-                <td>${loanDTO.user.karma}</td>
-                <td>${loanDTO.loan.applyDate}</td>
-                <td>${loanDTO.bookQuantity}</td>
-                <td>
-                    <form action="${contextPath}/admin/approve.do">
-                        <input type="text" name="loanId" value="${loanDTO.loan.id}" hidden>
-                        <button><fmt:message key="loans.approve"/> </button>
-                    </form>
-                </td>
-            </tr>
-        </c:forEach>
-    </table>
+<div class="d-flex justify-content-center my-md-5">
+    <h1><fmt:message key="adminControl.unapprovedLoans"/></h1>
 </div>
 
-<%------------------------- Pagination part -------------------------------%>
-<%--For displaying Previous link except for the 1st page --%>
-<c:if test="${currentPage != 1}">
-    <td><a href="${contextPath}/admin/unapprovedLoans?page=${currentPage - 1}"><fmt:message key="pagination.previous"/> </a></td>
-</c:if>
+<c:choose>
+    <c:when test="${not empty loans}">
+        <div class="bg-semi-transparent mx-md-5 d-flex justify-content-center">
+            <table class="table table-hover table-md">
+                <tr>
+                    <th class="text-center">#</th>
+                    <th><fmt:message key="loans.bookTitle"/></th>
+                    <th class="text-center"><fmt:message key="loans.bookAuthors"/></th>
+                    <th><fmt:message key="loans.userName"/></th>
+                    <th class="text-center"><fmt:message key="loans.userKarma"/></th>
+                    <th class="text-center"><fmt:message key="loans.applicationDate"/></th>
+                    <th class="text-center"><fmt:message key="loans.availableBooks"/></th>
+                    <th class="text-center"><fmt:message key="loans.approvement"/></th>
+                </tr>
 
-<%--For displaying Page numbers.
-The when condition does not display a link for the current page--%>
-<table border="1" cellpadding="5" cellspacing="5">
-    <tr>
-        <c:forEach begin="1" end="${pagesQuantity}" var="i">
-            <c:choose>
-                <c:when test="${currentPage eq i}">
-                    <td>${i}</td>
-                </c:when>
-                <c:otherwise>
-                    <td><a href="${contextPath}/admin/unapprovedLoans?page=${i}">${i}</a></td>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
-    </tr>
-</table>
+                <c:forEach var="loanDTO" items="${loans}">
+                    <tr>
+                        <td class="text-center">${loanDTO.loan.id}</td>
+                        <td>${loanDTO.book.title}</td>
+                        <td class="text-center">
+                            <div>
+                                <ul style="list-style-type:none;">
+                                    <li>
+                                        <c:forEach var="author" items="${loanDTO.authors}">
+                                            ${author.firstName} ${author.lastName}
+                                        </c:forEach>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td><a href="${contextPath}/admin/userProfile?userId=${loanDTO.user.id}">${loanDTO.user.lastName} ${loanDTO.user.firstName}</a></td>
+                        <td class="text-center">${loanDTO.user.karma}</td>
+                        <td class="text-center">${loanDTO.loan.applyDate}</td>
+                        <td class="text-center">${loanDTO.bookQuantity}</td>
+                        <td class="text-center">
+                            <form action="${contextPath}/admin/approve.do">
+                                <input type="text" name="loanId" value="${loanDTO.loan.id}" hidden>
+                                <button class="btn brown-button"><fmt:message key="loans.approve"/> </button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+        <br>
+        <%------------------------- Pagination part -------------------------------%>
 
-<%--For displaying Next link --%>
-<c:if test="${currentPage lt pagesQuantity}">
-    <td><a href="${contextPath}/admin/unapprovedLoans?page=${currentPage + 1}"><fmt:message key="pagination.next"/> </a></td>
-</c:if>
+        <nav>
+            <ul class="pagination justify-content-center">
+                    <%--For displaying Previous link except for the 1st page --%>
+                <c:choose>
+                    <c:when test="${currentPage != 1}">
+                        <li class="page-item">
+                            <a class="page-link text-dark"
+                               href="${contextPath}/admin/unapprovedLoans?page=${currentPage - 1} "><fmt:message
+                                    key="pagination.previous"/> </a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item disabled">
+                            <a class="page-link text-dark"
+                               href="${contextPath}/admin/unapprovedLoans?page=${currentPage - 1}"><fmt:message
+                                    key="pagination.previous"/> </a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+
+                    <%--For displaying Page numbers.
+                    The when condition does not display a link for the current page--%>
+
+                <c:forEach begin="1" end="${pagesQuantity}" var="i">
+                    <c:choose>
+                        <c:when test="${currentPage eq i}">
+                            <li class="page-item">
+                                <div class="page-link text-dark">${i}</div>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item"><a class="page-link text-dark"
+                                                     href="${contextPath}/admin/unapprovedLoans?page=${i}">${i}</a></li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+
+
+                    <%--For displaying Next link --%>
+                <c:choose>
+                    <c:when test="${currentPage lt pagesQuantity}">
+                        <li class="page-item">
+                            <a class="page-link text-dark"
+                               href="${contextPath}/admin/unapprovedLoans?page=${currentPage + 1}"><fmt:message
+                                    key="pagination.next"/> </a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item disabled">
+                            <a class="page-link text-dark"
+                               href="${contextPath}/admin/unapprovedLoans?page=${currentPage + 1}"><fmt:message
+                                    key="pagination.next"/> </a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+            </ul>
+        </nav>
+    </c:when>
+    <c:otherwise>
+        <div class="d-flex justify-content-center">
+            <h3><fmt:message key="noData"/></h3>
+        </div>
+    </c:otherwise>
+</c:choose>
 
 </body>
 </html>

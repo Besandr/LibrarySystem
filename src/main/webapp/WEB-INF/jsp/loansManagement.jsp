@@ -16,20 +16,21 @@
 </head>
 <body>
 
-<div><c:import url="adminCabinet.jsp"/></div>
+<div><c:import url="adminControl.jsp"/></div>
 
-<div><fmt:message key="adminControl.chooseOperation"/></div>
+<%--<div><fmt:message key="adminControl.chooseOperation"/></div>--%>
 
-<a href="${contextPath}/admin/unapprovedLoans">
-    <fmt:message key="adminControl.unapprovedLoans"/>
-</a>
-<a href="${contextPath}/admin/activeLoans">
-    <fmt:message key="adminControl.activeLoans"/>
-</a>
-<%--todo EXPIRED LOANS--%>
-<a href="">
-    <fmt:message key="adminControl.expiredLoans"/>
-</a>
+<div class="d-flex justify-content-center h-50 pt-md-5">
+    <a class="btn btn-lg brown-button mx-md-5 my-auto" href="${contextPath}/admin/unapprovedLoans">
+        <fmt:message key="adminControl.unapprovedLoans"/>
+    </a>
+    <a class="btn btn-lg brown-button mx-md-5 my-auto" href="${contextPath}/admin/activeLoans">
+        <fmt:message key="adminControl.activeLoans"/>
+    </a>
 
+    <%--<a href="">--%>
+        <%--<fmt:message key="adminControl.expiredLoans"/>--%>
+    <%--</a>--%>
+</div>
 </body>
 </html>
