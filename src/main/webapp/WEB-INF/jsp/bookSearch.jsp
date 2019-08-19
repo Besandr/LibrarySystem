@@ -23,7 +23,7 @@
 </div>
 <br>
 <div class="d-flex justify-content-center">
-    <form action="${contextPath}/bookSearch.do">
+    <form class="col-5" action="${contextPath}/bookSearch.do">
         <div class="row" style="margin:3%">
             <div class="col">
                 <label for="authorSelect" class="col-12 col-form-label">

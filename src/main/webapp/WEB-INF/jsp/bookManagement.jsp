@@ -40,7 +40,7 @@
     <div class="d-flex justify-content-center">"${bookDto.book.year}"</div>
     <div class="d-flex justify-content-center">
         <c:forEach var="keyword" items="${bookDto.keywords}">
-            <div>${keyword.word}</div>
+            <div class="ml-3">${keyword.word}</div>
         </c:forEach>
     </div>
     <%--Showing managements actions--%>
